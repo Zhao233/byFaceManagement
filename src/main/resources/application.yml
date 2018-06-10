@@ -1,0 +1,14 @@
+#server port
+server.port: 8080
+
+# Profiles file name
+spring.profiles.active: Dev
+
+age: 18
+name: jason
+manInfo: "age:${age},name:${name}"
+
+mail.sendswitch: on
+mail.smtpHost: ismtp.beyondsoft.com
+mail.from: gbms@beyondsoft.com
+mail.fromUserPassword: gbms20180319
