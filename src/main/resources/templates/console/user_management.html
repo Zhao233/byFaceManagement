@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Morris Chart Styles-->
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <style>
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+                        <div class="image" style="padding-bottom: 20dp">
+                            <img src="/images/default_avatar_male.jpg" width="120" height="120" alt="User">
+                        </div>
+
+                        <div>
+                            John Doe
+                        </div>
+
+                        <div>
+                            john.doe@163.com
+                        </div>
+                    </div>
+                    <br></br>
+                </li>
+
+                <!-- 用户管理 -->
+                <li>
+                    <a href="user_management.html" class="active-menu"><i class="fa fa-table"></i> User
+                        Management</a>
+                </li>
+
+                <!-- 员工管理 -->
+                <li>
+                    <a href="employee_management.html">
+                        <i class="fa fa-dashboard"></i>
+                        Employee Management
+                    </a>
+                </li>
+
+                <!-- 访客管理 -->
+                <li>
+                    <a href="chart.html"><i class="fa fa-bar-chart-o"></i>Visitor Mangement</a>
+                </li>
+
+                <!-- 摄像头管理 -->
+                <li>
+                    <a href="employee_management.html.html"><i class="fa fa-desktop"></i>Camera Mangement</a>
+                </li>
+
+                <!-- 服务器管理 -->
+                <li>
+                    <a href="tab-panel.html"><i class="fa fa-qrcode"></i>Server Mangement</a>
+                </li>
+
+
+                <!-- <li>
+                    <a href="form.html"><i class="fa fa-edit"></i> Forms </a>
+                </li>
+
+
+                <li>
+                    <a href="#"><i class="fa fa-sitemap"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">Second Level Link</a>
+                        </li>
+                        <li>
+                            <a href="#">Second Level Link</a>
+                        </li>
+                        <li>
+                            <a href="#">Second Level Link<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">Third Level Link</a>
+                                </li>
+                                <li>
+                                    <a href="#">Third Level Link</a>
+                                </li>
+                                <li>
+                                    <a href="#">Third Level Link</a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="empty.html"><i class="fa fa-fw fa-file"></i> Empty Page</a>
+                </li> -->
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        Employee Management
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <!--表头-->
+                                    <thead>
+                                    <tr>
+                                        <th data-field="id" data-align="center">Id
+                                        </th>
+                                        <th data-field="name">User Name</th>
+                                        <th data-field="password">PassWord</th>
+                                        <th data-field="phone">Phone</th>
+
+                                    </tr>
+                                    </thead>
+                                    <!--表格内容-->
+                                    <!--<tbody>-->
+                                    <!--<tr class="odd gradeX">-->
+                                        <!--<td></td>-->
+                                        <!--<td>tony</td>-->
+                                        <!--<td>1010001</td>-->
+                                        <!--<td class="center"> 121090800001</td>-->
+                                        <!--<td>18757463546</td>-->
+                                        <!--<td>83737373@163.com</td>-->
+                                        <!--<td class="center">-->
+                                            <!--<div class="image" style="padding-bottom: 20dp">-->
+                                                <!--<img src="/images/faceImg/e1.jpg" width="75" height="102" alt="User">-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<div class="image">-->
+                                                <!--<input name="submit" type="image" class="launch-modal" href="#"-->
+                                                       <!--data-modal-id="modal-register" src="/images/edit.png" width="25"-->
+                                                       <!--height="25"/>-->
+                                                <!--<input type="image" src="/images/delete.png" width="25" height="25"-->
+                                                       <!--alt="User">-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+
+                                    <!--<tr class="odd gradeX">-->
+                                        <!--<td></td>-->
+                                        <!--<td>kabe</td>-->
+                                        <!--<td>1010002</td>-->
+                                        <!--<td class="center">121090800002</td>-->
+                                        <!--<td>13546375867</td>-->
+                                        <!--<td>875647574@163.com</td>-->
+                                        <!--<td class="center">-->
+                                            <!--<div class="image" style="padding-bottom: 20dp">-->
+                                                <!--<img src="/images//faceImg/e2.jpg" width="75" height="102" alt="User">-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<div class="image">-->
+                                                <!--<img src="/images/edit.png" class="launch-modal" href="#"-->
+                                                     <!--data-modal-id="modal-register" width="25" height="25" alt="User"-->
+                                                     <!--style="padding-right: 5dp">-->
+                                                <!--<img src="/images/delete.png" width="25" height="25" alt="User"-->
+                                                     <!--style="padding-left: 5dp">-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+
+                                    <!--<tr class="odd gradeX">-->
+                                        <!--<td></td>-->
+                                        <!--<td>sam</td>-->
+                                        <!--<td>1010003</td>-->
+                                        <!--<td class="center">121090800003</td>-->
+                                        <!--<td>15974635475</td>-->
+                                        <!--<td>243546574@163.com</td>-->
+                                        <!--<td class="center">-->
+                                            <!--<div class="image" style="padding-bottom: 20dp">-->
+                                                <!--<img src="/images/faceImg/e3.jpg" width="75" height="102" alt="User">-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<div class="image">-->
+                                                <!--<img src="/images/edit.png" class="launch-modal" href="#"-->
+                                                     <!--data-modal-id="modal-register" width="25" height="25" alt="User"-->
+                                                     <!--style="padding-right: 5dp"/>-->
+                                                <!--<img src="/images/delete.png" class="launch-modal" href="#"-->
+                                                     <!--data-modal-id="modal-register" width="25" height="25" alt="User"-->
+                                                     <!--width="25" height="25" alt="User" style="padding-left: 5dp"/>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+
+                                </table>
+
+                                <button class="btn">Add Employee</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+            <!-- /. ROW  -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<!--弹出框-->
+<div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="modal-register-label">Sign up now</h3>
+                <p>Fill in the form below to get instant access:</p>
+            </div>
+
+            <div class="modal-body">
+
+                <form role="form" action="" method="post" class="registration-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="form-first-name">First name</label>
+                        <input type="text" name="form-first-name" placeholder="First name..."
+                               class="form-first-name form-control" id="form-first-name">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-last-name">Last name</label>
+                        <input type="text" name="form-last-name" placeholder="Last name..."
+                               class="form-last-name form-control" id="form-last-name">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-email">Email</label>
+                        <input type="text" name="form-email" placeholder="Email..." class="form-email form-control"
+                               id="form-email">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-about-yourself">About yourself</label>
+                        <textarea name="form-about-yourself" placeholder="About yourself..."
+                                  class="form-about-yourself form-control" id="form-about-yourself"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Sign me up!</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+<!-- jQuery Js -->
+<!-- <script src="javascript/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="/javascript/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="/javascript/jquery.metisMenu.js"></script>
+
+<!-- DATA TABLE SCRIPTS -->
+<script src="/javascript/jquery.dataTables.js"></script>
+<script src="/javascript/dataTables.bootstrap.js"></script>
+
+<!-- Custom Js -->
+<script>
+    $(document).ready(function() {
+        /*bootstrap table*/
+        $('#dataTables-example').bootstrapTable({
+            url:"/console/user_management/all",//请求数据url
+            queryParams: function (params) {
+                return {
+                    offset: params.offset,  //页码
+                    limit: params.limit,   //页面大小
+                    search : params.search, //搜索
+                    order : params.order, //排序
+                    ordername : params.sort, //排序
+                };
+            },
+
+            showHeader : true,
+            showColumns : true,
+            showRefresh : true,
+            pagination: true,//分页
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
+
+            //表格的列
+
+            columns: [
+                {
+                    field: 'id',//域值
+                    title: 'ID',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '5%',
+                },
+                {
+                    field: 'name',//域值
+                    title: 'Name',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '30%',
+                    editable:true,
+                },
+                {
+                    field: 'password',//域值
+                    title: 'Password',//内容
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '35%',
+                    editable:true,
+                },
+                {
+                    field: 'phone',//域值
+                    title: 'Email',//内容
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '20%',
+
+                    formatter : function (value, row, index) {
+                        if (row['status'] === 1) {
+                            return '正常';
+                        }
+                        if (row['status'] === 0) {
+                            return '禁用';
+                        }
+                        return value;
+                    }
+                }
+            ]
+        });
+    });
+</script>
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    !function ($) {
+        $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _formatte_user_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $(".btn.btn-primary.open-add-new-user-dialog").click(function () {
+        _reset($(".form-horizontal.add-new-user"));
+        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update").modal("show");
+    });
+
+    $(".btn.btn-default.open-update-use-dialog").click(function () {
+        var id = $("input[type='radio']:checked").val();
+        if (id != undefined) {
+            _reset($(".form-horizontal.add-new-user"));
+            // 读取用户选中的用户信息
+            $.get("/console/user_management/get/" + id, null, function (r, status) {
+                $("#dialog-user-management-update").find("input[id='id']").val(r.id);
+                $("#dialog-user-management-update").find("input[id='version']").val(r.version);
+                $("#dialog-user-management-update").find("input[id='username']").val(r.username);
+                $("#dialog-user-management-update").find("input[id='firstName']").val(r.firstName);
+                $("#dialog-user-management-update").find("input[id='lastName']").val(r.lastName);
+                $("#dialog-user-management-update").find("input[id='email']").val(r.email);
+                $("#dialog-user-management-update").find("select[id='role']").val(r.role);
+                $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
+
+                $("#dialog-user-management-update-title").html("Update user");
+                $("#dialog-user-management-update").modal("show");
+            });
+        } else {
+            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
+            $(".bs-example-modal-sm").modal("show");
+        }
+    });
+
+    $(".btn.btn-primary.add-new-user").click(function () {
+        _reset_input($(".form-horizontal.add-new-user").find("input"));
+
+        var data = $(".form-horizontal.add-new-user").serializeArray();
+        $.post("/console/user_management/save", data, function (r, status) {
+            if (r.status == "SUCCEED") {
+                $(".bs-example-modal-sm").find(".modal-body").html(
+                    $("#dialog-user-management-update-title").html() + " succeeded."
+                );
+                $(".bs-example-modal-sm").modal("show");
+                $(".btn.btn-default.add-new-user-close").click();
+                $(".panel.panel-default").find("button[name='refresh']").click();
+                // location.reload();
+            } else {
+                if (r.message.username) {
+                    _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
+                }
+                if (r.message.email) {
+                    _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
+                }
+                if (r.message.password) {
+                    _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
+                }
+                if (r.message.firstName) {
+                    _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
+                }
+                if (r.message.lastName) {
+                    _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
+                }
+                if (r.message.WARNING) {
+                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                    $(".bs-example-modal-sm").modal("show");
+                }
+            }
+        });
+    });
+</script>
+
+
+<script>
+    console.log("this script has been launched");
+</script>
+
+</body>
+</html>
