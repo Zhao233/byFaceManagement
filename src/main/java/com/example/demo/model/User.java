@@ -7,6 +7,22 @@ public class User {
     private String password;
     private String phone;
 
+    public User(String id, String name, String password, String phone) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public User(int id, String name, String password, String phone) {
+        this.id = String.valueOf(id);
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+    }
+
+
+
     public String getId() {
         return id;
     }
