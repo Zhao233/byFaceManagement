@@ -71,10 +71,17 @@
         </dependency>
 
         <!-- 分页插件 -->
+        <!--<dependency>-->
+            <!--<groupId>com.github.pagehelper</groupId>-->
+            <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
+            <!--<version>1.1.2</version>-->
+        <!--</dependency>-->
+
+        <!-- mybatis 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.1.2</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- alibaba的druid数据库连接池 -->
@@ -109,6 +116,14 @@
                     <verbose>true</verbose>
                 </configuration>
             </plugin>
+
+            <!-- 配置分页插件 -->
+            <!--<plugin>-->
+                <!--<groupId>com.github.pagehelper.PageHelper</groupId>-->
+                <!--&lt;!&ndash; 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库&ndash;&gt;-->
+                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+                <!--<property name="dialect" value="mysql"/>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

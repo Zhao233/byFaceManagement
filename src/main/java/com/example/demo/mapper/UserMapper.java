@@ -7,6 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
+    String test_DB = "user_test";
+    String DB = "";
+
+    String dbName = "user_test";
 
     /**
      * 增加一个用户
@@ -25,7 +29,9 @@ public interface UserMapper {
      * */
     @Update("update user_test " +
             "set " +
-            "name = #{user.name},password=#{user.password}, phone=#{user.phone} " +
+            "name = #{user.name}," +
+            "password=#{user.password}, " +
+            "phone=#{user.phone} " +
             "where id = #{user.id}")
     void updateUser(@Param("user") User user);
 
@@ -38,7 +44,10 @@ public interface UserMapper {
     /**
      * 根据用户名获取用户（用户名唯一（在表中字段为unique））
      * */
-    @Select("select * from user_test where name = #{name}")
+    @Select("select * from user_test where name=#{name}")
     User getUserByName(@Param("name") String name);
+
+    @Select("select * from "+test_DB+" where name=#{username}")
+    List<User> getUsersByName(@Param("username") String name);
 
 }

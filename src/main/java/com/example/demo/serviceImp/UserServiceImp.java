@@ -3,6 +3,8 @@ package com.example.demo.serviceImp;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,4 +75,5 @@ public class UserServiceImp implements UserService {
 
 
     }
+
 }
