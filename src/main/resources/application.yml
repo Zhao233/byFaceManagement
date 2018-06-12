@@ -1,7 +1,7 @@
-#server port
+# 应用端口
 server.port: 8080
 
-# Profiles file name
+# 活动的Profiles
 spring.profiles.active: Dev
 
 age: 18
