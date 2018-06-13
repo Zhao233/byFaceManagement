@@ -105,6 +105,10 @@
                     <a href="/console/server_management"  class="active-menu"><i class="fa fa-qrcode"></i>Server Mangement</a>
                 </li>
 
+                <li>
+                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
+                </li>
+
             </ul>
 
         </div>
@@ -140,11 +144,11 @@
                                             "enabled": true,
                                             "mainServer": false-->
 
-                                        <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="serverName">Server Name</th>
-                                        <th data-field="serverIP">Server IP</th>
-                                        <th data-field="mainServer">Is Main Server</th>
-                                        <th data-field="updateDateString">Modify Time</th>
+                                        <!--<th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>-->
+                                        <!--<th data-field="serverName">Server Name</th>-->
+                                        <!--<th data-field="serverIP">Server IP</th>-->
+                                        <!--<th data-field="mainServer">Is Main Server</th>-->
+                                        <!--<th data-field="updateDateString">Modify Time</th>-->
                                     </tr>
                                     </thead>
                                 </table>
@@ -241,6 +245,7 @@
         /*bootstrap table*/
 
         $('#_table_user_search').bootstrapTable({
+            select:'multi',
             method: 'get',
             url: "/console/server_management/search",
             striped: true,
@@ -267,7 +272,47 @@
                     "rows": res.rows,
                     "total": res.total
                 };
-            }
+            },
+            columns: [
+                {
+                    field: 'id',//域值
+                    title: '',//标题
+                    visible: false,//false表示不显示
+                    sortable: false,//启用排序
+                    width : '5%',
+                },
+                {
+                    field: 'serverName',//域值
+                    title: 'Server Name',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '5%',
+                },
+
+                {
+                    field: 'serverIP',//域值
+                    title: 'Server IP',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '5%',
+                },
+
+                {
+                    field: 'mainServer',//域值
+                    title: 'Is Main Server',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '5%',
+                },
+
+                {
+                    field: 'updateDateString',//域值
+                    title: 'Modify Time',//标题
+                    visible: true,//false表示不显示
+                    sortable: true,//启用排序
+                    width : '5%',
+                },
+        ]
         });
     });
 </script>

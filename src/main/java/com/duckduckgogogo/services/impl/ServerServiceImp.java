@@ -20,7 +20,7 @@ import java.util.List;
  * */
 @Service("serverService")
 public class ServerServiceImp implements ServerService {
-    private static final String serverIP = "10.8.20.146:8080";
+    private static final String serverIP = "10.8.20.255:8080";
 
     /**
      * 从服务器获取服务器信息

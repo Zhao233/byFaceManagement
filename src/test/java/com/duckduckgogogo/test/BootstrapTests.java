@@ -1,5 +1,6 @@
 package com.duckduckgogogo.test;
 
+import com.duckduckgogogo.services.ConfigInfoService;
 import com.duckduckgogogo.services.ServerService;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
@@ -18,6 +19,9 @@ public class BootstrapTests {
 
     @Autowired
     private ServerService serverService;
+
+    @Autowired
+    private ConfigInfoService configInfoService;
 
 //    @Autowired
 //    private ServerService serverService;
@@ -75,5 +79,11 @@ public class BootstrapTests {
         System.out.println(serverService.searchServers("7","0","1"));
     }
 
+    @Test
+    public void test2(){
+        System.out.println(configInfoService.save("123","test001","test_url",
+                10,30,20,
+                10,0,1,2,1));
+    }
 
 }
