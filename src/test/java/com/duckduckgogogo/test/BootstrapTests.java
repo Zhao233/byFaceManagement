@@ -1,6 +1,9 @@
 package com.duckduckgogogo.test;
 
+import com.duckduckgogogo.controller.EmployeeManagementController;
+import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.services.ConfigInfoService;
+import com.duckduckgogogo.services.EmployeeService;
 import com.duckduckgogogo.services.ServerService;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
@@ -10,6 +13,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,6 +30,12 @@ public class BootstrapTests {
 
     @Autowired
     private ConfigInfoService configInfoService;
+
+    @Autowired
+    private CameraService cameraService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
 //    @Autowired
 //    private ServerService serverService;
@@ -80,10 +94,56 @@ public class BootstrapTests {
     }
 
     @Test
-    public void test2(){
+    public void test_config(){
         System.out.println(configInfoService.save("123","test001","test_url",
                 10,30,20,
                 10,0,1,2,1));
+    }
+
+    @Test
+    public void test_Camera(){
+        //System.out.println(cameraService.addCamera("test_cam","rtsp://admin:admin@10.22.0.198:554/cam/realmonitor?channel=1&subtype=0",1,"test_entranceGuard","test_No","123,111,2222"));
+
+        System.out.println(cameraService.searchCamera("","0","10"));
+
+        //System.out.println(cameraService.updateCamera(3,1,"test_camera_updated","rtsp://admin:admin@10.22.0.198:554/cam/realmonitor?channel=1&subtype=0",1,"test_entranceGuard","test_No","123,111,2222"));
+
+        //System.out.println(cameraService.get(3));
+
+        //List<Integer> list = new LinkedList<>();
+        //list.add(3);
+
+        //System.out.println(cameraService.deleteCamera(list));
+    }
+
+    @Test
+    public void JSON(){
+        JSONArray array = new JSONArray();
+        HashMap<String, Integer> map;
+
+        List<Integer> list = new LinkedList<>();
+
+        list.add(123);
+        list.add(123);
+        list.add(123);
+        list.add(123);
+
+        for(int temp : list){
+            map = new HashMap<>();
+
+            map.put("taskID",temp);
+
+            array.add(map);
+        }
+
+        System.out.println(array);
+    }
+
+    @Test
+    public  void Employee(){
+        EmployeeManagementController controller = new EmployeeManagementController();
+
+        Map<String, Object> map = controller.search("",0,10);
     }
 
 }

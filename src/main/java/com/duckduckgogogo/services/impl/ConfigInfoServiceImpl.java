@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service("configInfoService")
 @Transactional
-public class ConfigInfoServiceImpl implements ConfigInfoService {
-    private static final String serverIP = "10.8.20.255:8080";
-
+public class ConfigInfoServiceImpl extends Info implements ConfigInfoService {
     @Override
     public ConfigInfo findById(long id) {
 
@@ -48,8 +46,7 @@ public class ConfigInfoServiceImpl implements ConfigInfoService {
     public String search(){
 
         try {
-            String url = "http://" + this.serverIP + "/api/config/query";
-            //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
+            String url = "http://" + super.serverIP + "/api/config/query";
 
             RestTemplate rest = new RestTemplate();
 
@@ -71,7 +68,7 @@ public class ConfigInfoServiceImpl implements ConfigInfoService {
                     int visitorquality, int similarscore, int warningscore, int time1,
                     int time2, int time3, int version) {
         try {
-            String url = "http://" + this.serverIP + "/api/config/update";
+            String url = "http://" + super.serverIP + "/api/config/update";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             String request = "{\"visitorquality\":"+visitorquality+"," +

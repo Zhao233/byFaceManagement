@@ -61,12 +61,13 @@ public class ConsoleController {
     }
 
     /**
-     * ADMINISTRATOR)
+     * ADMINI   STRATOR)
      */
     @RequestMapping("/camera_management")
     public ModelAndView toCameraManagement() {
         return new ModelAndView("console/camera_management");
     }
+
 
     /**
      * ADMINISTRATOR)
@@ -84,7 +85,6 @@ public class ConsoleController {
         return new ModelAndView("console/employee_management");
     }
 
-
     /**
      * CUSTOMER
      */
@@ -101,10 +101,6 @@ public class ConsoleController {
     /**
      * SUPPLIER
      */
-    @RequestMapping("/task_management")
-    public ModelAndView toTaskManagement() {
-        return new ModelAndView("console/task_management");
-    }
 
     @RequestMapping("/task_management_complete")
     public ModelAndView toTaskManagementComplete() {
@@ -150,5 +146,15 @@ public class ConsoleController {
     @RequestMapping("/chart")
     public ModelAndView tochart() {
         return new ModelAndView("console/chart");
+    }
+
+
+
+    /**
+     * Test
+     * */
+    @RequestMapping("/server_test")
+    public ModelAndView toServer_test() {
+        return new ModelAndView("console/server_test");
     }
 }

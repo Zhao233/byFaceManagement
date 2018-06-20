@@ -19,20 +19,17 @@ import java.util.List;
  *远程调用接口，操作服务器信息
  * */
 @Service("serverService")
-public class ServerServiceImp implements ServerService {
-    private static final String serverIP = "10.8.20.255:8080";
-
+public class ServerServiceImp extends Info implements ServerService {
     /**
      * 从服务器获取服务器信息
      * */
     @Override
     public String searchServers(String search, String offset, String limit){
         try {
-            String url = "http://" + this.serverIP + "/api/server/search";
-            //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
+            String url = "http://" + super.serverIP + "/api/server/search";
 
             RestTemplate rest = new RestTemplate();
-            //FileSystemResource resource = new FileSystemResource(new File(filePath));
+
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
             param.add("search", search);
             param.add("offset", offset);
@@ -60,7 +57,7 @@ public class ServerServiceImp implements ServerService {
     @Override
     public String addServer(String serverName,String serverIP,String isMainServer){
         try {
-            String url = "http://" + this.serverIP + "/api/server/add";
+            String url = "http://" + super.serverIP + "/api/server/add";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
@@ -73,7 +70,6 @@ public class ServerServiceImp implements ServerService {
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             String request = "{\"serverName\":\"" + serverName + "\",\"serverIP\":\"" + serverIP + "\",\"isMainServer\":\"" + isMainServer + "\"}";
-
 
             String string = rest.postForObject(url, request, String.class);
 
@@ -94,7 +90,7 @@ public class ServerServiceImp implements ServerService {
     @Override
     public String updateServer(String serverName,String serverIP,String isMainServer){
 		try {
-            String url = "http://" + this.serverIP + "/api/server/update";
+            String url = "http://" + super.serverIP + "/api/server/update";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
@@ -129,7 +125,7 @@ public class ServerServiceImp implements ServerService {
      * */
     @Override
     public String deleteServer(List<String> list){
-        String url = "http://"+this.serverIP+"/api/server/delete";
+        String url = "http://"+super.serverIP+"/api/server/delete";
         //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
         RestTemplate rest = new RestTemplate();
@@ -168,7 +164,7 @@ public class ServerServiceImp implements ServerService {
     @Override
     public String getServerById(String id) {
         try {
-            String url = "http://" + this.serverIP + "/api/server/get/" + id;
+            String url = "http://" + super.serverIP + "/api/server/get/" + id;
 
             RestTemplate rest = new RestTemplate();
             //FileSystemResource resource = new FileSystemResource(new File(filePath));

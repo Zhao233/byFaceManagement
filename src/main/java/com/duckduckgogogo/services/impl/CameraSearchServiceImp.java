@@ -1,29 +1,25 @@
 package com.duckduckgogogo.services.impl;
 
-import com.duckduckgogogo.services.TraceSearchService;
+import com.duckduckgogogo.services.CameraSearchService;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 
-@Service("traceService")
-public class TraceServiceImpl extends Info implements TraceSearchService {
-
+public class CameraSearchServiceImp extends Info implements CameraSearchService {
     @Override
-    public String getTraceInfo(int personID, String dateStrat, String dateEnd) {
+    public String getCameraInfo(int camereid, String datestrat, String dateend) {
         try{
             String url = "http://" + super.serverIP + "/api/query/camera";
 
             RestTemplate rest = new RestTemplate();
 
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("personID", personID);
-            param.add("dateStrat", dateStrat);
-            param.add("dateEnd", dateEnd);
+            param.add("camereid", camereid);
+            param.add("datestrat", datestrat);
+            param.add("dateend", dateend);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
