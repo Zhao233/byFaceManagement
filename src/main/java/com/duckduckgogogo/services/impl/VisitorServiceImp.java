@@ -38,15 +38,22 @@ public class VisitorServiceImp extends Info implements VisitorService {
     }
 
     @Override
-    public String addVisitor(FileSystemResource image, JSONObject person) {
+    public String addVisitor(FileSystemResource resource, String personName, String IDNumber, String phoneNumber, String startDate, String endData) {
         try{
             String url = "http://" + super.serverIP + "/api/face/add";
-
             RestTemplate rest = new RestTemplate();
 
+            JSONObject object = new JSONObject();
+            object.put("personName", personName);
+            object.put("IDNumber",IDNumber);
+            object.put("phoneNumber",phoneNumber);
+            object.put("startDate",startDate);
+            object.put("endDate",endData);
+            object.put("role","visitor");
+
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("personInfo", person);
-            param.add("imageData", image);
+            param.add("personInfo", object);
+            param.add("imageData", resource);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
@@ -57,20 +64,29 @@ public class VisitorServiceImp extends Info implements VisitorService {
     }
 
     @Override
-    public String updateVisitor(int personID,String personName) {
+    public String updateVisitor(FileSystemResource resource, int personID, String personName, String IDNumber, String phoneNumber, int version, String startDate, String endDate) {
         try{
             String url = "http://" + super.serverIP + "/api/face/update";
 
             RestTemplate rest = new RestTemplate();
 
+            JSONObject object = new JSONObject();
+            object.put("id", personID);
+            object.put("personName", personName);
+            object.put("role", "visitor");
+            object.put("IDNumber", IDNumber);
+            object.put("phoneNumber", phoneNumber);
+            object.put("startDate", startDate);
+            object.put("endDate", endDate);
+            object.put("version", version);
+
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("personID", personID);
-            param.add("personName", personName);
+            param.add("personInfo", object);
+            param.add("imageData", resource);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             return rest.postForObject(url, param, String.class);
-
         } catch (Exception e){
             return "error : "+e.getMessage();
         }

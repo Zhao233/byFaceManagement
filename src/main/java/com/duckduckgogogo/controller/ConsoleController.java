@@ -85,6 +85,12 @@ public class ConsoleController {
         return new ModelAndView("console/employee_management");
     }
 
+
+    @RequestMapping("/visitor_management")
+    public ModelAndView toVisitorManagement() {
+        return new ModelAndView("console/visitor_management");
+    }
+
     /**
      * CUSTOMER
      */
@@ -147,8 +153,6 @@ public class ConsoleController {
     public ModelAndView tochart() {
         return new ModelAndView("console/chart");
     }
-
-
 
     /**
      * Test

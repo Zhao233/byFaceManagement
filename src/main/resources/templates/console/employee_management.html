@@ -108,7 +108,7 @@
 
                 <!-- 访客管理 -->
                 <li>
-                    <a href="/console/chart.html"><i class="fa fa-bar-chart-o"></i>Visitor Management</a>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>Visitor Management</a>
                 </li>
 
                 <!-- 摄像头管理 -->
@@ -153,17 +153,28 @@
                                     <thead>
                                     <tr>
                                         <th data-field="userid" data-formatter="_formatte_user_id"></th>
-                                        <th data-field="userid" data-sortable="true" class="W30" style="border:none;">
-                                            User ID
-                                        </th>
+
                                         <th data-field="name" data-sortable="true" class="W30" style="border:none;">
                                             Name
                                         </th>
-                                        <th data-field="updateDateString" data-sortable="true" class="W30"
-                                            style="border:none;">Modify Time
+                                        <th data-field="personNumber" data-sortable="true" class="W30" style="border:none;">
+                                            Employee Number
                                         </th>
-                                        <th data-field="feature" data-formatter="_formatte_locale_image"
-                                            data-sortable="true" class="W100" style="border:none;">Image
+                                        <th data-field="cardNumber" data-sortable="true" class="W30" style="border:none;">
+                                            Card Number
+                                        </th>
+                                        <th data-field="IDNumber" data-sortable="true" class="W30" style="border:none;">
+                                            ID Number
+                                        </th>
+                                        <th data-field="phoneNumber" data-sortable="true" class="W30" style="border:none;">
+                                            Phone Number
+                                        </th>
+
+                                        <th data-field="updateDateString" data-sortable="true" class="W30" style="border:none;">
+                                            Modify Time
+                                        </th>
+                                        <th data-field="feature" data-formatter="_formatte_locale_image" data-sortable="true" class="W100" style="border:none;">
+                                            Image
                                         </th>
                                     </tr>
                                     </thead>
@@ -241,7 +252,7 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="IDNumber" class="col-sm-4 control-label">Card Number</label>
+                                <label for="IDNumber" class="col-sm-4 control-label">ID Number</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="IDNumber" name="IDNumber"
                                            maxlength="30"/>
@@ -452,8 +463,6 @@
             }
 
         });
-
-
 
         flag = '';
 
