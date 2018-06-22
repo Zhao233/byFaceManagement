@@ -1,10 +1,7 @@
 package com.duckduckgogogo.test;
 
 import com.duckduckgogogo.controller.EmployeeManagementController;
-import com.duckduckgogogo.services.CameraService;
-import com.duckduckgogogo.services.ConfigInfoService;
-import com.duckduckgogogo.services.EmployeeService;
-import com.duckduckgogogo.services.ServerService;
+import com.duckduckgogogo.services.*;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -36,6 +33,9 @@ public class BootstrapTests {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private CameraInfoService cameraInfoService;
 
 //    @Autowired
 //    private ServerService serverService;
@@ -144,6 +144,11 @@ public class BootstrapTests {
         EmployeeManagementController controller = new EmployeeManagementController();
 
         Map<String, Object> map = controller.search("",0,10);
+    }
+
+    @Test
+    public void test_came(){
+        System.out.println(cameraInfoService.getChart(97,"2018-06-20"));
     }
 
 }

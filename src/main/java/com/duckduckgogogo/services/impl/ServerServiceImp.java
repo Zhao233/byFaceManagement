@@ -88,28 +88,22 @@ public class ServerServiceImp extends Info implements ServerService {
      *向服务器提交修改信息
      * */
     @Override
-    public String updateServer(String serverName,String serverIP,String isMainServer){
+    public String updateServer(int id, String serverName,String serverIP,String isMainServer,int version){
 		try {
             String url = "http://" + super.serverIP + "/api/server/update";
-            //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
-            //FileSystemResource resource = new FileSystemResource(new File(filePath));
+
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
-            param.add("personID", 83);
-            param.add("personName", "test005");
-
-            JSONObject message = new JSONObject();
-
-            message.put("search", "");
-            message.put("offset", 0);
-            message.put("limit", 5);
+            param.add("id", id);
+            param.add("serverName", serverName);
+            param.add("serverIP", serverIP);
+            param.add("isMainServer", isMainServer);
+            param.add("version", version);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
-            String request = "{\"serverName\":\"" + serverName + "\",\"serverIP\":\"" + serverIP + "\",\"isMainServer\":\"" + isMainServer + "\"}";
-
-            String string = rest.postForObject(url, request, String.class);
+            String string = rest.postForObject(url, param, String.class);
 
             System.out.print("修改成功：");
             System.out.println(string);
@@ -124,45 +118,28 @@ public class ServerServiceImp extends Info implements ServerService {
      * 向服务器提交删除请求
      * */
     @Override
-    public String deleteServer(List<String> list){
+    public String deleteServer(List<Integer> list){
         String url = "http://"+super.serverIP+"/api/server/delete";
         //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
         RestTemplate rest = new RestTemplate();
-        //FileSystemResource resource = new FileSystemResource(new File(filePath));
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
-        param.add("search", "");
-        param.add("offset", 0);
-        param.add("limit", 5);
-
-        JSONObject message = new JSONObject();
-
-        message.put("search", "");
-        message.put("offset", 0);
-        message.put("limit", 5);
-
-        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         JSONArray array = new JSONArray();
+        JSONObject object = new JSONObject();
 
-        int size = list.size();
-        for(int i = 0; i < size;i++){
-            array.add(new DeleteID(list.get(i)));
+        for(int temp : list){
+            object.put("serverID",temp);
+
+            array.add(object);
         }
 
-        //String request = "[{\"serverID\":2},{\"serverID\":3}]";
         String request = array.toString();
 
-        String string = rest.postForObject(url, request, String.class);
-
-        System.out.print("删除成功：");
-        System.out.println(string);
-
-        return string;
+        return rest.postForObject(url, request, String.class);
     }
 
     @Override
-    public String getServerById(String id) {
+    public String getServerById(int id) {
         try {
             String url = "http://" + super.serverIP + "/api/server/get/" + id;
 

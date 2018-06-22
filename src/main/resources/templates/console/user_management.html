@@ -101,6 +101,17 @@
                     <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Management</a>
                 </li>
 
+                <!-- 考勤管理 -->
+                <li>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                </li>
+
+                <!-- 摄像头信息 -->
+                <li>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
+                </li>
+
+                <!--配置信息-->
                 <li>
                     <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
                 </li>
@@ -141,152 +152,6 @@
                                         <th data-field="enabled">Enabled</th>
                                     </tr>
                                     </thead>
-
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                asfas
-                                            </td>
-
-                                            <td>
-                                                d
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-                                            <td>
-                                                a
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                asfas
-                                            </td>
-
-                                            <td>
-                                                d
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-                                            <td>
-                                                a
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                asfas
-                                            </td>
-
-                                            <td>
-                                                d
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-                                            <td>
-                                                a
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                asfas
-                                            </td>
-
-                                            <td>
-                                                d
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-                                            <td>
-                                                a
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                asfas
-                                            </td>
-
-                                            <td>
-                                                d
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-
-                                            <td>
-                                                a
-                                            </td>
-                                            <td>
-                                                a
-                                            </td>
-                                        </tr>
-
-
-
-                                    </tbody>
                                 </table>
 
                                 <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New User</button>
@@ -438,48 +303,48 @@
 
             //表格的列
 
-            columns: [
-                {
-                    field: 'id',//域值
-                    title: 'ID',//标题
-                    visible: true,//false表示不显示
-                    sortable: true,//启用排序
-                    width : '5%',
-                },
-                {
-                    field: 'name',//域值
-                    title: 'Name',//标题
-                    visible: true,//false表示不显示
-                    sortable: true,//启用排序
-                    width : '30%',
-                    editable:true,
-                },
-                {
-                    field: 'password',//域值
-                    title: 'Password',//内容
-                    visible: true,//false表示不显示
-                    sortable: true,//启用排序
-                    width : '35%',
-                    editable:true,
-                },
-                {
-                    field: 'phone',//域值
-                    title: 'Email',//内容
-                    visible: true,//false表示不显示
-                    sortable: true,//启用排序
-                    width : '20%',
-
-                    formatter : function (value, row, index) {
-                        if (row['status'] === 1) {
-                            return '正常';
-                        }
-                        if (row['status'] === 0) {
-                            return '禁用';
-                        }
-                        return value;
-                    }
-                }
-            ]
+            // columns: [
+            //     {
+            //         field: 'id',//域值
+            //         title: 'ID',//标题
+            //         visible: true,//false表示不显示
+            //         sortable: true,//启用排序
+            //         width : '5%',
+            //     },
+            //     {
+            //         field: 'name',//域值
+            //         title: 'Name',//标题
+            //         visible: true,//false表示不显示
+            //         sortable: true,//启用排序
+            //         width : '30%',
+            //         editable:true,
+            //     },
+            //     {
+            //         field: 'password',//域值
+            //         title: 'Password',//内容
+            //         visible: true,//false表示不显示
+            //         sortable: true,//启用排序
+            //         width : '35%',
+            //         editable:true,
+            //     },
+            //     {
+            //         field: 'phone',//域值
+            //         title: 'Email',//内容
+            //         visible: true,//false表示不显示
+            //         sortable: true,//启用排序
+            //         width : '20%',
+            //
+            //         formatter : function (value, row, index) {
+            //             if (row['status'] === 1) {
+            //                 return '正常';
+            //             }
+            //             if (row['status'] === 0) {
+            //                 return '禁用';
+            //             }
+            //             return value;
+            //         }
+            //     }
+            // ]
         });
 
         $('#_table_user_search').bootstrapTable({

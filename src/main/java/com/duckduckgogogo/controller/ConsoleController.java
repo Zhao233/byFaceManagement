@@ -91,6 +91,16 @@ public class ConsoleController {
         return new ModelAndView("console/visitor_management");
     }
 
+    @RequestMapping("/attendance_management")
+    public ModelAndView toAttendanceManagement() {
+        return new ModelAndView("console/attendance_management");
+    }
+
+    @RequestMapping("/camera_info")
+    public ModelAndView toCameraInfo() {
+        return new ModelAndView("console/camera_info");
+    }
+
     /**
      * CUSTOMER
      */

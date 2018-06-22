@@ -1,50 +1,53 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.17/css/jquery.dataTables.min.css"/>
-    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.6/css/select.dataTables.min.css"/>-->
-    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css"/>-->
+    <title></title>
+    <link href="/style/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.17/js/jquery.dataTables.min.js"></script>
-    <!--<script src="https://cdn.datatables.net/select/1.2.6/js/dataTables.select.min.js"></script>-->
-    <!--<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>-->
+    <style>
+        .datePicker{
+            width: 36em;
+        }
+
+        .datePicker_{
+            width: 15em;
+        }
+    </style>
+</head>
+
 <body>
-<table id="example" class="display" style="width:100%">    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Server Name</th>
-        <th>Server IP</th>
-        <th>Is Main Server</th>
-        <th>Modify Time</th>
-        <th>Enabled</th>
-        <th>Version</th>
-    </tr>
-    </thead>
-</table>
+<div class="container">
+    <div class="form-group datePicker">
+        <label for="dtp_input2" class="col-md-2 ">选择开始日期</label>
+        <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+            <input class="form-control" size="6" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        <input type="hidden" id="dtp_input2" value="" /><br/>
+    </div>
+</div>
 
-<script>
+<script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
+<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+<script type="text/javascript">
     $(document).ready(function() {
-        $('#example').DataTable( {
-            "processing": true,
-            "serverSide": true,
-
-            "ajax": {
-                "url": "/conGETsole/server_management/test/get",
-                "type": "GET",
-                "contentType": "application/json",
-            },
-            columns: [
-                { data: 'id' },
-                { data: 'serverName' },
-                { data: 'serverIP' },
-                { data: 'mainServer' },
-                { data: 'enabled' },
-                { data: 'version' }
-            ]
+        $('.form_date').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
         });
-    } );
+    })
 </script>
+
 </body>
-
-
 </html>

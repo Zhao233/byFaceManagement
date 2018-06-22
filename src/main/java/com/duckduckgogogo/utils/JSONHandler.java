@@ -91,9 +91,6 @@ public class JSONHandler {
 
             return jsonArray;
         } catch(Exception e){
-            //
-
-
             return new JSONArray();
         }
     }

@@ -7,9 +7,9 @@ public interface ServerService {
 
     String addServer(String serverName,String serverIP,String isMainServer);
 
-    String updateServer(String serverName,String serverIP,String isMainServer);
+    String updateServer(int id, String serverName,String serverIP,String isMainServer,int version);
 
-    String deleteServer(List<String> list);
+    String deleteServer(List<Integer> list);
 
-    String getServerById(String id);
+    String getServerById(int id);
 }

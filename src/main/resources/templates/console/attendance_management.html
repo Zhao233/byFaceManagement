@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Morris Chart Styles-->
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <!-- it's about file upload box -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+    <!--datePicker-->
+    <!--<link href="/style/bootstrap.min.css" rel="stylesheet" media="screen">-->
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
+
+    <style>
+
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .datePicker{
+            width: 36em;
+        }
+
+        .datePicker_{
+            width: 15em;
+        }
+    </style>
+</head>
+<body>
+<script>
+    window.sign = 0;//0:add, 1:update
+</script>
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+                        <div class="image" style="padding-bottom: 20dp">
+                            <img src="/images/default_avatar_male.jpg" width="120" height="120" alt="User">
+                        </div>
+
+                        <div>
+                            John Doe
+                        </div>
+
+                        <div>
+                            john.doe@163.com
+                        </div>
+                    </div>
+                    <br></br>
+                </li>
+
+                <!-- 用户管理 -->
+                <li>
+                    <a href="/console/user_management"><i class="fa fa-table"></i> User
+                        Management</a>
+                </li>
+
+                <!-- 员工管理 -->
+                <li>
+                    <a href="/console/employee_management">
+                        <i class="fa fa-dashboard"></i>
+                        Employee Management
+                    </a>
+                </li>
+
+                <!-- 访客管理 -->
+                <li>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>Visitor Management</a>
+                </li>
+
+                <!-- 摄像头管理 -->
+                <li>
+                    <a href="/console/camera_management" ><i class="fa fa-desktop"></i>Camera Management</a>
+                </li>
+
+                <!-- 服务器管理 -->
+                <li>
+                    <a href="/console/server_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                </li>
+
+                <!-- 考勤管理 -->
+                <li>
+                    <a href="/console/attendance_management" class="active-menu"><i class="fa fa-qrcode"></i>Attendance Mangement</a>
+                </li>
+
+                <!-- 摄像头信息 -->
+                <li>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
+                </li>
+
+                <!--配置信息-->
+                <li>
+                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        Attendance Management
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <button class="btn btn-primary searchData">Search</button>
+                            <br/>
+
+                            <label class="col-md-2" for="search_id">员工ID</label>
+                            <input class="form-control" type="text" id="search_id"/>
+
+                            <div class="form-group datePicker">
+                                <label for="dtp_input2" class="col-md-2 ">选择开始日期</label>
+
+                                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                    <input id="startTime" class="form-control" size="6" type="text" value="" readonly>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                <input type="hidden" id="dtp_input2" value="" /><br/>
+                            </div>
+
+                            <div class="form-group datePicker">
+                                <label for="dtp_input2" class="col-md-2 ">选择结束日期</label>
+                                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                    <input id="endTime" class="form-control" size="6" type="text" value="" readonly>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                <input type="hidden" id="dtp_input3" value="" /><br/>
+                            </div>
+                        </div>
+
+                            <!--<button class="btn btn-primary searchData">Search</button>-->
+
+                            <div class="table-responsive">
+
+                                <table id="_table_user_search" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="personnumber" data-sortable="true" class="W30" style="border:none;">
+                                            ID
+                                        </th>
+                                        <th data-field="name" data-sortable="true" class="W30" style="border:none;">
+                                            Name
+                                        </th>
+                                        <th data-field="tracedate" data-sortable="true" class="W30"
+                                            style="border:none;">Time
+                                        </th>
+                                        <th data-field="cameraname" data-sortable="true" class="W30"
+                                            style="border:none;">Camera
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+            <!-- /. ROW  -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<!--datePicker-->
+<script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
+<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+<!--<script src="/assets/js/jquery-1.11.1.min.js"></script>-->
+<!--<script src="/assets/bootstrap/js/bootstrap.min.js"></script>-->
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+<!-- jQuery Js -->
+<!-- <script src="javascript/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="/javascript/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="/javascript/jquery.metisMenu.js"></script>
+
+<!-- DATA TABLE SCRIPTS -->
+<script type="text/javascript" charset="UTF-8" src="/javascript/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="UTF-8" src="/javascript/dataTables.bootstrap.js"></script>
+
+<!-- Custom Js -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        //初始化日历
+        $('.form_date').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+
+        //初始化table
+        var date = new Date();
+
+        //获取当前时间
+        var formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+        console.log('date: ' + formatted_date);
+
+        window.limit;
+        window.offset;
+        window.search;
+
+        $('#_table_user_search').bootstrapTable({
+            method: 'get',
+            url: "/console/attendance_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+
+            showHeader : true,
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
+
+            queryParams: function(params) {
+                window.limit = params.limit;
+                window.offset = params.offset / params.limit;
+                window.search = $(".search").find("input").val();
+
+                return {
+                    limit: limit,
+                    offset: offset,
+                    search: search,
+                    startDate:'2018-6-21',
+                    // endDate:'2018-6-18'formatted_date,
+                    endDate:'2018-6-21',
+                    id:97
+                };
+            },
+            responseHandler: function(res) {
+                console.log('row'+res.rows);
+
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+        });
+    })
+</script>
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _formatte_user_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
+        _reset($(".form-horizontal.add-new-user"));
+        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update").modal("show");
+    });
+
+    //update method
+    // $(".btn.btn-success.open-update-use-dialog").click(function() {
+    //     var id = $("input[type='radio']:checked").val();
+    //     if (id != undefined) {
+    //         _reset($(".form-horizontal.add-new-user"));
+    //         // 读取用户选中的用户信息
+    //         $.get("/console/server_management/get/" + id, null, function(r, status) {
+    //             $("#dialog-user-management-update").find("input[id='servername']").val(r.serverName);
+    //             $("#dialog-user-management-update").find("input[id='serverip']").val(r.serverIP);
+    //             $("#dialog-user-management-update").find("select[id='ismainserver']").val(r.mainServer ? "True" : "False");
+    //
+    //             $("#dialog-user-management-update-title").html("Update user");
+    //             $("#dialog-user-management-update").modal("show");
+    //         });
+    //     } else {
+    //         $(".bs-example-modal-sm").find(".modal-body").html("You did not select the camera.");
+    //         $(".bs-example-modal-sm").modal("show");
+    //     }
+    // });
+
+    // $(".btn.btn-primary.add-new-user").click(function() {
+    //     _reset_input($(".form-horizontal.add-new-user").find("input"));
+    //
+    //     var data = $(".form-horizontal.add-new-user").serializeArray();
+    //
+    //     console.log(data);
+    //
+    //     $.post("/console/camera_management/add", data, function(r, status) {
+    //
+    //         if (r.status == "SUCCEED") {
+    //             $(".bs-example-modal-sm").find(".modal-body").html(
+    //                 $("#dialog-server-management-update-title").html() + " succeeded."
+    //             );
+    //             $(".bs-example-modal-sm").modal("show");
+    //             $(".btn.btn-default.add-new-user-close").click();
+    //             $(".panel.panel-default").find("button[name='refresh']").click();
+    //             // location.reload();
+    //         } else {
+    //             if (r.message.servername) {
+    //                 _set($(".form-horizontal.add-new-user").find("input[id='servername']"), r.message.servername);
+    //             }
+    //             if (r.message.serverip) {
+    //                 _set($(".form-horizontal.add-new-user").find("input[id='serverip']"), r.message.serverip);
+    //             }
+    //             if (r.message.WARNING) {
+    //                 $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+    //                 $(".bs-example-modal-sm").modal("show");
+    //             }
+    //         }
+    //     });
+    // });
+
+
+
+    $(".btn.btn-primary.searchData").click(function() {
+        console.log('clicked search button');
+
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        var search_id = $("#search_id").val();
+
+        console.log("startTime: "+startTime);
+        console.log("endTime: "+endTime);
+        console.log("search_id: "+search_id);
+
+        //校验输入数据
+        if(startTime == undefined){
+
+            if(endTime == undefined){
+
+                if(search_id == undefined){
+                   return;
+                }
+
+                return;
+            }
+
+            return;
+        }
+
+        //校验结束时间大于开始时间
+        var start_time = startTime.replace(/-/,"");
+        var end_time = endTime.replace(/-/,"");
+
+        console.log("start_time: "+start_time);
+        console.log("end_time: "+end_time);
+
+        if(end_time < start_time){
+
+        }
+
+
+
+        $.ajax({
+            type: "get",
+            url: "/console/attendance_management/search",
+            data: {
+                limit:  window.limit,
+                offset:  window.offset,
+                search:  window.search,
+                startDate:startTime,
+                endDate:endTime,
+                id:search_id
+            },
+            dataType:"json",
+            success : function(json) {
+                $("#_table_user_search").bootstrapTable('load', json);//主要是要这种写法
+            }
+        });
+    });
+</script>
+
+
+<script>
+    console.log("this script has been launched");
+</script>
+
+</body>
+</html>

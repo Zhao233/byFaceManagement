@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -68,9 +69,7 @@ public class ServerManagementController {
     private Map<String, Object> add(@RequestParam(value = "serverName", defaultValue = "") String serverName,
                                       @RequestParam(value = "serverIP", defaultValue = "") String serverIP,
                                       @RequestParam(value = "isMainServer", defaultValue = "") String isMainServer){
-        //serverService.addServer()
         Map<String,Object> r = new HashMap<>();
-        Map<String,String> message = new HashMap<>();
 
         String data = serverService.addServer(serverName,serverIP,isMainServer);
 
@@ -79,7 +78,7 @@ public class ServerManagementController {
         if(isSuccess){
             r.put("status", "SUCCEED");
         } else {
-
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -87,22 +86,40 @@ public class ServerManagementController {
 
     @RequestMapping("/update")
     @ResponseBody
-    private Map<String, Object> update(@RequestParam(value = "search", defaultValue = "") String search,
-                                      @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                      @RequestParam(value = "limit", defaultValue = "10") Integer limit){
-        //serverService.updateServer()
+    private Map<String, Object> update(@RequestParam(value = "id", defaultValue = "") int id,
+                                      @RequestParam(value = "serverName", defaultValue = "0") String serverName,
+                                      @RequestParam(value = "serverIP", defaultValue = "0") String serverIP,
+                                      @RequestParam(value = "isMainServer", defaultValue = "0") String isMainServer,
+                                      @RequestParam(value = "version", defaultValue = "10") int version){
+        Map<String, Object> r = new HashMap<>();
 
-        return null;
+        String result = serverService.updateServer(id,serverName,serverIP,isMainServer,version+1);
+
+        if(JSONHandler.isSuccess(result)){
+            r.put("result","SUCCEED");
+        } else {
+            r.put("result","FAILED");
+        }
+
+        return r;
     }
 
     @RequestMapping("/delete")
     @ResponseBody
-    private Map<String, Object> delete(@RequestParam(value = "search", defaultValue = "") String search,
+    private Map<String, Object> delete(@RequestParam(value = "list_id", defaultValue = "") List<Integer> list_id,
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                       @RequestParam(value = "limit", defaultValue = "10") Integer limit){
-        //serverService.deleteServer()
+        Map<String, Object> r = new HashMap<>();
 
-        return null;
+        String result = serverService.deleteServer(list_id);
+
+        if(JSONHandler.isSuccess(result)){
+            r.put("result","SUCCEED");
+        } else {
+            r.put("result","FAILED");
+        }
+
+        return r;
     }
 
     @RequestMapping("/test")
@@ -113,7 +130,7 @@ public class ServerManagementController {
 
     @RequestMapping("/get/{id}")
     @ResponseBody
-    private Map<String,Object> get(@PathVariable String id){
+    private Map<String,Object> get(@PathVariable int id){
         Map<String,Object> r = new HashMap<>();
 
         String result = serverService.getServerById(id);
