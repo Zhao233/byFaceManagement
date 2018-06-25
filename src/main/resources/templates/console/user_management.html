@@ -103,7 +103,7 @@
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Attendance Management</a>
                 </li>
 
                 <!-- 摄像头信息 -->
@@ -127,7 +127,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        Employee Management
+                        User Management
                     </h1>
                 </div>
             </div>
@@ -154,8 +154,10 @@
                                     </thead>
                                 </table>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New User</button>
-                                <button class="btn btn-default open-update-use-dialog" data-toggle="modal">Update User</button>
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加</button>
+                                <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
+                                <button class="btn btn-danger delete-employee-dialog">删除</button>
+
                             </div>
 
                         </div>
@@ -247,8 +249,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary add-new-user">Save Changes</button>
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存修改</button>
                         </div>
                     </div>
                 </form>
@@ -300,51 +302,6 @@
             pageList: [5, 10, 20, 50],//分页步进值
             search: true,//显示搜索框
             clickToSelect: false,
-
-            //表格的列
-
-            // columns: [
-            //     {
-            //         field: 'id',//域值
-            //         title: 'ID',//标题
-            //         visible: true,//false表示不显示
-            //         sortable: true,//启用排序
-            //         width : '5%',
-            //     },
-            //     {
-            //         field: 'name',//域值
-            //         title: 'Name',//标题
-            //         visible: true,//false表示不显示
-            //         sortable: true,//启用排序
-            //         width : '30%',
-            //         editable:true,
-            //     },
-            //     {
-            //         field: 'password',//域值
-            //         title: 'Password',//内容
-            //         visible: true,//false表示不显示
-            //         sortable: true,//启用排序
-            //         width : '35%',
-            //         editable:true,
-            //     },
-            //     {
-            //         field: 'phone',//域值
-            //         title: 'Email',//内容
-            //         visible: true,//false表示不显示
-            //         sortable: true,//启用排序
-            //         width : '20%',
-            //
-            //         formatter : function (value, row, index) {
-            //             if (row['status'] === 1) {
-            //                 return '正常';
-            //             }
-            //             if (row['status'] === 0) {
-            //                 return '禁用';
-            //             }
-            //             return value;
-            //         }
-            //     }
-            // ]
         });
 
         $('#_table_user_search').bootstrapTable({
@@ -424,7 +381,7 @@
         $("#dialog-user-management-update").modal("show");
     });
 
-    $(".btn.btn-default.open-update-use-dialog").click(function() {
+    $(".btn.btn-success.open-update-use-dialog").click(function() {
         var id = $("input[type='radio']:checked").val();
         if (id != undefined) {
             _reset($(".form-horizontal.add-new-user"));
@@ -453,69 +410,113 @@
 
         var data = $(".form-horizontal.add-new-user").serializeArray();
         $.post("/console/user_management/save", data, function(r, status) {
-            if (r.status == "SUCCEED") {
-                $(".bs-example-modal-sm").find(".modal-body").html(
-                    $("#dialog-user-management-update-title").html() + " succeeded."
-                );
-                $(".bs-example-modal-sm").modal("show");
-                $(".btn.btn-default.add-new-user-close").click();
-                $(".panel.panel-default").find("button[name='refresh']").click();
-                // location.reload();
-            } else {
-                if (r.message.username) {
-                    _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
-                }
-                if (r.message.email) {
-                    _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
-                }
-                if (r.message.password) {
-                    _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
-                }
-                if (r.message.firstName) {
-                    _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
-                }
-                if (r.message.lastName) {
-                    _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
-                }
-                if (r.message.WARNING) {
-                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+            switch (r.status) {
+                case "SUCCEED" :
+                    $(".bs-example-modal-sm").find(".modal-body").html(
+                        $("#dialog-user-management-update-title").html() + " succeeded."
+                    );
                     $(".bs-example-modal-sm").modal("show");
-                }
+                    $(".btn.btn-default.add-new-user-close").click();
+                    $(".panel.panel-default").find("button[name='refresh']").click();
+
+
+                    // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                    // $("#dialog-user-management-update").modal("show");
+                    //
+                    // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                    break
+
+                case "FAILED" :
+                    $("#dialog-user-management-update").find(".modal-body").html("增加失败");
+                    $("#dialog-user-management-update").modal("show");
+
+                    break
             }
+
+
+            // if (r.status == "SUCCEED") {
+            //     $(".bs-example-modal-sm").find(".modal-body").html(
+            //         $("#dialog-user-management-update-title").html() + " succeeded."
+            //     );
+            //     $(".bs-example-modal-sm").modal("show");
+            //     $(".btn.btn-default.add-new-user-close").click();
+            //     $(".panel.panel-default").find("button[name='refresh']").click();
+            //     // location.reload();
+            // } else {
+            //     if (r.message.username) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
+            //     }
+            //     if (r.message.email) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
+            //     }
+            //     if (r.message.password) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
+            //     }
+            //     if (r.message.firstName) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
+            //     }
+            //     if (r.message.lastName) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
+            //     }
+            //     if (r.message.WARNING) {
+            //         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+            //         $(".bs-example-modal-sm").modal("show");
+            //     }
+            // }
         });
     });
 
-    // $(document).ready(function() {
-    //     $('#_table_user_search').bootstrapTable({
-    //         method: 'get',
-    //         url: "/console/user_management/search",
-    //         striped: true,
-    //         dataType: "json",
-    //         pagination: true,
-    //         queryParamsType: "limit",
-    //         singleSelect: true,
-    //         contentType: "application/x-www-form-urlencoded",
-    //         pageSize: 10,
-    //         pageNumber:1,
-    //         search: true,
-    //         showColumns: true,
-    //         showRefresh: true,
-    //         sidePagination: "server", //服务端请求
-    //         queryParams: function(params) {
-    //             return {
-    //                 limit: params.limit,
-    //                 offset: params.offset / params.limit,
-    //                 search: $(".search").find("input").val()
-    //             };
-    //         },
-    //         responseHandler: function(res) {
-    //             return {
-    //                 "rows": res.rows,
-    //                 "total": res.total
-    //             };
-    //         }
-    //     });
-    // });
+    $(".btn.btn-danger.delete-employee-dialog").click(function (){
+        console.log('clicked the delete');
+
+        var id = $("input[type='radio']:checked").val();
+
+        var list_id = new Array();
+
+        list_id[0] = (id);
+
+        console.log(list_id);
+
+        var form = new FormData();
+
+        form.append("list_ID", list_id);
+
+        $.ajax({
+            url: "/console/user_management/delete",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $(".bs-example-modal-sm").find(".modal-body").html(
+                            $("#dialog-user-management-update-title").html() + " succeeded."
+                        );
+                        $(".bs-example-modal-sm").modal("show");
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
+                        $("#dialog-user-management-update").modal("show");
+
+                        break
+                }
+            },
+            error: function (r) {
+
+                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").modal("show");
+            }
+
+        });
+    })
+
+
 </script>
 
 

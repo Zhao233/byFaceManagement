@@ -45,7 +45,7 @@ public class CameraInfoServiceImp extends Info implements CameraInfoService {
 
             return rest.postForObject(url, param, String.class);
         } catch (Exception e){
-            return "error : "+e.getMessage();
+            return "";//返回空字段
         }
     }
 }

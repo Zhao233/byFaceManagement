@@ -20,4 +20,6 @@ public interface UserService extends JpaRepository<User, Long> {
     Page<User> findAll(String q, Pageable pageable);
 
     List<User> findByRoleAndEnabled(String role, boolean enabled);
+
+    void deleteById(long id);
 }

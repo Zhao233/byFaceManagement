@@ -111,7 +111,6 @@ public class CameraServiceImpl extends Info implements CameraService {
 
             return rest.postForObject(url, request, String.class);
 
-
         } catch (Exception e){
             return "";
         }

@@ -105,8 +105,6 @@ public class ServerServiceImp extends Info implements ServerService {
 
             String string = rest.postForObject(url, param, String.class);
 
-            System.out.print("修改成功：");
-            System.out.println(string);
 
             return string;
         } catch (Exception e){

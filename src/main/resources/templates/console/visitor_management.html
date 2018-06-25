@@ -118,12 +118,12 @@
 
                 <!-- 服务器管理 -->
                 <li>
-                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Management</a>
                 </li>
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Attendance Management</a>
                 </li>
 
                 <!-- 摄像头信息 -->
@@ -193,13 +193,11 @@
                                     </thead>
                                 </table>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New
-                                    Visitor
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加
                                 </button>
-                                <button class="btn btn-success open-update-use-dialog" data-toggle="modal">Update
-                                    Visitor
+                                <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改
                                 </button>
-                                <button class="btn btn-danger delete-employee-dialog">Delete Visitor</button>
+                                <button class="btn btn-danger delete-employee-dialog">删除</button>
                             </div>
                         </div>
                     </div>
@@ -219,8 +217,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">User Management | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">Visitor Management | <span id="dialog-user-management-update-title"></span></h4>
             </div>
+
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user form-uploadfiles"
                       enctype="multipart/form-data"
@@ -371,7 +370,10 @@
     });
 
     function _reset(from) {
+
         from[0].reset();
+
+
         _reset_input(from.find("input"));
     }
 
@@ -390,7 +392,7 @@
         window.flag='add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update-title").html("增加");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -426,6 +428,7 @@
         }
     });
 
+
     $(".btn.btn-primary.add-new-user").click(function () {
         console.log(window.flag);
 
@@ -457,19 +460,28 @@
             processData: false,
             contentType: false,
             success: function (r) {
-                if (r.status == "SUCCEED") {
-                    $("#dialog-user-management-update").find(".modal-body").html("Upload succeeded.");
-                    $("#dialog-user-management-update").modal("show");
+                switch (r.status) {
+                    case "SUCCEED" :
+                        $(".bs-example-modal-sm").find(".modal-body").html(
+                            $("#dialog-user-management-update-title").html() + " succeeded."
+                        );
+                        $(".bs-example-modal-sm").modal("show");
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
 
-                    $(".panel.panel-default").find("button[name='refresh']").click();
-                } else {
-                    if (r.message.WARNING) {
-                        $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                        $("#dialog-return").modal("show");
-                    } else{
-                        $("#dialog-return").find(".modal-body").html(r.message.FAILED);
-                        $("#dialog-return").modal("show");
-                    }
+
+                        // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                        // $("#dialog-user-management-update").modal("show");
+                        //
+                        // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-user-management-update").find(".modal-body").html("增加失败");
+                        $("#dialog-user-management-update").modal("show");
+
+                        break
                 }
             },
             error: function (r) {
@@ -483,7 +495,6 @@
 
         form = '';//避免重复点击
     });
-
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
         console.log('clicked the delete');
 
@@ -506,17 +517,27 @@
             processData: false,
             contentType: false,
             success: function (r) {
-                if (r.status == "SUCCEED") {
-                    $("#dialog-user-management-update").find(".modal-body").html("Upload succeeded.");
-                    $("#dialog-user-management-update").modal("show");
+                switch (r.status) {
+                    case "SUCCEED" :
+                        $(".bs-example-modal-sm").find(".modal-body").html(
+                            $("#dialog-user-management-update-title").html() + " succeeded."
+                        );
+                        $(".bs-example-modal-sm").modal("show");
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
 
-                    $(".panel.panel-default").find("button[name='refresh']").click();
 
-                } else {
-                    if (r.message.WARNING) {
-                        $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                        $("#dialog-return").modal("show");
-                    }
+                        // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
+                        // $("#dialog-user-management-update").modal("show");
+                        //
+                        // $(".panel.panel-default").find("button[name='refresh']").click();
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
+                        $("#dialog-user-management-update").modal("show");
+
+                        break
                 }
             },
             error: function (r) {
@@ -527,6 +548,8 @@
 
         });
     })
+
+
 
     function _formatte_locale_image(value, row, index) {
         var s = '<a class = "view"  href="javascript:void(0)"><img style="width:400;height:150px;"  src="' + value + '" /></a>';

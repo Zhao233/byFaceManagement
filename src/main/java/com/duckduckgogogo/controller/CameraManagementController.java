@@ -2,6 +2,7 @@ package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.utils.JSONHandler;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class CameraManagementController {
 
             r.put("status", "SUCCEED");
         } else {
-
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -78,7 +79,7 @@ public class CameraManagementController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    private Map<String, Object> deleteCamera(@RequestParam(required = false, value = "list[]") List<String> listOfId){
+    private Map<String, Object> deleteCamera(@RequestParam("list_ID") List<String> listOfId){
         Map<String, Object> r = new HashMap<>();
 
         String result = cameraService.deleteCamera(listOfId);
@@ -86,7 +87,6 @@ public class CameraManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");
         } else {
-
         }
 
         return r;
@@ -100,11 +100,20 @@ public class CameraManagementController {
 
         String result = cameraService.get(id);
 
+
         if(JSONHandler.isSuccess(result)){
-            //r.put("")
+            JSONObject object = JSONObject.fromObject(result);
 
+            r.put("cameraName",object.getString("cameraName"));
+            r.put("rtspUrl",object.getString("rtspUrl"));
+            r.put("server",object.getString("server"));
+            r.put("entranceGuardNO",object.getString("entranceGuardNO"));
+            r.put("cameraXY",object.getString("cameraXY"));
+            r.put("entranceGuard",object.getString("entranceGuard"));
+
+            r.put("status","SUCCEED");
         } else {
-
+            r.put("status","FAILED");
         }
 
         return r;

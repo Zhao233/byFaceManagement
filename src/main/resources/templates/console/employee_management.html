@@ -118,12 +118,12 @@
 
                 <!-- 服务器管理 -->
                 <li>
-                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Mangaement</a>
                 </li>
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Attendance Management</a>
                 </li>
 
                 <!-- 摄像头信息 -->
@@ -217,7 +217,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">User Management | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">Employee Management | <span id="dialog-user-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user form-uploadfiles"
@@ -455,10 +455,14 @@
             processData: false,
             contentType: false,
             success: function (r) {
-                if (r.status == "SUCCEED") {
-                    $("#dialog-user-management-update").find(".modal-body").html("Upload succeeded.");
-                    $("#dialog-user-management-update").modal("show");
 
+
+                if (r.status == "SUCCEED") {
+                    $(".bs-example-modal-sm").find(".modal-body").html(
+                        $("#dialog-user-management-update-title").html() + " succeeded."
+                    );
+                    $(".bs-example-modal-sm").modal("show");
+                    $(".btn.btn-default.add-new-user-close").click();
                     $(".panel.panel-default").find("button[name='refresh']").click();
                 } else {
                     if (r.message.WARNING) {
@@ -504,9 +508,11 @@
             contentType: false,
             success: function (r) {
                 if (r.status == "SUCCEED") {
-                    $("#dialog-user-management-update").find(".modal-body").html("Upload succeeded.");
-                    $("#dialog-user-management-update").modal("show");
-
+                    $(".bs-example-modal-sm").find(".modal-body").html(
+                        $("#dialog-user-management-update-title").html() + " succeeded."
+                    );
+                    $(".bs-example-modal-sm").modal("show");
+                    $(".btn.btn-default.add-new-user-close").click();
                     $(".panel.panel-default").find("button[name='refresh']").click();
 
                 } else {

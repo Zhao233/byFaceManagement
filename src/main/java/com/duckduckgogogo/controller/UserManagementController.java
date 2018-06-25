@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -145,5 +146,19 @@ public class UserManagementController {
         User user = userService.findById(id.longValue());
         if (user != null) user.setPassword("");
         return user;
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public Map<String, Object> delete(@RequestParam("list_ID") List<Integer> list) {
+        Map<String, Object> r = new HashMap<>();
+
+        for(int temp : list){
+            userService.delete(Long.valueOf(temp));
+        }
+
+        r.put("status","SUCCEED");
+
+        return r;
     }
 }
