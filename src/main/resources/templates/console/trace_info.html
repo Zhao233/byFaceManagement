@@ -79,6 +79,10 @@
 
     $(document).ready(function () {
 
+        $.get("/console/trace/search/", data, function (r, status) {
+            console.log("recieved data : "+ r);
+        });
+
         // debugger;
         var can = document.getElementById('canvas');
         var ctx = can.getContext('2d');
@@ -300,25 +304,40 @@
                         </h1>
                     </div>
                 </div>
-            </div>
-        </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Advanced Tables -->
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <canvas id="canvas" width="1200" height="680">
-                        Your browser doesn't support canvas
-                    </canvas>
-                    <img style="display:none;" src="/images/test_camera.png" />
-                    <img style="display:none;" src="/images/test_camera0.png" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Advanced Tables -->
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <canvas id="canvas" width="1200" height="680">
+                                    Your browser doesn't support canvas
+                                </canvas>
+                                <img style="display:none;" src="/images/test_camera.png" />
+                                <img style="display:none;" src="/images/test_camera0.png" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+
 
 </div>
+
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <!--<script type="text/javascript" src="/javascript/bootstrap.min.js"></script>-->
 <!--<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>-->

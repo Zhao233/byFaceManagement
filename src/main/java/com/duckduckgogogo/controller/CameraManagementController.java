@@ -2,7 +2,9 @@ package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.utils.JSONHandler;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,9 +49,15 @@ public class CameraManagementController {
 
         String result = cameraService.searchCamera(search,String.valueOf(offset),String.valueOf(limit));
 
-        JSONObject object = JSONObject.fromObject(result);
-        r.put("total", object.getInt("total"));
-        r.put("rows", object.getJSONArray("rows"));
+        try {
+            JSONObject object = JSONObject.fromObject(result);
+            r.put("total", object.getInt("total"));
+            r.put("rows", object.getJSONArray("rows"));
+        } catch (JSONException e){
+            System.out.println("错误："+e.getMessage());
+
+
+        }
 
         return r;
     }

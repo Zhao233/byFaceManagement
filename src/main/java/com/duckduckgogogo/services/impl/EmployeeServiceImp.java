@@ -27,6 +27,7 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             param.add("search", search);
             param.add("offset", offset);
             param.add("limit", limit);
+
             param.add("role", role);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));

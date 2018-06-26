@@ -74,48 +74,50 @@
 
                 <!-- 用户管理 -->
                 <li>
-                    <a href="/console/user_management" class="active-menu"><i class="fa fa-table"></i> User
-                        Management</a>
+                    <a href="/console/user_management" class="active-menu"><i class="fa fa-table"></i> 用户管理</a>
                 </li>
 
                 <!-- 员工管理 -->
                 <li>
-                    <a href="/console/employee_management"><i class="fa fa-dashboard"></i>Employee Management</a>
+                    <a href="/console/employee_management" >
+                        <i class="fa fa-dashboard"></i>
+                        员工管理
+                    </a>
                 </li>
 
                 <!-- 访客管理 -->
                 <li>
-                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>Visitor Management</a>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
                 </li>
 
                 <!-- 摄像头管理 -->
                 <li>
-                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>Camera Management</a>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
                 </li>
 
                 <!-- 服务器管理 -->
                 <li>
-                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>Server Management</a>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
                 </li>
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>Attendance Management</a>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>考勤管理</a>
                 </li>
 
                 <!-- 摄像头信息 -->
                 <li>
-                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>摄像头信息</a>
                 </li>
 
                 <!-- 轨迹信息 -->
                 <li>
-                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
                 <!--配置信息-->
                 <li>
-                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Config Info</a>
+                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
                 </li>
 
             </ul>
@@ -129,7 +131,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        User Management
+                        用户管理
                     </h1>
                 </div>
             </div>
@@ -146,12 +148,12 @@
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="username">Username</th>
-                                        <th data-field="firstName">First Name</th>
-                                        <th data-field="lastName">Last Name</th>
-                                        <th data-field="email">Email</th>
-                                        <th data-field="role">Role</th>
-                                        <th data-field="enabled">Enabled</th>
+                                        <th data-field="username">用户名</th>
+                                        <th data-field="firstName">姓</th>
+                                        <th data-field="lastName">名</th>
+                                        <th data-field="email">邮箱地址</th>
+                                        <th data-field="role">级别</th>
+                                        <th data-field="enabled">是否启用</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -179,7 +181,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">User Management  | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">用户管理  | <span id="dialog-user-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user" method="POST">

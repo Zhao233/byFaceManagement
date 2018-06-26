@@ -111,6 +111,16 @@ public class ConsoleController {
         return new ModelAndView("console/test_trace");
     }
 
+    @RequestMapping("/test_trace_1")
+    public ModelAndView toTest_trace_1() {
+        return new ModelAndView("console/test_trace_1");
+    }
+
+    @RequestMapping("/test_trace_2")
+    public ModelAndView toTest_trace_2() {
+        return new ModelAndView("console/test_trace_2");
+    }
+
     /**
      * CUSTOMER
      */

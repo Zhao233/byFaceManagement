@@ -26,7 +26,11 @@
     <!--datePicker-->
     <!--<link href="/style/bootstrap.min.css" rel="stylesheet" media="screen">-->
     <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
+    <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
     <style>
 
         .center-vertical {
@@ -90,48 +94,51 @@
 
                 <!-- 用户管理 -->
                 <li>
-                    <a href="/console/user_management"><i class="fa fa-table"></i> User
-                        Management</a>
+                    <a href="/console/user_management"><i class="fa fa-table"></i> 用户管理</a>
                 </li>
 
                 <!-- 员工管理 -->
                 <li>
-                    <a href="/console/employee_management">
+                    <a href="/console/employee_management" >
                         <i class="fa fa-dashboard"></i>
-                        Employee Management
+                        员工管理
                     </a>
                 </li>
 
                 <!-- 访客管理 -->
                 <li>
-                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>Visitor Management</a>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
                 </li>
 
                 <!-- 摄像头管理 -->
                 <li>
-                    <a href="/console/camera_management" ><i class="fa fa-desktop"></i>Camera Management</a>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
                 </li>
 
                 <!-- 服务器管理 -->
                 <li>
-                    <a href="/console/server_management"  ><i class="fa fa-qrcode"></i>Server Mangement</a>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
                 </li>
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management" class="active-menu"><i class="fa fa-qrcode"></i>Attendance Mangement</a>
+                    <a href="/console/attendance_management"  class="active-menu"><i class="fa fa-qrcode"></i>考勤管理</a>
                 </li>
 
                 <!-- 摄像头信息 -->
                 <li>
-                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
+                    <a href="/console/camera_info" ><i class="fa fa-desktop"></i>摄像头信息</a>
+                </li>
+
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
                 <!--配置信息-->
                 <li>
-                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
+                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
                 </li>
-
 
             </ul>
 
@@ -144,7 +151,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        Attendance Management
+                        考勤管理
                     </h1>
                 </div>
             </div>
@@ -195,13 +202,13 @@
                                             ID
                                         </th>
                                         <th data-field="name" data-sortable="true" class="W30" style="border:none;">
-                                            Name
+                                            姓名
                                         </th>
                                         <th data-field="tracedate" data-sortable="true" class="W30"
-                                            style="border:none;">Time
+                                            style="border:none;">考勤时间
                                         </th>
                                         <th data-field="cameraname" data-sortable="true" class="W30"
-                                            style="border:none;">Camera
+                                            style="border:none;">考勤摄像头名称
                                         </th>
                                     </tr>
                                     </thead>
