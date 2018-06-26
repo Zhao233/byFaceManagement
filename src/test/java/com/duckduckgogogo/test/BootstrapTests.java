@@ -37,6 +37,7 @@ public class BootstrapTests {
     @Autowired
     private CameraInfoService cameraInfoService;
 
+
 //    @Autowired
 //    private ServerService serverService;
 //

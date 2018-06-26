@@ -2,7 +2,9 @@ package com.duckduckgogogo.services.impl;
 
 import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.utils.DeleteCamera;
+import com.duckduckgogogo.utils.JSONHandler;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,8 +17,6 @@ import java.util.Map;
 
 @Service("cameraService")
 public class CameraServiceImpl extends Info implements CameraService {
-    private static final String serverIP = "10.8.20.255:8080";
-
     @Override
     public String addCamera(String cameraName, String rtspUrl, int server, String entranceGuard,
                             String entranceGuardNO, String cameraXY) {
@@ -27,17 +27,25 @@ public class CameraServiceImpl extends Info implements CameraService {
             RestTemplate rest = new RestTemplate();
             //FileSystemResource resource = new FileSystemResource(new File(filePath));
 
-            String request = "{\"cameraName\":\""      + cameraName + "\"," +
-                              "\"rtspUrl\":\""         + rtspUrl + "\"," +
-                              "\"server\":"          + server + "," +
-                              "\"entranceGuard\":\""   + entranceGuard + "\"," +
-                              "\"entranceGuardNO\":\"" + entranceGuardNO + "\"," +
-                              "\"cameraXY\":\""        + cameraXY + "\"}";
+//            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+//            param.add("cameraName", cameraName);
+//            param.add("rtspUrl", rtspUrl);
+//            param.add("server", server);
+//            param.add("entranceGuard", entranceGuard);
+//            param.add("entranceGuardNO", entranceGuardNO);
+//            param.add("cameraXY", cameraXY);
 
-            System.out.println("the request : "+request);
+            JSONObject object = new JSONObject();
+            object.put("cameraName",cameraName);
+            object.put("rtspUrl",rtspUrl);
+            object.put("server",server);
+            object.put("entranceGuard",entranceGuard);
+            object.put("entranceGuardNO",entranceGuardNO);
+            object.put("cameraXY",cameraXY);
 
+            rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
-            return rest.postForObject(url, request, String.class);
+            return rest.postForObject(url, object, String.class);
         }catch (Exception e){
             System.out.println("Error: add error");
 
@@ -60,7 +68,6 @@ public class CameraServiceImpl extends Info implements CameraService {
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             return rest.postForObject(url, param, String.class);
-
         } catch (Exception e){
             return "error : "+e.getMessage();
         }
@@ -73,6 +80,20 @@ public class CameraServiceImpl extends Info implements CameraService {
         try{
             String url = "http://" + super.serverIP + "/api/camera/update";
 
+            RestTemplate rest = new RestTemplate();
+
+            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+            param.add("cameraName", cameraName);
+            param.add("rtspUrl", rtspUrl);
+            param.add("server", server);
+            param.add("entranceGuard", entranceGuard);
+            param.add("entranceGuardNO", entranceGuardNO);
+            param.add("cameraXY", cameraXY);
+            param.add("id", id);
+            param.add("version", version);
+
+            rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
             String request = "{\"server\":\""      + server + "\"," +
                     "\"entranceGuard\":\""          + entranceGuard + "\"," +
                     "\"version\":\""   + version + "\"," +
@@ -83,7 +104,7 @@ public class CameraServiceImpl extends Info implements CameraService {
                     "\"cameraName\":\"" + cameraName + "\"}";
 
 
-            RestTemplate rest = new RestTemplate();
+
 
             return rest.postForObject(url,request,String.class);
 

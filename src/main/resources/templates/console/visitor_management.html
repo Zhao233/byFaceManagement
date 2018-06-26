@@ -131,6 +131,11 @@
                     <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
                 </li>
 
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                </li>
+
                 <!--配置管理-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>Congfig Info</a>
@@ -173,8 +178,8 @@
                                         <th data-field="updateDateString" data-sortable="true" class="W30"
                                             style="border:none;">Modify Time
                                         </th>
-                                        <th data-field="personNumber" data-sortable="true" class="W30"
-                                            style="border:none;">Person Number
+                                        <th data-field="IDNumber" data-sortable="true" class="W30"
+                                            style="border:none;">ID Number
                                         </th>
                                         <th data-field="phoneNumber" data-sortable="true" class="W30"
                                             style="border:none;">Phone Number
@@ -295,6 +300,17 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
 <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -354,6 +370,12 @@
 <script src="/javascript/bootstrap-table.min.js"></script>
 
 <script>
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
     window.flag;
     window.id;
 
@@ -430,70 +452,105 @@
 
 
     $(".btn.btn-primary.add-new-user").click(function () {
-        console.log(window.flag);
+        var isComplete = true;
 
-        _reset_input($(".form-horizontal.add-new-user").find("input"));
-
-        var form = new FormData();
-
-        var file = $("#avatar-2")[0].files[0];
-        console.log(file);
-        form.append("file", file);
-
-        if(window.flag == "update"){
-            form.append("personID", window.id);
-            form.append("version", $("input[id='version']").val());
-
-            console.log($("input[id='version']").val());
+        //check input
+        if ($("input[id='personName']").val() == "") {
+            _set($("input[id='personName']"), "请输入姓名");
+            isComplete = false;
+        }
+        if ($("input[id='IDNumber']").val() == "") {
+            _set($("input[id='IDNumber']"), "请输入身份证号");
+            isComplete = false;
+        }
+        if ($("input[id='phoneNumber']").val() == "") {
+            _set($("input[id='phoneNumber']"), "请输入电话号码");
+            isComplete = false;
+        }
+        if ($("input[id='startDate']").val() == "") {
+            _set($("input[id='startDate']"), "请输入开始日期");
+            isComplete = false;
+        }
+        if ($("input[id='endDate']").val() == "") {
+            _set($("input[id='endDate']"), "请输入结束日期");
+            isComplete = false;
         }
 
-        form.append("personName", $("input[id='personName']").val());
-        form.append("IDNumber", $("input[id='IDNumber']").val());
-        form.append("phoneNumber", $("input[id='phoneNumber']").val());
-        form.append("startDate", $("input[id='startDate']").val());
-        form.append("endDate", $("input[id='endDate']").val());
+        if(isComplete) {
 
-        $.ajax({
-            url: "/console/visitor_management/"+flag,
-            type: "post",
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function (r) {
-                switch (r.status) {
-                    case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
-                        $(".btn.btn-default.add-new-user-close").click();
-                        $(".panel.panel-default").find("button[name='refresh']").click();
+            var flag_ = window.flag;
+            console.log(window.flag);
 
+            _reset_input($(".form-horizontal.add-new-user").find("input"));
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
-                        // $("#dialog-user-management-update").modal("show");
-                        //
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
+            var form = new FormData();
 
-                        break
+            var file = $("#avatar-2")[0].files[0];
+            console.log(file);
+            form.append("file", file);
 
-                    case "FAILED" :
-                        $("#dialog-user-management-update").find(".modal-body").html("增加失败");
-                        $("#dialog-user-management-update").modal("show");
+            if (window.flag == "update") {
+                form.append("personID", window.id);
+                form.append("version", $("input[id='version']").val());
 
-                        break
-                }
-            },
-            error: function (r) {
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                $("#dialog-return").modal("show");
+                console.log($("input[id='version']").val());
             }
 
-        });
+            form.append("personName", $("input[id='personName']").val());
+            form.append("IDNumber", $("input[id='IDNumber']").val());
+            form.append("phoneNumber", $("input[id='phoneNumber']").val());
+            form.append("startDate", $("input[id='startDate']").val());
+            form.append("endDate", $("input[id='endDate']").val());
 
-        flag = '';
+            $.ajax({
+                url: "/console/visitor_management/" + flag,
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (r) {
+                    switch (r.status) {
+                        case "SUCCEED" :
+                            var message;
+                            if (flag_ == 'add') {
+                                message = "增加成功";
+                            } else {
+                                message = "修改成功";
+                            }
 
-        form = '';//避免重复点击
+                            $("#dialog-return").find(".modal-body").html(message);
+                            $("#dialog-return").modal("show");
+
+                            $(".btn.btn-default.add-new-user-close").click();
+                            $(".panel.panel-default").find("button[name='refresh']").click();
+
+
+                            // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                            // $("#dialog-user-management-update").modal("show");
+                            //
+                            // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                            break
+
+                        case "FAILED" :
+                            $("#dialog-user-management-update").find(".modal-body").html("增加失败");
+                            $("#dialog-user-management-update").modal("show");
+
+                            break
+                    }
+                },
+                error: function (r) {
+                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                    $("#dialog-return").modal("show");
+                }
+
+            });
+
+            flag = '';
+
+            form = '';//避免重复点击
+        }
+
     });
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
         console.log('clicked the delete');
@@ -519,10 +576,9 @@
             success: function (r) {
                 switch (r.status) {
                     case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
+                        $("#dialog-return").find(".modal-body").html("删除成功");
+                        $("#dialog-return").modal("show");
+
                         $(".btn.btn-default.add-new-user-close").click();
                         $(".panel.panel-default").find("button[name='refresh']").click();
 
@@ -534,14 +590,16 @@
                         break
 
                     case "FAILED" :
-                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
-                        $("#dialog-user-management-update").modal("show");
+                        $("#dialog-return").find(".modal-body").html("删除失败");
+                        $("#dialog-return").modal("show");
+
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
 
                         break
                 }
             },
             error: function (r) {
-
                 $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
                 $("#dialog-return").modal("show");
             }

@@ -21,6 +21,25 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
 
+    <!--input check-->
+    <script src="/javascript/validation_messages_zh.js"></script>
+    <!--<script src="/javascript/jquery-validation-1-14-0libjquery.js"></script>-->
+    <script src="/javascript/jquery.validate.min.js"></script>
+
+    <script>
+        $.validator.setDefaults({
+            submitHandler: function() {
+                alert("提交事件!");
+            }
+        });
+
+        function _set(el, message) {
+            el.addClass("alert-danger");
+            el.attr("title", message);
+            el.tooltip('show');
+        }
+    </script>
+
     <style>
         .kv-avatar .krajee-default.file-preview-frame, .kv-avatar .krajee-default.file-preview-frame:hover {
             margin: 0;
@@ -131,6 +150,11 @@
                     <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
                 </li>
 
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>Congfig Info</a>
@@ -147,7 +171,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        Employee Management
+                        员工管理
                     </h1>
                 </div>
             </div>
@@ -220,7 +244,7 @@
                 <h4 class="modal-title">Employee Management | <span id="dialog-user-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form-horizontal add-new-user form-uploadfiles"
+                <form id="input_form" role="form" class="form-horizontal add-new-user"
                       enctype="multipart/form-data"
                       method="POST" method="POST">
                     <input type="text" style="display:none;" id="id" name="id"/>
@@ -237,9 +261,9 @@
 
                         <div class="col-sm-8 ">
                             <div class="form-group">
-                                <label for="personName" class="col-sm-4 control-label">Name</label>
+                                <label for="personName" class="col-sm-4 control-label">姓名</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="personName" name="personName"
+                                    <input type="text" minlength="2" class="form-control" id="personName" name="personName"
                                            data-toggle="tooltip" data-placement="top" maxlength="30"
                                            required="required"/>
                                 </div>
@@ -247,50 +271,62 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="personNumber" class="col-sm-4 control-label">Employee Number</label>
+                                <label for="personNumber" class="col-sm-4 control-label">员工编号</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="personNumber" name="personNumber"
-                                           maxlength="30"/>
+                                    <input type="text" type="number" class="form-control" id="personNumber" name="personNumber"
+                                           maxlength="30" required="required"/>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="cardNumber" class="col-sm-4 control-label">Card Number</label>
+                                <label for="cardNumber" class="col-sm-4 control-label">卡号</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="cardNumber" name="cardNumber"
-                                           maxlength="30"/>
+                                    <input type="text" type="number" class="form-control" id="cardNumber" name="cardNumber"
+                                           maxlength="30" required="required"/>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="IDNumber" class="col-sm-4 control-label">ID Number</label>
+                                <label for="IDNumber" class="col-sm-4 control-label">身份证号</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="IDNumber" name="IDNumber"
-                                           maxlength="30"/>
+                                    <input type="text" type="number" class="form-control" id="IDNumber" name="IDNumber"
+                                           maxlength="30" required="required"/>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group ">
-                                <label for="phoneNumber" class="col-sm-4 control-label">Phone Number</label>
+                                <label for="phoneNumber" class="col-sm-4 control-label">电话号码</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                                           maxlength="30"/>
+                                    <input type="text" type="number" class="form-control" id="phoneNumber" name="phoneNumber"
+                                           maxlength="30" required="required"/>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                             <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">
-                                Cancel
+                                取消
                             </button>
-                            <button type="button" class="btn btn-primary add-new-user">Save Changes</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存</button>
                         </div>
                     </div>
                 </form>
             </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -314,6 +350,7 @@
 <!-- Custom Js -->
 <script>
     $(document).ready(function () {
+
         $('#_table_user_search').bootstrapTable({
             method: 'get',
             url: "/console/employee_management/search",
@@ -388,7 +425,7 @@
         window.flag='add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update-title").html("添加员工");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -406,7 +443,7 @@
             $.get("/console/employee_management/get/" + id, null, function (r, status) {
                 console.log(r);
 
-                $("#dialog-user-management-update-title").html("Update user");
+                $("#dialog-user-management-update-title").html("更新员工信息");
                 $("#dialog-user-management-update").modal("show");
 
                 $("#dialog-user-management-update").find("input[id='version']").val(r.version);
@@ -415,6 +452,8 @@
                 $("#dialog-user-management-update").find("input[id='cardNumber']").val(r.cardNumber);
                 $("#dialog-user-management-update").find("input[id='IDNumber']").val(r.IDNumber);
                 $("#dialog-user-management-update").find("input[id='phoneNumber']").val(r.phoneNumber);
+
+
             });
 
         } else {
@@ -425,63 +464,103 @@
 
 
     $(".btn.btn-primary.add-new-user").click(function () {
-        console.log(window.flag);
+        var isComplete = true;
 
-        _reset_input($(".form-horizontal.add-new-user").find("input"));
-
-        var form = new FormData();
-
-        var file = $("#avatar-2")[0].files[0];
-        console.log(file);
-        form.append("file", file);
-
-        if(window.flag == "update"){
-            form.append("personID", window.id);
-            form.append("version", $("input[id='version']").val());
-
-            console.log($("input[id='version']").val());
+        //check input
+        if($("input[id='personName']").val() == ""){
+            _set($("input[id='personName']"), "请输入姓名");
+            isComplete = false;
+        }
+        if($("input[id='personNumber']").val() == ""){
+            _set($("input[id='personNumber']"), "请输入编号");
+            isComplete = false;
+        }
+        if($("input[id='cardNumber']").val() == ""){
+            _set($("input[id='cardNumber']"), "请输入卡号");
+            isComplete = false;
+        }
+        if($("input[id='IDNumber']").val() ==""){
+            _set($("input[id='IDNumber']"), "请输入身份证号");
+            isComplete = false;
+        }
+        if($("input[id='phoneNumber']").val() ==""){
+            _set($("input[id='phoneNumber']"), "请输入电话号码");
+            isComplete = false;
         }
 
-        form.append("personName", $("input[id='personName']").val());
-        form.append("personNumber", $("input[id='personNumber']").val());
-        form.append("cardNumber", $("input[id='cardNumber']").val());
-        form.append("IDNumber", $("input[id='IDNumber']").val());
-        form.append("phoneNumber", $("input[id='phoneNumber']").val());
+        if(isComplete) {
 
-        $.ajax({
-            url: "/console/employee_management/"+flag,
-            type: "post",
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function (r) {
+            var flag_ = window.flag;
+            console.log(window.flag);
 
+            _reset_input($(".form-horizontal.add-new-user").find("input"));
 
-                if (r.status == "SUCCEED") {
-                    $(".bs-example-modal-sm").find(".modal-body").html(
-                        $("#dialog-user-management-update-title").html() + " succeeded."
-                    );
-                    $(".bs-example-modal-sm").modal("show");
-                    $(".btn.btn-default.add-new-user-close").click();
-                    $(".panel.panel-default").find("button[name='refresh']").click();
-                } else {
-                    if (r.message.WARNING) {
-                        $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                        $("#dialog-return").modal("show");
-                    }
-                }
-            },
-            error: function (r) {
+            var form = new FormData();
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                $("#dialog-return").modal("show");
+            var file = $("#avatar-2")[0].files[0];
+            console.log(file);
+            form.append("file", file);
+
+            if (window.flag == "update") {
+                form.append("personID", window.id);
+                form.append("version", $("input[id='version']").val());
+
+                console.log($("input[id='version']").val());
             }
 
-        });
+            form.append("personName", $("input[id='personName']").val());
+            form.append("personNumber", $("input[id='personNumber']").val());
+            form.append("cardNumber", $("input[id='cardNumber']").val());
+            form.append("IDNumber", $("input[id='IDNumber']").val());
+            form.append("phoneNumber", $("input[id='phoneNumber']").val());
 
-        flag = '';
+            $.ajax({
+                url: "/console/employee_management/" + flag,
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (r) {
+                    if (r.status == "SUCCEED") {
+                        var message;
+                        if (flag_ == 'add') {
+                            $("#dialog-return").find(".modal-body").html("增加成功");
+                        } else {
+                            $("#dialog-return").find(".modal-body").html("修改成功");
+                        }
 
-        form = '';//避免重复点击
+
+                        $("#dialog-return").modal("show");
+
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+
+                        // $(".bs-example-modal-sm").find(".modal-body").html(
+                        //     $("#dialog-user-management-update-title").html() + " succeeded."
+                        // );
+                        // $(".bs-example-modal-sm").modal("show");
+                        // $(".btn.btn-default.add-new-user-close").click();
+                        // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                    } else {
+                        if (r.message.WARNING) {
+                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                            $("#dialog-return").modal("show");
+                        }
+                    }
+                },
+                error: function (r) {
+
+                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                    $("#dialog-return").modal("show");
+                }
+
+            });
+
+            flag = '';
+
+            form = '';//避免重复点击
+        }
     });
 
 
@@ -508,13 +587,11 @@
             contentType: false,
             success: function (r) {
                 if (r.status == "SUCCEED") {
-                    $(".bs-example-modal-sm").find(".modal-body").html(
-                        $("#dialog-user-management-update-title").html() + " succeeded."
-                    );
-                    $(".bs-example-modal-sm").modal("show");
+                    $("#dialog-return").find(".modal-body").html("删除成功");
+                    $("#dialog-return").modal("show");
+
                     $(".btn.btn-default.add-new-user-close").click();
                     $(".panel.panel-default").find("button[name='refresh']").click();
-
                 } else {
                     if (r.message.WARNING) {
                         $("#dialog-return").find(".modal-body").html(r.message.WARNING);
@@ -522,8 +599,8 @@
                     }
                 }
             },
-            error: function (r) {
 
+            error: function (r) {
                 $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
                 $("#dialog-return").modal("show");
             }

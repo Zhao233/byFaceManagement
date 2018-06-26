@@ -41,10 +41,22 @@ public class EmployeeManagementController {
         String response = employeeService.searchEmployee(search, offset, limit,"staff");
         System.out.println(response);
 
-        JSONArray array = JSONHandler.getJsonArryFromResponse(response,"server","updateDate", "endDate", "startDate");
+        JSONObject object = JSONObject.fromObject(response);
 
-        r.put("total", String.valueOf(array.size()));
+        r.put("total",object.getInt("total"));
+        JSONArray array = object.getJSONArray("rows");
+
+        for(int i = 0 ; i < array.size(); i++){
+            array.getJSONObject(i).remove("server");
+        }
+
+        array.remove("server");
         r.put("rows", array);
+
+//        JSONArray array = JSONHandler.getJsonArryFromResponse(response,"server","updateDate", "endDate", "startDate");
+//
+//        r.put("total", String.valueOf(array.size()));
+//        r.put("rows", array);
         return r;
     }
 
@@ -61,41 +73,56 @@ public class EmployeeManagementController {
 
         MultipartFile mf = request.getFile("file");
 
-        String filename = mf.getOriginalFilename();
-        String suffix = filename.substring(filename.indexOf('.') + 1);
-        // File.separator
-        String folder = System.getProperty("java.io.tmpdir");
-        String datetime = String.valueOf(new Date().getTime());
-        String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
-        File file = new File(target);
+        if(mf != null) {
+            String filename = mf.getOriginalFilename();
+            String suffix = filename.substring(filename.indexOf('.') + 1);
+            // File.separator
+            String folder = System.getProperty("java.io.tmpdir");
+            String datetime = String.valueOf(new Date().getTime());
+            String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
+            File file = new File(target);
 
-        try (FileInputStream fis = (FileInputStream) mf.getInputStream();
-             FileOutputStream fos = new FileOutputStream(target)) {
-            byte[] b = new byte[1024];
-            int i = fis.read(b);
-            while (i > -1) {
-                fos.write(b, 0, b.length);
-                fos.flush();
-                i = fis.read(b);
+            try (FileInputStream fis = (FileInputStream) mf.getInputStream();
+                 FileOutputStream fos = new FileOutputStream(target)) {
+                byte[] b = new byte[1024];
+                int i = fis.read(b);
+                while (i > -1) {
+                    fos.write(b, 0, b.length);
+                    fos.flush();
+                    i = fis.read(b);
+                }
+            } catch (Exception e) {
+                try {
+                    throw e;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            try {
-                throw e;
-            } catch (IOException e1) {
-                e1.printStackTrace();
+
+            FileSystemResource resource = new FileSystemResource(file);
+
+            String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber);
+            System.out.println(response);
+
+            if(JSONHandler.isSuccess(response)){
+                r.put("status","SUCCEED");
+            } else {
+                r.put("status", "FAILED");
             }
-        }
 
-        FileSystemResource resource = new FileSystemResource(file);
-
-        String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber);
-        System.out.println(response);
-
-        if(JSONHandler.isSuccess(response)){
-            r.put("status","SUCCEED");
         } else {
-            r.put("status", "FAILED");
+
+            String response = employeeService.addEmployee(personName,personNumber,cardNumber,IDNumber,phoneNumber);
+            System.out.println(response);
+
+            if(JSONHandler.isSuccess(response)){
+                r.put("status","SUCCEED");
+            } else {
+                r.put("status", "FAILED");
+            }
         }
+
+
 
         return r;
     }

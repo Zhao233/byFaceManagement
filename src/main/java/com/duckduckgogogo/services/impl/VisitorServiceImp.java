@@ -28,6 +28,12 @@ public class VisitorServiceImp extends Info implements VisitorService {
             param.add("limit", limit);
             param.add("role", role);
 
+//            JSONObject object = new JSONObject();
+//            object.put("search",search);
+//            object.put("offset",offset);
+//            object.put("limit",limit);
+//            object.put("role",role);
+
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             return rest.postForObject(url, param, String.class);

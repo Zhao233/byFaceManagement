@@ -29,38 +29,18 @@ public class ServerManagementController {
     private Map<String,Object> search(@RequestParam(value = "search", defaultValue = "") String search,
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                       @RequestParam(value = "limit", defaultValue = "10") Integer limit){
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> r = new HashMap<>();
 
         String response = serverService.searchServers(search, String.valueOf(offset), String.valueOf(limit));
         System.out.println(response);
 
-        try {
-            JSONArray array = JSONArray.fromObject(response);
-            JSONArray array_result = new JSONArray();
+        JSONObject object = JSONObject.fromObject(response);
 
-            String[] arr = new String[array.size()];
+        r.put("total",object.getInt("total"));
 
-            int size = array.size();
-            for (int i = 0; i < size; i++) {
-                arr[i] = array.getString(i);
+        r.put("rows", object.getJSONArray("rows"));
 
-                JSONObject object = JSONObject.fromObject(arr[i]);
-                object.remove("updateDate");
-                object.remove("enabled");
-
-                array_result.add(object);
-            }
-
-            map.put("total", String.valueOf(size));
-            map.put("rows", array_result);
-
-
-            return map;
-        }catch (JSONException e){
-            System.out.println("error :"+e.getMessage());
-
-            return map;
-        }
+        return r;
     }
 
     @RequestMapping("/add")

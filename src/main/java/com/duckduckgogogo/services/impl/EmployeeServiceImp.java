@@ -65,6 +65,35 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
     }
 
     @Override
+    public String addEmployee(String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber) {
+        try{
+            String url = "http://" + super.serverIP + "/api/face/add";
+            RestTemplate rest = new RestTemplate();
+
+            JSONObject object = new JSONObject();
+            object.put("personName", personName);
+            object.put("personNumber", personNumber);
+            object.put("cardNumber",cardNumber);
+            object.put("IDNumber",IDNumber);
+            object.put("phoneNumber",phoneNumber);
+            object.put("role","staff");
+
+            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+            param.add("personInfo",object);
+
+            FileSystemResource image =new FileSystemResource("");
+            param.add("imageData", image);
+
+            rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+            return rest.postForObject(url, param, String.class);
+        } catch (Exception e){
+            return "error : "+e.getMessage();
+        }
+    }
+
+
+    @Override
     public String updateEmployee(FileSystemResource resource, int personID, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber, int version) {
         try{
             String url = "http://" + super.serverIP + "/api/face/update";
@@ -92,6 +121,8 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             return "error : "+e.getMessage();
         }
     }
+
+
 
     @Override
     public String deleteEmployee(List<Integer> list) {

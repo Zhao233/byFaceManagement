@@ -80,10 +80,7 @@
 
                 <!-- 员工管理 -->
                 <li>
-                    <a href="/console/employee_management">
-                        <i class="fa fa-dashboard"></i>
-                        Employee Management
-                    </a>
+                    <a href="/console/employee_management"><i class="fa fa-dashboard"></i>Employee Management</a>
                 </li>
 
                 <!-- 访客管理 -->
@@ -111,9 +108,14 @@
                     <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
                 </li>
 
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
-                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
+                    <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Config Info</a>
                 </li>
 
             </ul>
@@ -428,7 +430,7 @@
                     break
 
                 case "FAILED" :
-                    $("#dialog-user-management-update").find(".modal-body").html("增加失败");
+                    $("#dialog-user-management-update").find(".modal-body").html("增加失败:"+r.message);
                     $("#dialog-user-management-update").modal("show");
 
                     break

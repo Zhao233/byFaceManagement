@@ -48,4 +48,6 @@ public class CameraInfoServiceImp extends Info implements CameraInfoService {
             return "";//返回空字段
         }
     }
+
+    
 }

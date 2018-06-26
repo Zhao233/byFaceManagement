@@ -32,16 +32,10 @@ public class AttendanceManagementController {
 
         String result = attendanceService.searchServers(search,offset,limit,startDate,endDate,id);
 
-        JSONArray array = JSONArray.fromObject(result);
+        JSONObject object = JSONObject.fromObject(result);
 
-//      "tracedate":"2018-06-20 14:13:07",
-//      "personnumber":"1003",
-//      "name":"张三",
-//      "id":292,
-//      "cameraname":"东门入口"
-
-        r.put("total", array.size());
-        r.put("rows", array);
+        r.put("total",object.getInt("total"));
+        r.put("rows", object.getJSONArray("rows"));
         return r;
     }
 }

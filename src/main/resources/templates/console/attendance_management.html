@@ -157,29 +157,30 @@
                         <div class="panel-body">
                             <button class="btn btn-primary searchData">Search</button>
                             <br/>
+                            <div class="form-group">
+                                <label class="col-md-2" for="search_id">员工ID</label>
+                                <input class="input-group" type="text" id="search_id"/>
 
-                            <label class="col-md-2" for="search_id">员工ID</label>
-                            <input class="form-control" type="text" id="search_id"/>
+                                <div class="form-group datePicker">
+                                    <label for="dtp_input2" class="col-md-2 ">选择开始日期</label>
 
-                            <div class="form-group datePicker">
-                                <label for="dtp_input2" class="col-md-2 ">选择开始日期</label>
-
-                                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                    <input id="startTime" class="form-control" size="6" type="text" value="" readonly>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input id="startTime" class="form-control" size="6" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                    <input type="hidden" id="dtp_input2" value="" /><br/>
                                 </div>
-                                <input type="hidden" id="dtp_input2" value="" /><br/>
-                            </div>
 
-                            <div class="form-group datePicker">
-                                <label for="dtp_input2" class="col-md-2 ">选择结束日期</label>
-                                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                    <input id="endTime" class="form-control" size="6" type="text" value="" readonly>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <div class="form-group datePicker">
+                                    <label for="dtp_input2" class="col-md-2 ">选择结束日期</label>
+                                    <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input id="endTime" class="form-control" size="6" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                    <input type="hidden" id="dtp_input3" value="" /><br/>
                                 </div>
-                                <input type="hidden" id="dtp_input3" value="" /><br/>
                             </div>
                         </div>
 
@@ -267,6 +268,7 @@
         window.offset;
         window.search;
 
+
         $('#_table_user_search').bootstrapTable({
             method: 'get',
             url: "/console/attendance_management/search",
@@ -296,12 +298,12 @@
                 window.search = $(".search").find("input").val();
 
                 return {
-                    limit: limit,
-                    offset: offset,
-                    search: search,
-                    startDate:'2018-6-21',
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val(),
+                    startDate:'2018-6-20',
                     // endDate:'2018-6-18'formatted_date,
-                    endDate:'2018-6-21',
+                    endDate:'2018-6-30',
                     id:97
                 };
             },
@@ -450,8 +452,6 @@
         if(end_time < start_time){
 
         }
-
-
 
         $.ajax({
             type: "get",

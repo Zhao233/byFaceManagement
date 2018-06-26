@@ -115,6 +115,11 @@
                     <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
                 </li>
 
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
@@ -225,6 +230,17 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
 <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -320,9 +336,10 @@
 
     $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
         window.flag='add';
+        var flag_ = window.flag;
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update-title").html("增加服务器");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -355,74 +372,97 @@
     });
 
     $(".btn.btn-primary.add-new-user").click(function() {
-        _reset_input($(".form-horizontal.add-new-user").find("input"));
+        var isComplete = true;
 
-        if(window.flag=='update'){
-            var dataSource = new FormData();
-
-            dataSource.append("id", window.id);
-            dataSource.append("version", window.version);
-
-            console.log('version:'+$("input[id='version']").val());
-            console.log('id: '+window.id);
-
-            dataSource.append("serverName",$("input[id='serverName']").val());
-            dataSource.append("serverIP",$("input[id='serverIP']").val());
-            dataSource.append("isMainServer",$("#isMainServer").val());
-
-            console.log("isMainServer:" +$("#isMainServer").val())
-        } else {
-            var dataSource = $(".form-horizontal.add-new-user").serializeArray();
-            console.log(dataSource);
-            console.log('flag:'+flag);
+        //check input
+        if($("input[id='serverName']").val() == ""){
+            _set($("input[id='serverName']"), "请输入服务器名称");
+            isComplete = false;
+        }
+        if($("input[id='serverIP']").val() == ""){
+            _set($("input[id='serverIP']"), "请输入服务器IP");
+            isComplete = false;
         }
 
-        $.ajax({
-            url: "/console/server_management/"+window.flag,
-            type: "post",
-            data: dataSource,
-            processData: false,
-            contentType: false,
-            success: function (r) {
-                switch (r.status) {
-                    case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
-                        $(".btn.btn-default.add-new-user-close").click();
-                        $(".panel.panel-default").find("button[name='refresh']").click();
+        if(isComplete) {
 
+            var flag_ = window.flag;
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
-                        // $("#dialog-user-management-update").modal("show");
-                        //
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
+            _reset_input($(".form-horizontal.add-new-user").find("input"));
 
-                        break
+            if (window.flag == 'update') {
+                var dataSource = new FormData();
 
-                    case "FAILED" :
-                        var message;
-                        if(window.flag == 'update'){
-                            message = '添加';
-                        } else {
-                            message = '修改';
-                        }
+                dataSource.append("id", window.id);
+                dataSource.append("version", window.version);
 
-                        $("#dialog-user-management-update").find(".modal-body").html(message+"失败");
-                        $("#dialog-user-management-update").modal("show");
+                console.log('version:' + $("input[id='version']").val());
+                console.log('id: ' + window.id);
 
-                        break
-                }
-            },
-            error: function (r) {
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                $("#dialog-return").modal("show");
+                dataSource.append("serverName", $("input[id='serverName']").val());
+                dataSource.append("serverIP", $("input[id='serverIP']").val());
+                dataSource.append("isMainServer", $("#isMainServer").val());
+
+                console.log("isMainServer:" + $("#isMainServer").val())
+            } else {
+                var dataSource = new FormData();
+
+                dataSource.append("serverName", $("input[id='serverName']").val());
+                dataSource.append("serverIP", $("input[id='serverIP']").val());
+                dataSource.append("isMainServer", $("#isMainServer").val());
+
+                console.log(dataSource);
+                console.log('flag:' + flag);
             }
 
-        });
+            $.ajax({
+                url: "/console/server_management/" + window.flag,
+                type: "post",
+                data: dataSource,
+                processData: false,
+                contentType: false,
+                success: function (r) {
+                    switch (r.status) {
+                        case "SUCCEED" :
 
-        window.flag='';
+                            if (flag_ == 'add') {
+                                $("#dialog-return").find(".modal-body").html("增加成功");
+                            } else {
+                                $("#dialog-return").find(".modal-body").html("修改成功");
+                            }
+
+                            $("#dialog-return").modal("show");
+
+                            $(".btn.btn-default.add-new-user-close").click();
+                            $(".panel.panel-default").find("button[name='refresh']").click();
+
+                            // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                            // $("#dialog-user-management-update").modal("show");
+                            //
+                            // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                            break
+
+                        case "FAILED" :
+                            if (flag_ == 'add') {
+                                $("#dialog-return").find(".modal-body").html("增加失败");
+                            } else {
+                                $("#dialog-return").find(".modal-body").html("修改失败");
+                            }
+
+                            $("#dialog-return").modal("show");
+
+                            break
+                    }
+                },
+                error: function (r) {
+                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                    $("#dialog-return").modal("show");
+                }
+            });
+
+            window.flag = '';
+        }
 
     });
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
@@ -449,10 +489,8 @@
             success: function (r) {
                 switch (r.status) {
                     case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
+                        $("#dialog-return").find(".modal-body").html("删除成功");
+                        $("#dialog-return").modal("show");
                         $(".btn.btn-default.add-new-user-close").click();
                         $(".panel.panel-default").find("button[name='refresh']").click();
 
@@ -463,9 +501,8 @@
                         break
 
                     case "FAILED" :
-                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
-                        $("#dialog-user-management-update").modal("show");
-
+                        $("#dialog-return").find(".modal-body").html("删除失败");
+                        $("#dialog-return").modal("show");
                         break
                 }
             },

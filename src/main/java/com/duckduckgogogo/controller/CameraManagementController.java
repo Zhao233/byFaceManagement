@@ -47,12 +47,9 @@ public class CameraManagementController {
 
         String result = cameraService.searchCamera(search,String.valueOf(offset),String.valueOf(limit));
 
-        if(JSONHandler.isSuccess(result)){
-            r.put("total", JSONHandler.getJsonArrayLength(result));
-            r.put("rows", JSONHandler.getJsonArryFromResponse(result,"server"));
-        } else {
-
-        }
+        JSONObject object = JSONObject.fromObject(result);
+        r.put("total", object.getInt("total"));
+        r.put("rows", object.getJSONArray("rows"));
 
         return r;
     }
@@ -87,6 +84,7 @@ public class CameraManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");
         } else {
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -104,12 +102,14 @@ public class CameraManagementController {
         if(JSONHandler.isSuccess(result)){
             JSONObject object = JSONObject.fromObject(result);
 
+            r.put("id",object.getString("id"));
             r.put("cameraName",object.getString("cameraName"));
             r.put("rtspUrl",object.getString("rtspUrl"));
             r.put("server",object.getString("server"));
             r.put("entranceGuardNO",object.getString("entranceGuardNO"));
             r.put("cameraXY",object.getString("cameraXY"));
             r.put("entranceGuard",object.getString("entranceGuard"));
+            r.put("version", object.getString("version"));
 
             r.put("status","SUCCEED");
         } else {

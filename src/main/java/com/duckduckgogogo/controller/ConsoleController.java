@@ -4,7 +4,6 @@ import com.duckduckgogogo.domain.User;
 import com.duckduckgogogo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -99,6 +98,17 @@ public class ConsoleController {
     @RequestMapping("/camera_info")
     public ModelAndView toCameraInfo() {
         return new ModelAndView("console/camera_info");
+    }
+
+    @RequestMapping("/trace_info")
+    public ModelAndView toTraceInfo() {
+        return new ModelAndView("console/trace_info");
+    }
+
+
+    @RequestMapping("/test_trace")
+    public ModelAndView toA() {
+        return new ModelAndView("console/test_trace");
     }
 
     /**

@@ -115,6 +115,11 @@
                     <a href="/console/camera_info"><i class="fa fa-desktop"></i>Camera Info</a>
                 </li>
 
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>Trace Info</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"  ><i class="fa fa-qrcode"></i>Congfig Info</a>
@@ -132,12 +137,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        Camera Management
+                        摄像头管理
                     </h1>
                 </div>
             </div>
             <!-- /. ROW  -->
-
             <div class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
@@ -149,8 +153,9 @@
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="cameraName">Camera Name</th>
+                                        <th data-field="cameraName" data-formatter="_formatte_name">Camera Name</th>
                                         <th data-field="taskId">Task Id</th>
+                                        <th data-field="server.serverName">Server Name</th>
                                         <th data-field="entranceGuardNO">Entrance Guard Number</th>
                                         <th data-field="entranceGuard">Entrance Guard</th>
                                         <th data-field="enabled">Enable</th>
@@ -188,7 +193,8 @@
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user" method="POST">
-                    <!--<input type="text" style="display:none;" id="id" name="id" />-->
+                    <input type="text" style="display:none;" id="id" name="id" />
+                    <input type="text" style="display:none;" id="version" name="version" />
                     <!--<input type="text" style="display:none;" id="version" name="version" />-->
 
                     <div class="form-group">
@@ -207,14 +213,6 @@
                         <div class="col-sm-1"></div>
                     </div>
 
-                    <!--<div class="form-group">-->
-                        <!--<label for="server" class="col-sm-4 control-label">Server</label>-->
-                        <!--<div class="col-sm-7">-->
-                            <!--<input type="text" class="form-control" id="server" name="server" maxlength="30" />-->
-                        <!--</div>-->
-                        <!--<div class="col-sm-1"></div>-->
-                    <!--</div>-->
-
                     <div class="form-group">
                         <label for="entranceGuardNO" class="col-sm-4 control-label">Entrance Guard Number</label>
                         <div class="col-sm-7">
@@ -222,7 +220,6 @@
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
-
                     <div class="form-group">
                         <label for="entranceGuardNO" class="col-sm-4 control-label">Camera XY</label>
                         <div class="col-sm-7">
@@ -230,7 +227,6 @@
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
-
 
                     <div class="form-group">
                         <label for="entranceGuard" class="col-sm-4 control-label">Entrance Guard</label>
@@ -244,6 +240,38 @@
                     </div>
 
                     <div class="form-group">
+                        <div class="col-sm-22">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Supplier List</div>
+                                <div class="panel-body">
+                                    <table id="serverList" data-toggle="table"
+                                           data-url="/console/server_management/search"
+                                           data-method="get"
+                                           data-striped="true"
+                                           data-show-refresh="true"
+                                           data-show-toggle="false"
+                                           data-show-columns="true"
+                                           data-search="true"
+                                           data-pagination="true"
+                                           data-sidePagination="client"
+                                           data-cache="false"
+                                           data-sort-name="serverIP"
+                                           data-idField="id">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="id" name="serverID" data-formatter="_formatte_serverList_id" data-align="center"></th>
+                                            <th data-field="serverName">Server Name</th>
+                                            <th data-field="serverIP">Server IP</th>
+                                            <th data-field="mainServer">Is Main Server</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                             <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
                             <button type="button" class="btn btn-primary add-new-user">保存</button>
@@ -254,6 +282,18 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
 <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -277,13 +317,103 @@
         /*bootstrap table*/
 
         $('#_table_user_search').bootstrapTable({
-
-            select: {
-                style: 'multi'
-            },
-
             method: 'get',
             url: "/console/camera_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function(res) {
+                console.log(res);
+
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+
+        });
+    });
+</script>
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _formatte_user_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _formatte_serverList_id(value, row, index) {
+        return '<input name="serverID" type="radio" value="' + value + '" />';
+    }
+
+    function _formatte_name(value,row,index){
+        if (value != undefined) {
+            return '<a href="/console/camera_info/?id=' + row.id +'">' + value + '</a>';
+        }
+    }
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
+        _reset($(".form-horizontal.add-new-user"));
+
+        window.flag = 'add';
+
+        $('#serverList').bootstrapTable({
+            method: 'get',
+            url: "/console/server_management/search",
             striped: true,
             dataType: "json",
             pagination: true,
@@ -309,63 +439,55 @@
                     "total": res.total
                 };
             }
-
         });
-    });
-</script>
-<!-- Custom Js -->
 
-<script src="/javascript/custom-scripts.js"></script>
-
-<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-<script src="/javascript/bootstrap-table.min.js"></script>
-
-<script>
-    !function ($) {
-        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
-            $(this).find('em:first').toggleClass("glyphicon-minus");
-        });
-        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
-    }(window.jQuery);
-
-    $(window).on('resize', function () {
-        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
-        else $('#sidebar-collapse').collapse('hide');
-    });
-
-    function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
-    }
-
-    function _reset(from) {
-        from[0].reset();
-        _reset_input(from.find("input"));
-    }
-
-    function _reset_input(input) {
-        input.removeClass("alert-danger");
-        input.tooltip('destroy');
-    }
-
-    function _set(el, message) {
-        el.addClass("alert-danger");
-        el.attr("title", message);
-        el.tooltip('show');
-    }
-
-    $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
-        _reset($(".form-horizontal.add-new-user"));
         $("#dialog-user-management-update-title").html("增加新摄像头");
         $("#dialog-user-management-update").modal("show");
     });
 
     //update method
     $(".btn.btn-success.open-update-use-dialog").click(function() {
+        window.flag='update';
+
         var id = $("input[type='radio']:checked").val();
+
         if (id != undefined) {
             _reset($(".form-horizontal.add-new-user"));
-            // 读取用户选中的用户信息
+
+            $('#serverList').bootstrapTable({
+                method: 'get',
+                url: "/console/server_management/search",
+                striped: true,
+                dataType: "json",
+                pagination: true,
+                queryParamsType: "limit",
+                singleSelect: true,
+                contentType: "application/x-www-form-urlencoded",
+                pageSize: 10,
+                pageNumber:1,
+                search: true,
+                showColumns: true,
+                showRefresh: true,
+                sidePagination: "server", //服务端请求
+                queryParams: function(params) {
+                    return {
+                        limit: params.limit,
+                        offset: params.offset / params.limit,
+                        search: $(".search").find("input").val()
+                    };
+                },
+                responseHandler: function(res) {
+                    return {
+                        "rows": res.rows,
+                        "total": res.total
+                    };
+                }
+            });
+
             $.get("/console/camera_management/get/" + id, null, function(r, status) {
+                window.version = r.version;
+                $("#dialog-user-management-update").find("input[id='id']").val(r.id);
+                $("#dialog-user-management-update").find("input[id='version']").val(r.version);
                 $("#dialog-user-management-update").find("input[id='cameraName']").val(r.cameraName);
                 $("#dialog-user-management-update").find("input[id='rtspUrl']").val(r.rtspUrl);
                 $("#dialog-user-management-update").find("input[id='entranceGuardNO']").val(r.entranceGuardNO);
@@ -376,64 +498,121 @@
                 $("#dialog-user-management-update").modal("show");
             });
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the camera.");
-            $(".bs-example-modal-sm").modal("show");
+            $("#dialog-return").find(".modal-body").html("请选择需要修改的摄像头");
+            $("#dialog-return").modal("show");
+            // $(".bs-example-modal-sm").find(".modal-body").html("You did not select the camera.");
+            // $(".bs-example-modal-sm").modal("show");
         }
     });
 
     $(".btn.btn-primary.add-new-user").click(function() {
-        _reset_input($(".form-horizontal.add-new-user").find("input"));
+        var isComplete = true;
 
-        var data = $(".form-horizontal.add-new-user").serializeArray();
+        //check input
+        if($("input[id='cameraName']").val() == ""){
+            _set($("input[id='cameraName']"), "请输入摄像头名称");
+            isComplete = false;
+        }
+        if($("input[id='rtspUrl']").val() == ""){
+            _set($("input[id='rtspUrl']"), "请输入有效地址");
+            isComplete = false;
+        }
+        if($("input[id='server']").val() == ""){
+            _set($("input[id='server']"), "请选择摄像头");
+            isComplete = false;
+        }
+        if($("input[id='entranceGuard']").val() ==""){
+            _set($("input[id='entranceGuard']"), "请输入入口");
+            isComplete = false;
+        }
 
-        console.log(data);
-
-        $.post("/console/camera_management/update", data, function(r, status) {
-            switch (r.status) {
-                case "SUCCEED" :
-                    $(".bs-example-modal-sm").find(".modal-body").html(
-                        $("#dialog-user-management-update-title").html() + " succeeded."
-                    );
-                    $(".bs-example-modal-sm").modal("show");
-                    $(".btn.btn-default.add-new-user-close").click();
-                    $(".panel.panel-default").find("button[name='refresh']").click();
+        if($("input[id='entranceGuardNO']").val() ==""){
+            _set($("input[id='entranceGuardNO']"), "请输入入口编号");
+            isComplete = false;
+        }
+        if($("input[id='cameraXY']").val() ==""){
+            _set($("input[id='cameraXY']"), "请输入摄像头地址");
+            isComplete = false;
+        }
 
 
-                    // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-                    // $("#dialog-user-management-update").modal("show");
-                    //
-                    // $(".panel.panel-default").find("button[name='refresh']").click();
-                    break
+        if(isComplete) {
 
-                case "FAILED" :
-                    $("#dialog-user-management-update").find(".modal-body").html("修改失败");
-                    $("#dialog-user-management-update").modal("show");
+            var flag_ = window.flag;
 
-                    break
+            _reset_input($(".form-horizontal.add-new-user").find("input"));
+
+            var serverID = $("input[name='serverID']:checked").val();
+
+            if (serverID == undefined) {
+                alert("请选择服务器");
+            } else {
+
+                var data = new FormData();
+
+                data.append("id", $("input[id='id']").val());
+                data.append("cameraName", $("input[id='cameraName']").val());
+                data.append("rtspUrl", $("input[id='rtspUrl']").val());
+                data.append("server", $("input[name='serverID']:checked").val());
+                data.append("entranceGuard", $("select[id='entranceGuard']").val());
+                data.append("entranceGuardNO", $("input[id='entranceGuardNO']").val());
+                data.append("cameraXY", $("input[id='cameraXY']").val());
+                data.append("version", $("input[id='version']").val());
+
+                console.log(data);
+                $.ajax({
+                    url: "/console/camera_management/" + window.flag,
+                    type: "post",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (r) {
+                        switch (r.status) {
+                            case "SUCCEED" :
+                                var message;
+                                if (flag_ == 'add') {
+                                    $("#dialog-return").find(".modal-body").html("增加成功");
+                                } else {
+                                    $("#dialog-return").find(".modal-body").html("修改成功");
+                                }
+
+
+                                $("#dialog-return").modal("show");
+
+                                $(".btn.btn-default.add-new-user-close").click();
+                                $(".panel.panel-default").find("button[name='refresh']").click();
+
+
+                                // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
+                                // $("#dialog-user-management-update").modal("show");
+                                //
+                                // $(".panel.panel-default").find("button[name='refresh']").click();
+                                break
+
+                            case "FAILED" :
+                                if (flag_ == 'add') {
+                                    $("#dialog-return").find(".modal-body").html("增加失败");
+                                } else {
+                                    $("#dialog-return").find(".modal-body").html("修改失败");
+                                }
+
+                                $("#dialog-return").modal("show");
+
+                                $(".btn.btn-default.add-new-user-close").click();
+                                $(".panel.panel-default").find("button[name='refresh']").click();
+
+                                break
+                        }
+                    },
+                    error: function (r) {
+
+                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").modal("show");
+                    }
+
+                });
             }
-
-
-            // if (r.status == "SUCCEED") {
-            //     $(".bs-example-modal-sm").find(".modal-body").html(
-            //         $("#dialog-server-management-update-title").html() + " succeeded."
-            //     );
-            //     $(".bs-example-modal-sm").modal("show");
-            //     $(".btn.btn-default.add-new-user-close").click();
-            //     $(".panel.panel-default").find("button[name='refresh']").click();
-            //     // location.reload();
-            // } else {
-            //     if (r.message.servername) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='servername']"), r.message.servername);
-            //     }
-            //     if (r.message.serverip) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='serverip']"), r.message.serverip);
-            //     }
-            //     if (r.message.WARNING) {
-            //         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-            //         $(".bs-example-modal-sm").modal("show");
-            //     }
-            // }
-        });
+        }
     });
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
         console.log('clicked the delete');
@@ -459,12 +638,12 @@
             success: function (r) {
                 switch (r.status) {
                     case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
-                        $(".btn.btn-default.add-new-user-close").click();
-                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    $("#dialog-return").find(".modal-body").html("删除成功");
+
+                    $("#dialog-return").modal("show");
+
+                    $(".btn.btn-default.add-new-user-close").click();
+                    $(".panel.panel-default").find("button[name='refresh']").click();
 
 
                         // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
@@ -474,8 +653,8 @@
                         break
 
                     case "FAILED" :
-                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
-                        $("#dialog-user-management-update").modal("show");
+                        $("#dialog-return").find(".modal-body").html("删除失败");
+                        $("#dialog-return").modal("show");
 
                         break
                 }

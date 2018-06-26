@@ -94,16 +94,20 @@ public class ServerServiceImp extends Info implements ServerService {
 
             RestTemplate rest = new RestTemplate();
 
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
-            param.add("id", id);
-            param.add("serverName", serverName);
-            param.add("serverIP", serverIP);
-            param.add("isMainServer", isMainServer);
-            param.add("version", version);
+//            MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+//            param.add("id", id);
+//            param.add("serverName", serverName);
+//            param.add("serverIP", serverIP);
+//            param.add("isMainServer", isMainServer);
+//            param.add("version", version);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
-            String string = rest.postForObject(url, param, String.class);
+            String request = "{\"id\":"+id+",\"serverName\":\"" + serverName + "\",\"serverIP\":\"" + serverIP + "\",\"isMainServer\":\"" + isMainServer + "\",\"version\":"+version+"}";
+
+            System.out.println("update request: "+ request);
+
+            String string = rest.postForObject(url, request, String.class);
 
 
             return string;

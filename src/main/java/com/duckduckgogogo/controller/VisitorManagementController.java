@@ -42,10 +42,18 @@ public class VisitorManagementController {
         String response = visitorService.searchVisitor(search, offset, limit,"visitor");
         System.out.println(response);
 
-        JSONArray array = JSONHandler.getJsonArryFromResponse(response,"server","updateDate", "endDate", "startDate");
+        JSONObject object = JSONObject.fromObject(response);
 
-        r.put("total", String.valueOf(array.size()));
+        r.put("total",object.getInt("total"));
+        JSONArray array = object.getJSONArray("rows");
+
+        for(int i = 0 ; i < array.size(); i++){
+            array.getJSONObject(i).remove("server");
+        }
+
+        array.remove("server");
         r.put("rows", array);
+
         return r;
     }
 
