@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 @Service("attendanceService")
 public class AttendanceServiceImp extends Info implements AttendanceService {
     @Override
-    public String searchServers(String search, int offset, int limit, String startDate, String endDate, int id) {
+    public String searchServers(String search, int offset, int limit, String startDate, String endDate) {
         try{
             String url = "http://" + super.serverIP + "/api/attendance/search";
 
@@ -26,9 +26,7 @@ public class AttendanceServiceImp extends Info implements AttendanceService {
             param.add("endDate", endDate);
 
             //默认值
-            if(id != 0000) {
-                param.add("id", id);
-            }
+
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 

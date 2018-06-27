@@ -69,38 +69,38 @@ public class VisitorManagementController {
         Map<String, Object> r = new HashMap<>();
 
         MultipartFile mf = request.getFile("file");
+        FileSystemResource resource = null;
+        if(mf != null) {
 
-        String filename = mf.getOriginalFilename();
-        String suffix = filename.substring(filename.indexOf('.') + 1);
-        // File.separator
-        String folder = System.getProperty("java.io.tmpdir");
-        String datetime = String.valueOf(new Date().getTime());
-        String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
-        File file = new File(target);
+            String filename = mf.getOriginalFilename();
+            String suffix = filename.substring(filename.indexOf('.') + 1);
+            // File.separator
+            String folder = System.getProperty("java.io.tmpdir");
+            String datetime = String.valueOf(new Date().getTime());
+            String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
+            File file = new File(target);
 
-        try (FileInputStream fis = (FileInputStream) mf.getInputStream();
-             FileOutputStream fos = new FileOutputStream(target)) {
-            byte[] b = new byte[1024];
-            int i = fis.read(b);
-            while (i > -1) {
-                fos.write(b, 0, b.length);
-                fos.flush();
-                i = fis.read(b);
+            try (FileInputStream fis = (FileInputStream) mf.getInputStream();
+                 FileOutputStream fos = new FileOutputStream(target)) {
+                byte[] b = new byte[1024];
+                int i = fis.read(b);
+                while (i > -1) {
+                    fos.write(b, 0, b.length);
+                    fos.flush();
+                    i = fis.read(b);
+                }
+            } catch (Exception e) {
+                try {
+                    throw e;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            try {
-                throw e;
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+
+            resource = new FileSystemResource(file);
         }
 
-        FileSystemResource resource = new FileSystemResource(file);
-
-        String start = "2018-01-01";
-        String end = "2018-02-01";
-
-        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber,start,end);
+        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber,startDate,endDate);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -127,38 +127,39 @@ public class VisitorManagementController {
 
 
         MultipartFile mf = request.getFile("file");
+        FileSystemResource resource = null;
 
-        String filename = mf.getOriginalFilename();
-        String suffix = filename.substring(filename.indexOf('.') + 1);
-        // File.separator
-        String folder = System.getProperty("java.io.tmpdir");
-        String datetime = String.valueOf(new Date().getTime());
-        String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
-        File file = new File(target);
+        if(mf != null) {
 
-        try (FileInputStream fis = (FileInputStream) mf.getInputStream();
-             FileOutputStream fos = new FileOutputStream(target)) {
-            byte[] b = new byte[1024];
-            int i = fis.read(b);
-            while (i > -1) {
-                fos.write(b, 0, b.length);
-                fos.flush();
-                i = fis.read(b);
+            String filename = mf.getOriginalFilename();
+            String suffix = filename.substring(filename.indexOf('.') + 1);
+            // File.separator
+            String folder = System.getProperty("java.io.tmpdir");
+            String datetime = String.valueOf(new Date().getTime());
+            String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
+            File file = new File(target);
+
+            try (FileInputStream fis = (FileInputStream) mf.getInputStream();
+                 FileOutputStream fos = new FileOutputStream(target)) {
+                byte[] b = new byte[1024];
+                int i = fis.read(b);
+                while (i > -1) {
+                    fos.write(b, 0, b.length);
+                    fos.flush();
+                    i = fis.read(b);
+                }
+            } catch (Exception e) {
+                try {
+                    throw e;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            try {
-                throw e;
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+
+            resource = new FileSystemResource(file);
         }
 
-        FileSystemResource resource = new FileSystemResource(file);
-
-        String start = "2018-01-01";
-        String end = "2018-02-01";
-
-        String response = visitorService.updateVisitor(resource,personID, personName,IDNumber,phoneNumber,version+1,start, end);
+        String response = visitorService.updateVisitor(resource,personID, personName,IDNumber,phoneNumber,version+1,startDate, endDate);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -188,6 +189,7 @@ public class VisitorManagementController {
             r.put("version",object.getString("version"));
             r.put("startDateString",object.getString("startDateString"));
             r.put("endDateString",object.getString("endDateString"));
+            r.put("feature",object.getString("feature"));
 
             r.put("status","SUCCEED");
         } else {

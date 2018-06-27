@@ -42,8 +42,10 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
     @Override
     public String addEmployee(FileSystemResource image, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber) {
         try{
+
             String url = "http://" + super.serverIP + "/api/face/add";
             RestTemplate rest = new RestTemplate();
+            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 
             JSONObject object = new JSONObject();
             object.put("personName", personName);
@@ -53,7 +55,10 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             object.put("phoneNumber",phoneNumber);
             object.put("role","staff");
 
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+            if(image == null){
+                image = new FileSystemResource("");
+            }
+
             param.add("personInfo", object);
             param.add("imageData", image);
 
@@ -64,35 +69,6 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             return "error : "+e.getMessage();
         }
     }
-
-    @Override
-    public String addEmployee(String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber) {
-        try{
-            String url = "http://" + super.serverIP + "/api/face/add";
-            RestTemplate rest = new RestTemplate();
-
-            JSONObject object = new JSONObject();
-            object.put("personName", personName);
-            object.put("personNumber", personNumber);
-            object.put("cardNumber",cardNumber);
-            object.put("IDNumber",IDNumber);
-            object.put("phoneNumber",phoneNumber);
-            object.put("role","staff");
-
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("personInfo",object);
-
-            FileSystemResource image =new FileSystemResource("");
-            param.add("imageData", image);
-
-            rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-
-            return rest.postForObject(url, param, String.class);
-        } catch (Exception e){
-            return "error : "+e.getMessage();
-        }
-    }
-
 
     @Override
     public String updateEmployee(FileSystemResource resource, int personID, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber, int version) {
@@ -111,6 +87,10 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             object.put("phoneNumber", phoneNumber);
             object.put("version", version);
 
+            if(resource == null){
+                resource = new FileSystemResource("");
+            }
+
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
             param.add("personInfo", object);
             param.add("imageData", resource);
@@ -122,8 +102,6 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             return "error : "+e.getMessage();
         }
     }
-
-
 
     @Override
     public String deleteEmployee(List<Integer> list) {
@@ -139,11 +117,10 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
                 array.add(object);
             }
 
-            String request = array.toString();
 
             RestTemplate rest = new RestTemplate();
 
-            return rest.postForObject(url, request, String.class);
+            return rest.postForObject(url, array, String.class);
 
         } catch (Exception e){
             return "";

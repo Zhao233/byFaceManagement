@@ -48,6 +48,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
         try{
             String url = "http://" + super.serverIP + "/api/face/add";
             RestTemplate rest = new RestTemplate();
+            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 
             JSONObject object = new JSONObject();
             object.put("personName", personName);
@@ -57,7 +58,10 @@ public class VisitorServiceImp extends Info implements VisitorService {
             object.put("endDate",endData);
             object.put("role","visitor");
 
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+            if(resource == null){
+                resource = new FileSystemResource("");
+            }
+
             param.add("personInfo", object);
             param.add("imageData", resource);
 
@@ -85,6 +89,10 @@ public class VisitorServiceImp extends Info implements VisitorService {
             object.put("startDate", startDate);
             object.put("endDate", endDate);
             object.put("version", version);
+
+            if(resource == null){
+                resource = new FileSystemResource("");
+            }
 
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
             param.add("personInfo", object);

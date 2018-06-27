@@ -74,6 +74,16 @@
             text-align: center;
             vertical-align: middle !important;
         }
+
+        .vertical-container{
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
     </style>
 </head>
 <body>
@@ -248,15 +258,21 @@
                     <input type="text" style="display:none;" id="version" name="version"/>
 
                     <div class="row">
-                        <div class="col-sm-4 text-center ">
-                            <div class="kv-avatar">
-                                <div class="file-loading">
-                                    <input id="avatar-2" name="avatar-2" type="file" required>
+                        <div class="col-sm-5 text-center ">
+                            <div class="thumbnail">
+                                <img id="choosedPic" style="height: 160px" src="/images/default_avatar_male.jpg">
+                                <div class="caption">
+                                    <p>
+                                        <label class="btn btn-primary choosePic" for="avatar-2">选择文件</label>
+                                        <input id="avatar-2" name="avatar-2" onchange="choosePic_complete(this);" type="file" style="display:none"/>
+
+                                        <a class="btn btn-default deletePic" role="button" style="display: none">删除图片</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-8 ">
+                        <div class="col-sm-7 ">
                             <div class="form-group">
                                 <label for="personName" class="col-sm-4 control-label">姓名</label>
                                 <div class="col-sm-7">
@@ -301,7 +317,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
@@ -477,11 +492,13 @@
                 $("#dialog-user-management-update").find("input[id='cardNumber']").val(r.cardNumber);
                 $("#dialog-user-management-update").find("input[id='IDNumber']").val(r.IDNumber);
                 $("#dialog-user-management-update").find("input[id='phoneNumber']").val(r.phoneNumber);
+
+                $("#choosedPic").attr('src',src=r.feature);
             });
 
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
-            $(".bs-example-modal-sm").modal("show");
+            $(".dialog-return").find(".modal-body").html("请选中员工后操作");
+            $(".dialog-return").modal("show");
         }
     });
 
@@ -544,32 +561,37 @@
                 processData: false,
                 contentType: false,
                 success: function (r) {
-                    if (r.status == "SUCCEED") {
-                        var message;
-                        if (flag_ == 'add') {
-                            $("#dialog-return").find(".modal-body").html("增加成功");
-                        } else {
-                            $("#dialog-return").find(".modal-body").html("修改成功");
-                        }
+                    switch (r.status) {
+                        case "SUCCEED" :
+                            if (flag_ == 'add') {
+                                $("#dialog-return").find(".modal-body").html("增加成功");
+                            } else {
+                                $("#dialog-return").find(".modal-body").html("修改成功");
+                            }
 
 
-                        $("#dialog-return").modal("show");
-
-                        $(".btn.btn-default.add-new-user-close").click();
-                        $(".panel.panel-default").find("button[name='refresh']").click();
-
-                        // $(".bs-example-modal-sm").find(".modal-body").html(
-                        //     $("#dialog-user-management-update-title").html() + " succeeded."
-                        // );
-                        // $(".bs-example-modal-sm").modal("show");
-                        // $(".btn.btn-default.add-new-user-close").click();
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
-
-                    } else {
-                        if (r.message.WARNING) {
-                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
                             $("#dialog-return").modal("show");
-                        }
+
+                            $(".btn.btn-default.add-new-user-close").click();
+                            $(".panel.panel-default").find("button[name='refresh']").click();
+
+                            break
+
+                        case "FAILED" :
+                            if (flag_ == 'add') {
+                                $("#dialog-return").find(".modal-body").html("增加失败");
+                            } else {
+                                $("#dialog-return").find(".modal-body").html("修改失败");
+                            }
+
+                            $("#dialog-return").modal("show");
+
+                            break
+                    }
+
+                    if (r.message.WARNING) {
+                        $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                        $("#dialog-return").modal("show");
                     }
                 },
                 error: function (r) {
@@ -650,122 +672,53 @@
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("You did not select the user.");
+            $("#dialog-return").find(".modal-body").html("请选中员工后操作");
             $("#dialog-return").modal("show");
         }
 
-
-        // console.log('clicked the delete');
-        //
-        // var id = $("input[type='radio']:checked").val();
-        //
-        // var list_id = new Array();
-        //
-        // list_id[0] = (id);
-        //
-        // console.log(list_id);
-        //
-        // var form = new FormData();
-        //
-        // form.append("list_ID", list_id);
-        //
-        // $.ajax({
-        //     url: "/console/camera_management/delete",
-        //     type: "post",
-        //     data: form,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function (r) {
-        //         switch (r.status) {
-        //             case "SUCCEED" :
-        //             $("#dialog-return").find(".modal-body").html("删除成功");
-        //
-        //             $("#dialog-return").modal("show");
-        //
-        //             $(".btn.btn-default.add-new-user-close").click();
-        //             $(".panel.panel-default").find("button[name='refresh']").click();
-        //
-        //
-        //                 // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-        //                 // $("#dialog-user-management-update").modal("show");
-        //                 //
-        //                 // $(".panel.panel-default").find("button[name='refresh']").click();
-        //                 break
-        //
-        //             case "FAILED" :
-        //                 $("#dialog-return").find(".modal-body").html("删除失败");
-        //                 $("#dialog-return").modal("show");
-        //
-        //                 break
-        //         }
-        //     },
-        //     error: function (r) {
-        //
-        //         $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-        //         $("#dialog-return").modal("show");
-        //     }
-        //
-        // });
     })
 
-
-    // $(".btn.btn-danger.delete-employee-dialog").click(function (){
-    //     console.log('clicked the delete');
-    //
-    //     var id = $("input[type='radio']:checked").val();
-    //
-    //     var list_id = new Array();
-    //
-    //     list_id[0] = (id);
-    //
-    //     console.log(list_id);
-    //
-    //     var form = new FormData();
-    //
-    //     form.append("list_ID", list_id);
-    //
-    //     $.ajax({
-    //         url: "/console/employee_management/delete",
-    //         type: "post",
-    //         data: form,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (r) {
-    //             if (r.status == "SUCCEED") {
-    //                 $("#dialog-return").find(".modal-body").html("删除成功");
-    //                 $("#dialog-return").modal("show");
-    //
-    //                 $(".btn.btn-default.add-new-user-close").click();
-    //                 $(".panel.panel-default").find("button[name='refresh']").click();
-    //             } else {
-    //                 if (r.message.WARNING) {
-    //                     $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-    //                     $("#dialog-return").modal("show");
-    //                 }
-    //             }
-    //         },
-    //
-    //         error: function (r) {
-    //             $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-    //             $("#dialog-return").modal("show");
-    //         }
-    //
-    //     });
-    // })
-
     function _formatte_locale_image(value, row, index) {
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:400;height:150px;"  src="' + value + '" /></a>';
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
         return s;
+    }
+
+    function showChoosedPic(){
+        var pic = ''
     }
 
     function _formatte_user_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
     }
-</script>
+
+    $("#avatar-2").change(function (event) {
+        var file = event.target.files[0];
+
+        if(file.size > 1024*1024*8){
+            alert('图片大小不能超过 8MB!');
+            return;
+        }
+
+        var URL = window.URL || window.webkitURL;
+
+        var imgURL = URL.createObjectURL(file);
 
 
-<script>
-    console.log("this script has been launched");
+        $("#choosedPic").attr('src',src=imgURL);
+
+        console.log(imgURL);
+    })
+
+    $(".btn.btn-default.deletePic").click(function () {
+        var file_select = $("#avatar-2");
+
+        file_select.after(file_select.clone().val(""));
+
+        file_select.remove();
+
+        $("#choosedPic").attr('src',src="/images/default_avatar_male.jpg");
+    })
+
 </script>
 
 </body>

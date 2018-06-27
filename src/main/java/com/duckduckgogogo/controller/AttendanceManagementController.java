@@ -22,7 +22,6 @@ public class AttendanceManagementController {
     @RequestMapping("/search")
     @ResponseBody
     public Map<String, Object> search(
-            @RequestParam("id") int id,
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
             @RequestParam("search") String search,
@@ -30,7 +29,7 @@ public class AttendanceManagementController {
             @RequestParam("limit") int limit){
         Map<String, Object> r = new HashMap<>();
 
-        String result = attendanceService.searchServers(search,offset,limit,startDate,endDate,id);
+        String result = attendanceService.searchServers(search,offset,limit,startDate,endDate);
 
         JSONObject object = JSONObject.fromObject(result);
 

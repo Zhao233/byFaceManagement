@@ -53,10 +53,6 @@ public class EmployeeManagementController {
         array.remove("server");
         r.put("rows", array);
 
-//        JSONArray array = JSONHandler.getJsonArryFromResponse(response,"server","updateDate", "endDate", "startDate");
-//
-//        r.put("total", String.valueOf(array.size()));
-//        r.put("rows", array);
         return r;
     }
 
@@ -72,6 +68,7 @@ public class EmployeeManagementController {
         Map<String, Object> r = new HashMap<>();
 
         MultipartFile mf = request.getFile("file");
+        FileSystemResource resource =null;
 
         if(mf != null) {
             String filename = mf.getOriginalFilename();
@@ -99,30 +96,18 @@ public class EmployeeManagementController {
                 }
             }
 
-            FileSystemResource resource = new FileSystemResource(file);
+            resource = new FileSystemResource(file);
 
-            String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber);
-            System.out.println(response);
-
-            if(JSONHandler.isSuccess(response)){
-                r.put("status","SUCCEED");
-            } else {
-                r.put("status", "FAILED");
-            }
-
-        } else {
-
-            String response = employeeService.addEmployee(personName,personNumber,cardNumber,IDNumber,phoneNumber);
-            System.out.println(response);
-
-            if(JSONHandler.isSuccess(response)){
-                r.put("status","SUCCEED");
-            } else {
-                r.put("status", "FAILED");
-            }
         }
 
+        String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber);
+        System.out.println(response);
 
+        if(JSONHandler.isSuccess(response)){
+            r.put("status","SUCCEED");
+        } else {
+            r.put("status", "FAILED");
+        }
 
         return r;
     }
@@ -142,36 +127,40 @@ public class EmployeeManagementController {
 
 
         MultipartFile mf = request.getFile("file");
+        FileSystemResource resource = null;
 
-        String filename = mf.getOriginalFilename();
-        String suffix = filename.substring(filename.indexOf('.') + 1);
-        // File.separator
-        String folder = System.getProperty("java.io.tmpdir");
-        String datetime = String.valueOf(new Date().getTime());
-        String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
-        File file = new File(target);
+        if(mf != null) {
 
-        try (FileInputStream fis = (FileInputStream) mf.getInputStream();
-             FileOutputStream fos = new FileOutputStream(target)) {
-            byte[] b = new byte[1024];
-            int i = fis.read(b);
-            while (i > -1) {
-                fos.write(b, 0, b.length);
-                fos.flush();
-                i = fis.read(b);
+            String filename = mf.getOriginalFilename();
+            String suffix = filename.substring(filename.indexOf('.') + 1);
+            // File.separator
+            String folder = System.getProperty("java.io.tmpdir");
+            String datetime = String.valueOf(new Date().getTime());
+            String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
+            File file = new File(target);
+
+            try (FileInputStream fis = (FileInputStream) mf.getInputStream();
+                 FileOutputStream fos = new FileOutputStream(target)) {
+                byte[] b = new byte[1024];
+                int i = fis.read(b);
+                while (i > -1) {
+                    fos.write(b, 0, b.length);
+                    fos.flush();
+                    i = fis.read(b);
+                }
+            } catch (Exception e) {
+                try {
+                    throw e;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            try {
-                throw e;
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+
+            resource = new FileSystemResource(file);
+
         }
 
-        FileSystemResource resource = new FileSystemResource(file);
-
-
-        String response = employeeService.updateEmployee(resource,personID, personName,personNumber,cardNumber,IDNumber,phoneNumber,version+1);
+        String response = employeeService.updateEmployee(resource, personID, personName, personNumber, cardNumber, IDNumber, phoneNumber, version + 1);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -179,6 +168,7 @@ public class EmployeeManagementController {
         } else {
             r.put("status", "FAILED");
         }
+
         return r;
     }
 
@@ -199,6 +189,7 @@ public class EmployeeManagementController {
             r.put("phoneNumber",object.getString("phoneNumber"));
             r.put("IDNumber",object.getString("IDNumber"));
             r.put("version",object.getString("version"));
+            r.put("feature",object.getString("feature"));
 
             r.put("status","SUCCEED");
         } else {
@@ -223,8 +214,4 @@ public class EmployeeManagementController {
         }
         return r;
     }
-
-
-
-
 }

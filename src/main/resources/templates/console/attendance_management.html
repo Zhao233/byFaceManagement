@@ -19,19 +19,26 @@
     <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
     <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
 
-    <!-- it's about file upload box -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
-
-    <!--datePicker-->
-    <!--<link href="/style/bootstrap.min.css" rel="stylesheet" media="screen">-->
     <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
     <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-    <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+
+    <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+    <script src="/javascript/bootstrap.min.js"></script>
+
+    <script src="/assets/js/jquery.backstretch.min.js"></script>
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+    <script src="/javascript/bootstrap-table.min.js"></script>
+
+    <!--datePicker-->
+    <link href="/style/jquery-ui.css" rel="stylesheet">
+    <script src="/javascript/jquery-ui.js"></script>
+
     <style>
+        .search{
+            height: 2em;
+        }
 
         .center-vertical {
             position: relative;
@@ -89,7 +96,7 @@
                             john.doe@163.com
                         </div>
                     </div>
-                    <br></br>
+                    <br>
                 </li>
 
                 <!-- 用户管理 -->
@@ -162,32 +169,13 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <button class="btn btn-primary searchData">Search</button>
-                            <br/>
                             <div class="form-group">
-                                <label class="col-md-2" for="search_id">员工ID</label>
-                                <input class="input-group" type="text" id="search_id"/>
 
-                                <div class="form-group datePicker">
-                                    <label for="dtp_input2" class="col-md-2 ">选择开始日期</label>
-
-                                    <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                        <input id="startTime" class="form-control" size="6" type="text" value="" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                    </div>
-                                    <input type="hidden" id="dtp_input2" value="" /><br/>
-                                </div>
-
-                                <div class="form-group datePicker">
-                                    <label for="dtp_input2" class="col-md-2 ">选择结束日期</label>
-                                    <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                        <input id="endTime" class="form-control" size="6" type="text" value="" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                    </div>
-                                    <input type="hidden" id="dtp_input3" value="" /><br/>
-                                </div>
+                                <label  for="datepicker_start">开始时间</label>
+                                <input  type="text" id="datepicker_start">
+                                <label  for="datepicker_end">结束时间</label>
+                                <input  type="text" id="datepicker_end">
+                                <button class="btn btn-primary searchData">Search</button>
                             </div>
                         </div>
 
@@ -226,111 +214,18 @@
     <!-- /. PAGE INNER  -->
 </div>
 
-<!--datePicker-->
-<script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
-<script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
-<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-
-<!--<script src="/assets/js/jquery-1.11.1.min.js"></script>-->
-<!--<script src="/assets/bootstrap/js/bootstrap.min.js"></script>-->
-<script src="/assets/js/jquery.backstretch.min.js"></script>
-<script src="/assets/js/scripts.js"></script>
-
-<!-- jQuery Js -->
-<!-- <script src="javascript/jquery-1.10.2.js"></script>
-<!-- Bootstrap Js -->
-<script src="/javascript/bootstrap.min.js"></script>
-<!-- Metis Menu Js -->
-<script src="/javascript/jquery.metisMenu.js"></script>
-
-<!-- DATA TABLE SCRIPTS -->
-<script type="text/javascript" charset="UTF-8" src="/javascript/jquery.dataTables.js"></script>
-<script type="text/javascript" charset="UTF-8" src="/javascript/dataTables.bootstrap.js"></script>
-
-<!-- Custom Js -->
-<script type="text/javascript">
-    $(document).ready(function() {
-        //初始化日历
-        $('.form_date').datetimepicker({
-            language:  'zh-CN',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
-        });
-
-        //初始化table
-        var date = new Date();
-
-        //获取当前时间
-        var formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-
-        console.log('date: ' + formatted_date);
-
-        window.limit;
-        window.offset;
-        window.search;
-
-
-        $('#_table_user_search').bootstrapTable({
-            method: 'get',
-            url: "/console/attendance_management/search",
-            striped: true,
-            dataType: "json",
-            pagination: true,
-            queryParamsType: "limit",
-            singleSelect: true,
-            contentType: "application/x-www-form-urlencoded",
-            pageSize: 10,
-            pageNumber:1,
-            search: true,
-            showColumns: true,
-            showRefresh: true,
-            sidePagination: "server", //服务端请求
-
-            showHeader : true,
-            //sidePagination : 'server',//服务器端分页
-            pageNumber : 1,
-            pageList: [5, 10, 20, 50],//分页步进值
-            search: true,//显示搜索框
-            clickToSelect: false,
-
-            queryParams: function(params) {
-                window.limit = params.limit;
-                window.offset = params.offset / params.limit;
-                window.search = $(".search").find("input").val();
-
-                return {
-                    limit: params.limit,
-                    offset: params.offset / params.limit,
-                    search: $(".search").find("input").val(),
-                    startDate:'2018-6-20',
-                    // endDate:'2018-6-18'formatted_date,
-                    endDate:'2018-6-30',
-                    id:97
-                };
-            },
-            responseHandler: function(res) {
-                console.log('row'+res.rows);
-
-                return {
-                    "rows": res.rows,
-                    "total": res.total
-                };
-            }
-        });
-    })
-</script>
-<!-- Custom Js -->
-
-<script src="/javascript/custom-scripts.js"></script>
-
-<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-<script src="/javascript/bootstrap-table.min.js"></script>
+<!--message alter-->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
     !function ($) {
@@ -371,93 +266,42 @@
         $("#dialog-user-management-update").modal("show");
     });
 
-    //update method
-    // $(".btn.btn-success.open-update-use-dialog").click(function() {
-    //     var id = $("input[type='radio']:checked").val();
-    //     if (id != undefined) {
-    //         _reset($(".form-horizontal.add-new-user"));
-    //         // 读取用户选中的用户信息
-    //         $.get("/console/server_management/get/" + id, null, function(r, status) {
-    //             $("#dialog-user-management-update").find("input[id='servername']").val(r.serverName);
-    //             $("#dialog-user-management-update").find("input[id='serverip']").val(r.serverIP);
-    //             $("#dialog-user-management-update").find("select[id='ismainserver']").val(r.mainServer ? "True" : "False");
-    //
-    //             $("#dialog-user-management-update-title").html("Update user");
-    //             $("#dialog-user-management-update").modal("show");
-    //         });
-    //     } else {
-    //         $(".bs-example-modal-sm").find(".modal-body").html("You did not select the camera.");
-    //         $(".bs-example-modal-sm").modal("show");
-    //     }
-    // });
-
-    // $(".btn.btn-primary.add-new-user").click(function() {
-    //     _reset_input($(".form-horizontal.add-new-user").find("input"));
-    //
-    //     var data = $(".form-horizontal.add-new-user").serializeArray();
-    //
-    //     console.log(data);
-    //
-    //     $.post("/console/camera_management/add", data, function(r, status) {
-    //
-    //         if (r.status == "SUCCEED") {
-    //             $(".bs-example-modal-sm").find(".modal-body").html(
-    //                 $("#dialog-server-management-update-title").html() + " succeeded."
-    //             );
-    //             $(".bs-example-modal-sm").modal("show");
-    //             $(".btn.btn-default.add-new-user-close").click();
-    //             $(".panel.panel-default").find("button[name='refresh']").click();
-    //             // location.reload();
-    //         } else {
-    //             if (r.message.servername) {
-    //                 _set($(".form-horizontal.add-new-user").find("input[id='servername']"), r.message.servername);
-    //             }
-    //             if (r.message.serverip) {
-    //                 _set($(".form-horizontal.add-new-user").find("input[id='serverip']"), r.message.serverip);
-    //             }
-    //             if (r.message.WARNING) {
-    //                 $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-    //                 $(".bs-example-modal-sm").modal("show");
-    //             }
-    //         }
-    //     });
-    // });
 
     $(".btn.btn-primary.searchData").click(function() {
         console.log('clicked search button');
 
-        var startTime = $("#startTime").val();
-        var endTime = $("#endTime").val();
-        var search_id = $("#search_id").val();
+        var startTime = $("#datepicker_start").val();
+        var endTime = $("#datepicker_end").val();
 
         console.log("startTime: "+startTime);
         console.log("endTime: "+endTime);
-        console.log("search_id: "+search_id);
 
         //校验输入数据
-        if(startTime == undefined){
-
-            if(endTime == undefined){
-
-                if(search_id == undefined){
-                   return;
-                }
-
-                return;
-            }
+        if(startTime == ""){
+            $("#dialog-return").find(".modal-body").html("请选择开始日期");
+            $("#dialog-return").modal("show");
 
             return;
-        }
+        } else {
+            if(endTime == ""){
+                $("#dialog-return").find(".modal-body").html("请选择结束日期");
+                $("#dialog-return").modal("show");
 
-        //校验结束时间大于开始时间
-        var start_time = startTime.replace(/-/,"");
-        var end_time = endTime.replace(/-/,"");
+                return;
+            } else {
+                var start_time = startTime.replace(/-/,"");
+                var end_time = endTime.replace(/-/,"");
 
-        console.log("start_time: "+start_time);
-        console.log("end_time: "+end_time);
+                console.log("start_time: "+start_time);
+                console.log("end_time: "+end_time);
 
-        if(end_time < start_time){
+                if(end_time < start_time){
+                    $("#dialog-return").find(".modal-body").html("开始时间需小于结束时间，请重新选择");
+                    $("#dialog-return").modal("show");
 
+                    return;
+                }
+            }
         }
 
         $.ajax({
@@ -469,7 +313,6 @@
                 search:  window.search,
                 startDate:startTime,
                 endDate:endTime,
-                id:search_id
             },
             dataType:"json",
             success : function(json) {
@@ -479,9 +322,119 @@
     });
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function() {
 
-<script>
-    console.log("this script has been launched");
+        //初始化table
+        var date = new Date();
+
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+
+        var date_month_start = year+"-" + month + "-" + 01;
+        var date_month_end = year+"-" + month + "-" + getLastDay(year,month);
+
+        console.log('start date: ' + date_month_start);
+        console.log('start date: ' + date_month_end);
+
+        $("#datepicker_start").val(date_month_start);
+        $("#datepicker_end").val(date_month_end);
+
+        window.limit;
+        window.offset;
+        window.search;
+
+        $('#_table_user_search').bootstrapTable({
+            method: 'get',
+            url: "/console/attendance_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+
+            showHeader : true,
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
+
+            queryParams: function(params) {
+                window.limit = params.limit;
+                window.offset = params.offset / params.limit;
+                window.search = $(".search").find("input").val();
+
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val(),
+                    startDate:date_month_start,
+                    endDate:date_month_end,
+                };
+            },
+            responseHandler: function(res) {
+                console.log('row'+res.rows);
+
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+        });
+
+        //初始化日历
+        $( "#datepicker_start" ).datepicker({
+            dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
+            /* 每周从周一开始 */
+            firstDay : 1,
+            /* 区域化月名为中文习惯 */
+            monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
+                "7月", "8月", "9月", "10月", "11月", "12月"],
+            /* 月份显示在年后面 */
+            showMonthAfterYear : true,
+            /* 年份后缀字符 */
+            yearSuffix : "年",
+            /* 格式化中文日期
+            （因为月份中已经包含“月”字，所以这里省略） */
+            dateFormat : "yy-mm-dd"
+        });
+        $( "#datepicker_end" ).datepicker({
+            dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
+            /* 每周从周一开始 */
+            firstDay : 1,
+            /* 区域化月名为中文习惯 */
+            monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
+                "7月", "8月", "9月", "10月", "11月", "12月"],
+            /* 月份显示在年后面 */
+            showMonthAfterYear : true,
+            /* 年份后缀字符 */
+            yearSuffix : "年",
+            /* 格式化中文日期
+            （因为月份中已经包含“月”字，所以这里省略） */
+            dateFormat : "yy-mm-dd"
+        });
+
+    })
+
+    function getLastDay(year,month) {
+        var new_year = year;    //取当前的年份
+        var new_month = month++;//取下一个月的第一天，方便计算（最后一天不固定）
+        if(month>12)            //如果当前大于12月，则年份转到下一年
+        {
+            new_month -=12;        //月份减
+            new_year++;            //年份增
+        }
+        var new_date = new Date(new_year,new_month,1);                //取当年当月中的第一天
+        return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期
+    }
 </script>
 
 </body>

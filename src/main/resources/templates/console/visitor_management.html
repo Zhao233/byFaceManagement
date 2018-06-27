@@ -17,9 +17,101 @@
     <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
     <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
 
-    <!-- it's about file upload box -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+    <!--datePicker-->
+    <link href="/style/jquery-ui.css" rel="stylesheet"/>
+
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
+
+    <!--datePicker-->
+    <script src="/javascript/jquery-ui.js"></script>
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.backstretch.min.js"></script>
+    <script src="/assets/js/scripts.js"></script>
+
+
+    <!-- Bootstrap Js -->
+    <script src="/javascript/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="/javascript/jquery.dataTables.js"></script>
+    <script src="/javascript/dataTables.bootstrap.js"></script>
+
+    <!-- Custom Js -->
+    <script>
+        $(document).ready(function () {
+            $('#_table_user_search').bootstrapTable({
+                method: 'get',
+                url: "/console/visitor_management/search",
+                striped: true,
+                dataType: "json",
+                pagination: true,
+                queryParamsType: "limit",
+                singleSelect: true,
+                contentType: "application/x-www-form-urlencoded",
+                pageSize: 10,
+                pageNumber: 1,
+                search: true,
+                showColumns: true,
+                showRefresh: true,
+                sidePagination: "server", //服务端请求
+                queryParams: function (params) {
+                    return {
+                        limit: params.limit,
+                        offset: params.offset / params.limit,
+                        search: $(".search").find("input").val()
+                    };
+                },
+                responseHandler: function (res) {
+                    return {
+                        "rows": res.rows,
+                        "total": res.total
+                    };
+                }
+            });
+
+            //初始化日历
+            $("#datepicker_start").datepicker({
+                dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+                /* 每周从周一开始 */
+                firstDay: 1,
+                /* 区域化月名为中文习惯 */
+                monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+                    "7月", "8月", "9月", "10月", "11月", "12月"],
+                /* 月份显示在年后面 */
+                showMonthAfterYear: true,
+                /* 年份后缀字符 */
+                yearSuffix: "年",
+                /* 格式化中文日期
+                （因为月份中已经包含“月”字，所以这里省略） */
+                dateFormat: "yy-mm-dd"
+            });
+            $("#datepicker_end").datepicker({
+                dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+                /* 每周从周一开始 */
+                firstDay: 1,
+                /* 区域化月名为中文习惯 */
+                monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+                    "7月", "8月", "9月", "10月", "11月", "12月"],
+                /* 月份显示在年后面 */
+                showMonthAfterYear: true,
+                /* 年份后缀字符 */
+                yearSuffix: "年",
+                /* 格式化中文日期
+                （因为月份中已经包含“月”字，所以这里省略） */
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
+    <!-- Custom Js -->
+
+    <script src="/javascript/custom-scripts.js"></script>
+
+    <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+    <script src="/javascript/bootstrap-table.min.js"></script>
+
 
     <style>
         .kv-avatar .krajee-default.file-preview-frame, .kv-avatar .krajee-default.file-preview-frame:hover {
@@ -99,7 +191,7 @@
 
                 <!-- 员工管理 -->
                 <li>
-                    <a href="/console/employee_management" >
+                    <a href="/console/employee_management">
                         <i class="fa fa-dashboard"></i>
                         员工管理
                     </a>
@@ -122,7 +214,7 @@
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>考勤管理</a>
+                    <a href="/console/attendance_management"><i class="fa fa-qrcode"></i>考勤管理</a>
                 </li>
 
                 <!-- 摄像头信息 -->
@@ -132,7 +224,7 @@
 
                 <!-- 轨迹信息 -->
                 <li>
-                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
+                    <a href="/console/trace_info"><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
                 <!--配置信息-->
@@ -170,7 +262,7 @@
                                     <tr>
                                         <th data-field="userid" data-formatter="_formatte_user_id"></th>
                                         <!--<th data-field="userid" data-sortable="true" class="W30" style="border:none;">-->
-                                            <!--User ID-->
+                                        <!--User ID-->
                                         <!--</th>-->
                                         <th data-field="name" data-sortable="true" class="W30" style="border:none;">
                                             姓名
@@ -233,15 +325,23 @@
                     <input type="text" style="display:none;" id="version" name="version"/>
 
                     <div class="row">
-                        <div class="col-sm-4 text-center ">
-                            <div class="kv-avatar">
-                                <div class="file-loading">
-                                    <input id="avatar-2" name="avatar-2" type="file" required>
+                        <div class="col-sm-5 text-center ">
+                            <div class="thumbnail">
+                                <img id="choosedPic" style="height: 160px" src="/images/default_avatar_male.jpg">
+                                <div class="caption">
+                                    <p>
+                                        <label class="btn btn-primary choosePic" for="avatar-2">选择文件</label>
+                                        <input id="avatar-2" name="avatar-2" onchange="choosePic_complete(this);"
+                                               type="file" style="display:none"/>
+
+                                        <a class="btn btn-default deletePic" role="button"
+                                           style="display: none">删除图片</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-8 ">
+                        <div class="col-sm-7 ">
                             <div class="form-group">
                                 <label for="personName" class="col-sm-4 control-label">Name</label>
                                 <div class="col-sm-7">
@@ -269,18 +369,20 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="startDate" class="col-sm-4 control-label">StartDate</label>
+                                <label for="datepicker_start" class="col-sm-4 control-label">StartDate</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="startDate" name="startDate"
-                                           maxlength="30"/>
+                                    <!--<input type="text" class="form-control" id="startDate" name="startDate"-->
+                                    <!--maxlength="30"/>-->
+                                    <input type="text" id="datepicker_start">
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group ">
-                                <label for="endDate" class="col-sm-4 control-label">EndDate</label>
+                                <label for="datepicker_end" class="col-sm-4 control-label">EndDate</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="endDate" name="endDate"
-                                           maxlength="30"/>
+                                    <!--<input type="text" class="form-control" id="endDate" name="endDate"-->
+                                    <!--maxlength="30"/>-->
+                                    <input type="text" id="datepicker_end">
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
@@ -290,9 +392,9 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                             <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">
-                                Cancel
+                                取消
                             </button>
-                            <button type="button" class="btn btn-primary add-new-user">Save Changes</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存</button>
                         </div>
                     </div>
                 </form>
@@ -304,7 +406,8 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
             </div>
             <div class="modal-body"></div>
@@ -315,82 +418,22 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-<script src="/assets/js/jquery-1.11.1.min.js"></script>
-<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="/assets/js/jquery.backstretch.min.js"></script>
-<script src="/assets/js/scripts.js"></script>
-
-<!-- jQuery Js -->
-<!-- <script src="javascript/jquery-1.10.2.js"></script>
-<!-- Bootstrap Js -->
-<script src="/javascript/bootstrap.min.js"></script>
-<!-- Metis Menu Js -->
-<script src="/javascript/jquery.metisMenu.js"></script>
-
-<!-- DATA TABLE SCRIPTS -->
-<script src="/javascript/jquery.dataTables.js"></script>
-<script src="/javascript/dataTables.bootstrap.js"></script>
-
-<!-- Custom Js -->
 <script>
-    $(document).ready(function () {
-        $('#_table_user_search').bootstrapTable({
-            method: 'get',
-            url: "/console/visitor_management/search",
-            striped: true,
-            dataType: "json",
-            pagination: true,
-            queryParamsType: "limit",
-            singleSelect: true,
-            contentType: "application/x-www-form-urlencoded",
-            pageSize: 10,
-            pageNumber: 1,
-            search: true,
-            showColumns: true,
-            showRefresh: true,
-            sidePagination: "server", //服务端请求
-            queryParams: function (params) {
-                return {
-                    limit: params.limit,
-                    offset: params.offset / params.limit,
-                    search: $(".search").find("input").val()
-                };
-            },
-            responseHandler: function (res) {
-                return {
-                    "rows": res.rows,
-                    "total": res.total
-                };
-            }
-        });
-    });
-</script>
-<!-- Custom Js -->
 
-<script src="/javascript/custom-scripts.js"></script>
-
-<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-<script src="/javascript/bootstrap-table.min.js"></script>
-
-<script>
-    function _set(el, message) {
-        el.addClass("alert-danger");
-        el.attr("title", message);
-        el.tooltip('show');
-    }
 
     window.flag;
     window.id;
@@ -427,7 +470,7 @@
     }
 
     $(".btn.btn-primary.open-add-new-user-dialog").click(function () {
-        window.flag='add';
+        window.flag = 'add';
 
         _reset($(".form-horizontal.add-new-user"));
         $("#dialog-user-management-update-title").html("增加");
@@ -435,7 +478,7 @@
     });
 
     $(".btn.btn-success.open-update-use-dialog").click(function () {
-        window.flag='update'
+        window.flag = 'update'
 
         var id = $("input[type='radio']:checked").val();
         window.id = id;
@@ -449,7 +492,7 @@
             $.get("/console/visitor_management/get/" + id, null, function (r, status) {
                 console.log(r);
 
-                $("#dialog-user-management-update-title").html("Update user");
+                $("#dialog-user-management-update-title").html("修改");
                 $("#dialog-user-management-update").modal("show");
 
                 $("#dialog-user-management-update").find("input[id='version']").val(r.version);
@@ -458,16 +501,27 @@
                 $("#dialog-user-management-update").find("input[id='phoneNumber']").val(r.phoneNumber);
                 $("#dialog-user-management-update").find("input[id='startDate']").val(r.startDateString);
                 $("#dialog-user-management-update").find("input[id='endDate']").val(r.endDateString);
+
+                $("#choosedPic").attr('src', src = r.feature);
+
             });
 
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
+            $(".bs-example-modal-sm").find(".modal-body").html("请选中访客后操作");
             $(".bs-example-modal-sm").modal("show");
         }
     });
 
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
 
     $(".btn.btn-primary.add-new-user").click(function () {
+        var startTime;
+        var endTime;
+
         var isComplete = true;
 
         //check input
@@ -483,16 +537,34 @@
             _set($("input[id='phoneNumber']"), "请输入电话号码");
             isComplete = false;
         }
-        if ($("input[id='startDate']").val() == "") {
-            _set($("input[id='startDate']"), "请输入开始日期");
-            isComplete = false;
-        }
-        if ($("input[id='endDate']").val() == "") {
-            _set($("input[id='endDate']"), "请输入结束日期");
+        if ($("input[id='datepicker_start']").val() == "") {
+            _set($("input[id='datepicker_start']"), "请选择开始日期");
             isComplete = false;
         }
 
+        if ($("input[id='datepicker_end']").val() == "") {
+            _set($("input[id='datepicker_end']"), "请选择结束日期");
+            isComplete = false;
+        }
+
+
         if(isComplete) {
+            startTime = $("input[id='datepicker_start']").val();
+            endTime = $("input[id='datepicker_end']").val();
+
+            console.log("startTime: " + startTime);
+            console.log("endTime: " + endTime);
+
+            var start_time = startTime.replace(/-/, "");
+            var end_time = endTime.replace(/-/, "");
+
+            if (end_time < start_time) {
+                _set($("input[id='datepicker_start']"), "结束时间需小于开始时间");
+                _set($("input[id='datepicker_end']"), "结束时间需小于开始时间");
+
+                isComplete = false;
+                return;
+            }
 
             var flag_ = window.flag;
             console.log(window.flag);
@@ -515,8 +587,8 @@
             form.append("personName", $("input[id='personName']").val());
             form.append("IDNumber", $("input[id='IDNumber']").val());
             form.append("phoneNumber", $("input[id='phoneNumber']").val());
-            form.append("startDate", $("input[id='startDate']").val());
-            form.append("endDate", $("input[id='endDate']").val());
+            form.append("startDate", startTime);
+            form.append("endDate", endTime);
 
             $.ajax({
                 url: "/console/visitor_management/" + flag,
@@ -600,10 +672,6 @@
                         $(".btn.btn-default.add-new-user-close").click();
                         $(".panel.panel-default").find("button[name='refresh']").click();
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-                        // $("#dialog-user-management-update").modal("show");
-                        //
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
                         break
 
                     case "FAILED" :
@@ -622,145 +690,58 @@
         });
     })
 
-    $(".btn.btn-danger.delete-employee-dialog").click(function (){
+    $(".btn.btn-danger.delete-employee-dialog").click(function () {
 
         var id = $("input[type='radio']:checked").val();
         if (id != undefined) {
             // 读取Project选中的用户信息
-            $.get("/console/employee_management/get/" + id, null, function(r, status) {
+            $.get("/console/employee_management/get/" + id, null, function (r, status) {
                 $(".bs-example-modal-sm").find(".modal-body").html("是否删除：  " + r.name + "?");
                 $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("You did not select the user.");
+            $("#dialog-return").find(".modal-body").html("请选中访客后操作");
             $("#dialog-return").modal("show");
         }
-
-
-        // console.log('clicked the delete');
-        //
-        // var id = $("input[type='radio']:checked").val();
-        //
-        // var list_id = new Array();
-        //
-        // list_id[0] = (id);
-        //
-        // console.log(list_id);
-        //
-        // var form = new FormData();
-        //
-        // form.append("list_ID", list_id);
-        //
-        // $.ajax({
-        //     url: "/console/camera_management/delete",
-        //     type: "post",
-        //     data: form,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function (r) {
-        //         switch (r.status) {
-        //             case "SUCCEED" :
-        //             $("#dialog-return").find(".modal-body").html("删除成功");
-        //
-        //             $("#dialog-return").modal("show");
-        //
-        //             $(".btn.btn-default.add-new-user-close").click();
-        //             $(".panel.panel-default").find("button[name='refresh']").click();
-        //
-        //
-        //                 // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-        //                 // $("#dialog-user-management-update").modal("show");
-        //                 //
-        //                 // $(".panel.panel-default").find("button[name='refresh']").click();
-        //                 break
-        //
-        //             case "FAILED" :
-        //                 $("#dialog-return").find(".modal-body").html("删除失败");
-        //                 $("#dialog-return").modal("show");
-        //
-        //                 break
-        //         }
-        //     },
-        //     error: function (r) {
-        //
-        //         $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-        //         $("#dialog-return").modal("show");
-        //     }
-        //
-        // });
     })
 
-    // $(".btn.btn-danger.delete-employee-dialog").click(function (){
-    //     console.log('clicked the delete');
-    //
-    //     var id = $("input[type='radio']:checked").val();
-    //
-    //     var list_id = new Array();
-    //
-    //     list_id[0] = (id);
-    //
-    //     console.log(list_id);
-    //
-    //     var form = new FormData();
-    //
-    //     form.append("list_ID", list_id);
-    //
-    //     $.ajax({
-    //         url: "/console/visitor_management/delete",
-    //         type: "post",
-    //         data: form,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (r) {
-    //             switch (r.status) {
-    //                 case "SUCCEED" :
-    //                     $("#dialog-return").find(".modal-body").html("删除成功");
-    //                     $("#dialog-return").modal("show");
-    //
-    //                     $(".btn.btn-default.add-new-user-close").click();
-    //                     $(".panel.panel-default").find("button[name='refresh']").click();
-    //
-    //
-    //                     // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-    //                     // $("#dialog-user-management-update").modal("show");
-    //                     //
-    //                     // $(".panel.panel-default").find("button[name='refresh']").click();
-    //                     break
-    //
-    //                 case "FAILED" :
-    //                     $("#dialog-return").find(".modal-body").html("删除失败");
-    //                     $("#dialog-return").modal("show");
-    //
-    //                     $(".btn.btn-default.add-new-user-close").click();
-    //                     $(".panel.panel-default").find("button[name='refresh']").click();
-    //
-    //                     break
-    //             }
-    //         },
-    //         error: function (r) {
-    //             $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-    //             $("#dialog-return").modal("show");
-    //         }
-    //
-    //     });
-    // })
-
-
-
     function _formatte_locale_image(value, row, index) {
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:400;height:150px;"  src="' + value + '" /></a>';
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
         return s;
     }
 
     function _formatte_user_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
     }
-</script>
+
+    $("#avatar-2").change(function (event) {
+        var file = event.target.files[0];
+
+        if (file.size > 1024 * 1024 * 8) {
+            alert('图片大小不能超过 8MB!');
+            return;
+        }
+
+        var URL = window.URL || window.webkitURL;
+
+        var imgURL = URL.createObjectURL(file);
 
 
-<script>
-    console.log("this script has been launched");
+        $("#choosedPic").attr('src', src = imgURL);
+
+        console.log(imgURL);
+    })
+
+    $(".btn.btn-default.deletePic").click(function () {
+        var file_select = $("#avatar-2");
+
+        file_select.after(file_select.clone().val(""));
+
+        file_select.remove();
+
+        $("#choosedPic").attr('src', src = "/images/default_avatar_male.jpg");
+    })
 </script>
 
 </body>
