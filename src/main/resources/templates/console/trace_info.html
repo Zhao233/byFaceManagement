@@ -9,191 +9,52 @@
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
 
-    <!-- Morris Chart Styles-->
-
     <!-- Custom Styles-->
     <link href="/style/custom-styles.css" rel="stylesheet"/>
     <!-- Google Fonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
 
-    <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+
+    <script src="/javascript/jquery-1.11.1.min.js"></script>
+
+    <script src="/javascript/jquery-ui.js"></script>
+
+    <!-- Bootstrap Js -->
+    <script src="/javascript/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+
+    <script src="/javascript/custom-scripts.js"></script>
+
+    <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+    <script src="/javascript/bootstrap-table.min.js"></script>
 
     <style>
 
-        .center-vertical {
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-        }
 
         .table th, .table td {
             text-align: center;
             vertical-align: middle !important;
         }
-
-        .datePicker{
-            width: 36em;
-        }
-
-        .datePicker_{
-            width: 15em;
-        }
-
-        canvas {
-            background-image: url("/images/test_floor.png");
-            background-position: center;
-            background-size: 100% 100%;
-        }
     </style>
+    <script type="text/javascript">
+
+        var canvas=$("#canvas").get(0).getContext("2d");
+
+        //var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        //设置对象起始点和终点
+        context.moveTo(10,10);
+        context.lineTo(200,200);
+        //设置样式
+        context.lineWidth = 2;
+        context.strokeStyle = "#F5270B";
+        //绘制
+        context.stroke();
+    </script>
 </head>
 <body>
-
-<script>
-    // var data = {
-    //     "startDate" : "2018-06-20",
-    //     "endDate" : "2018-06-20",
-    //     "id" : 97
-    // };
-
-    // $(document).ready(function () {
-    //     console.log("into the ");
-    //
-    //     $.get("/console/trace/search/", data, function (r, status) {
-    //
-    //
-    //         console.log("recieved data : "+ r);
-    //     });
-    // });
-
-    $(document).ready(function () {
-
-        $.get("/console/trace/search/", data, function (r, status) {
-            console.log("recieved data : "+ r);
-        });
-
-        // debugger;
-        var can = document.getElementById('canvas');
-        var ctx = can.getContext('2d');
-
-        //线宽
-        ctx.lineWidth = 2;
-        //颜色
-        ctx.strokeStyle = '#ff0000';
-
-        ctx.lineJoin = ctx.lineCap = 'round';
-
-        //drawLine(10, 20, 100, 200);
-        //drawLine(100, 200, 200, 256);
-        //drawLine(200, 256, 300, 300);
-
-        //ctx.strokeStyle = "rgb(250,0,0)";
-
-        //ctx.fillStyle = "rgb(250,0,0)";
-
-        var img0 = new Image();
-        img0.src = "/images/test_camera0.png";
-
-        ctx.drawImage(img0,300,135,20,20);
-        ctx.drawImage(img0,520,120,20,20);
-        ctx.drawImage(img0,830,100,20,20);
-        ctx.drawImage(img0,830,220,20,20);
-        ctx.drawImage(img0,830,330,20,20);
-        ctx.drawImage(img0,520,350,20,20);
-
-
-
-        ctx.beginPath();
-
-        ctx.moveTo(530,130);
-
-        ctx.lineTo(840,110);
-
-        ctx.lineTo(840,230);
-
-        ctx.lineTo(840,340);
-
-        ctx.lineTo(530,360);
-
-        ctx.stroke();
-
-        ctx.fillStyle = "black";
-        ctx.font = "italic 10px sans-serif";
-        var txt="2018-06-20 11:29:57";
-        ctx.fillText(txt, 480, 110);
-        ctx.fillText(txt, 480, 95);
-        ctx.fillText(txt, 480, 80);
-
-        ctx.fillText(txt, 790, 90);
-        ctx.fillText(txt, 790, 75);
-        ctx.fillText(txt, 790, 60);
-
-        ctx.fillText(txt, 790, 210);
-        ctx.fillText(txt, 790, 195);
-        ctx.fillText(txt, 790, 180);
-
-        ctx.fillText(txt, 790, 320);
-        ctx.fillText(txt, 790, 305);
-        ctx.fillText(txt, 790, 290);
-
-        ctx.fillText(txt, 480, 340);
-        ctx.fillText(txt, 480, 325);
-        ctx.fillText(txt, 480, 310);
-
-
-        var img = new Image();
-        img.src = "/images/test_camera.png";
-        ctx.drawImage(img,520,120,20,20);
-        ctx.drawImage(img,830,100,20,20);
-        ctx.drawImage(img,830,220,20,20);
-        ctx.drawImage(img,830,330,20,20);
-        ctx.drawImage(img,520,350,20,20);
-
-
-        //ctx.fillStyle = "#EEEEFF";
-
-        //ctx.fillRect(0, 0, 400, 300);
-
-        //反锯齿的画线方法
-        function drawLine(x, y, stopX, stopY) {
-
-            var isDrawing, points = [];
-            //push the point to points
-
-            var stepx = 0;
-            if (x > stopX)
-                stepx = -1;
-            else if (x < stopX)
-                stepx = 1;
-
-            var stepy = 0;
-            if (y > stopY)
-                setpy = -1;
-            else if (y < stopY)
-                stepy = 1;
-            var nx = x;
-            var ny = y;
-            while (true) {
-                if (nx != stopX)
-                    nx += stepx;
-                if(ny!=stopY)
-                    ny += stepy;
-                points.push({ x: nx, y: ny });
-                if (nx == stopX && ny == stopY)
-                    break;
-            }
-
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            for (var i = 1; i < points.length; i++) {
-                ctx.lineTo(points[i].x, points[i].y);
-            }
-            ctx.stroke();
-        }
-    });
-
-
-</script>
-
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
         <div class="navbar-header">
@@ -248,17 +109,17 @@
 
                 <!-- 摄像头管理 -->
                 <li>
-                    <a href="/console/camera_management" ><i class="fa fa-desktop"></i>摄像头管理</a>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
                 </li>
 
                 <!-- 服务器管理 -->
                 <li>
-                    <a href="/console/server_management"  ><i class="fa fa-qrcode"></i>服务器管理</a>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
                 </li>
 
                 <!-- 考勤管理 -->
                 <li>
-                    <a href="/console/attendance_management" ><i class="fa fa-qrcode"></i>考勤管理</a>
+                    <a href="/console/attendance_management"><i class="fa fa-qrcode"></i>考勤管理</a>
                 </li>
 
                 <!-- 摄像头信息 -->
@@ -273,92 +134,64 @@
 
                 <!--配置信息-->
                 <li>
-                    <a href="/console/face_config" ><i class="fa fa-qrcode"></i>配置信息</a>
+                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
                 </li>
+
             </ul>
+
         </div>
 
-        </nav>
-        <!-- /. NAV SIDE  -->
-        <div id="page-wrapper">
-            <div id="page-inner">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="page-header">
-                            轨迹查询
-                        </h1>
-                    </div>
-                </div>
+    </nav>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Advanced Tables -->
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <canvas id="canvas" style="width: 100%; height: 100%">
-                                    Your browser doesn't support canvas
-                                </canvas>
-                                <img style="display:none;" src="/images/test_camera.png" />
-                                <img style="display:none;" src="/images/test_camera0.png" />
-                            </div>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        访客管理
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <canvas id="canvas" style="width: 100%; height: 100%;" width="1200" height="680">
+                                Your browser doesn't support canvas
+                            </canvas>
+                            <img style="display:none;" src="/images/test_camera.png" />
+                            <img style="display:none;" src="/images/test_camera0.png" />
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- /. ROW  -->
         </div>
-
-
-
+    </div>
+    <!-- /. PAGE INNER  -->
 </div>
 
-<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
             </div>
             <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm
+                </button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-<!--<script type="text/javascript" src="/javascript/bootstrap.min.js"></script>-->
-<!--<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.js" charset="UTF-8"></script>-->
-<!--<script type="text/javascript" src="/javascript/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>-->
-
-<!--<script src="/assets/js/jquery-1.11.1.min.js"></script>-->
-<!--<script src="/assets/bootstrap/js/bootstrap.min.js"></script>-->
-<!--<script src="/assets/js/jquery.backstretch.min.js"></script>-->
-<!--<script src="/assets/js/scripts.js"></script>-->
-
-<!-- jQuery Js -->
-<!-- <script src="javascript/jquery-1.10.2.js"></script>
-<!-- Bootstrap Js -->
-<!--<script src="/javascript/bootstrap.min.js"></script>-->
-<!-- Metis Menu Js -->
-<!--<script src="/javascript/jquery.metisMenu.js"></script>-->
-
-<!--<script src="/javascript/custom-scripts.js"></script>-->
-
-<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-<!--<script src="/javascript/bootstrap-table.min.js"></script>-->
-
-<!--<script>-->
-    <!--!function ($) {-->
-        <!--$(document).on("click","ul.nav li.parent > a > span.icon", function(){-->
-            <!--$(this).find('em:first').toggleClass("glyphicon-minus");-->
-        <!--});-->
-        <!--$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");-->
-    <!--}(window.jQuery);-->
-
-    <!--$(window).on('resize', function () {-->
-        <!--if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');-->
-        <!--else $('#sidebar-collapse').collapse('hide');-->
-    <!--});-->
-
-<!--</script>-->
-
-
 </body>
+</html>

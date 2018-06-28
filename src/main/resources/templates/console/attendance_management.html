@@ -35,6 +35,11 @@
     <link href="/style/jquery-ui.css" rel="stylesheet">
     <script src="/javascript/jquery-ui.js"></script>
 
+    <!--tableExport-->
+    <script src="/javascript/tableExport.js"></script>
+    <script src="/javascript/bootstrap-table-export.js"></script>
+
+
     <style>
         .search{
             height: 2em;
@@ -359,6 +364,8 @@
             showColumns: true,
             showRefresh: true,
             sidePagination: "server", //服务端请求
+            showExport: true,                     //是否显示导出
+            exportDataType: "all",              //basic', 'all', 'selected'.
 
             showHeader : true,
             //sidePagination : 'server',//服务器端分页
