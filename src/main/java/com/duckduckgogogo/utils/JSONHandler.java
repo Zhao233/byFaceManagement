@@ -27,6 +27,7 @@ public class JSONHandler {
 
                 return false;
             }
+
         }catch (JSONException e){//JSONArray
             try {
                 array = JSONArray.fromObject(json);

@@ -1,5 +1,6 @@
 package com.duckduckgogogo.controller;
 
+import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.services.TraceService;
 import com.duckduckgogogo.utils.JSONHandler;
 import net.sf.json.JSONArray;
@@ -14,12 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/console/trace")
+@RequestMapping("/console/trace/")
 public class TraceController {
     @Autowired
     private TraceService traceService;
 
-    @RequestMapping("search")
+    @Autowired
+    private CameraService cameraService;
+
+    @RequestMapping("/search")
     @ResponseBody
     public Map<String, Object> search(
             @RequestParam("startDate") String startTime,
@@ -27,19 +31,20 @@ public class TraceController {
             @RequestParam("id") int id) {
         Map<String, Object> map = new HashMap<>();
 
-        String result = traceService.search(startTime,endTime,id);
+        String result_trace = traceService.search(startTime,endTime,id);
+        String result_all = cameraService.searchCamera("","0","10000");
 
-        if(JSONHandler.isSuccess(result)){
-            System.out.println("查询成功："+result);
-            JSONArray array = JSONArray.fromObject(result);
+        System.out.println("查询成功："+result_trace+"\n"+result_all);
 
-            map.put("list", array);
-            map.put("status", "SUCCEED");
-        } else {
-            System.out.println("打印失败: "+result);
+        JSONArray array_trace = JSONArray.fromObject(result_trace);
+        JSONObject array_all = JSONObject.fromObject(result_all);
 
-            map.put("status","FAILED");
-        }
+        JSONObject object = new JSONObject();
+        object.put("traceCamera",array_trace);
+        object.put("allCamera",array_all.getJSONArray("rows"));
+
+        map.put("cameras", object);
+        map.put("status", "SUCCEED");
 
         return map;
     }

@@ -1,6 +1,8 @@
 package com.duckduckgogogo.services.impl;
 
+import com.duckduckgogogo.services.CameraService;
 import com.duckduckgogogo.services.TraceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service("traceService")
 public class TraceServiceImp extends Info implements TraceService {
+
     @Override
     public String search(String startDate, String endDate, int id) {
         String url = "http://" + super.serverIP + "/api/query/trace";

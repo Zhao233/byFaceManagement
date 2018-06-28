@@ -26,6 +26,10 @@
     <!--<script src="/javascript/jquery-validation-1-14-0libjquery.js"></script>-->
     <script src="/javascript/jquery.validate.min.js"></script>
 
+    <!--tableExport-->
+    <script src="/javascript/tableExport.js"></script>
+    <script src="/javascript/bootstrap-table-export.js"></script>
+
     <script>
         $.validator.setDefaults({
             submitHandler: function() {
@@ -406,6 +410,10 @@
             showColumns: true,
             showRefresh: true,
             sidePagination: "server", //服务端请求
+
+            showExport: true,                     //是否显示导出
+            exportDataType: "all",              //basic', 'all', 'selected'
+
             queryParams: function (params) {
                 return {
                     limit: params.limit,
