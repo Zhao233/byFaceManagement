@@ -10,4 +10,8 @@ public interface ConfigInfoService{
     String save(String serverIPandPort, String imageDBName, String receiveURL, int userquality,
                 int visitorquality, int similarscore, int warningscore, int time1,
                 int time2, int time3, int version);
+
+    String getServerIP();
+
+    String isActiveOption(String ipAndPort);
 }

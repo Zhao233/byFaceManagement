@@ -9,10 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Bootstrap {
     private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
 
-
     public static void main(String[] args) {
-
-
         SpringApplication.run(Bootstrap.class, args);
 
         logger.info("HELLOWORLD Started.");

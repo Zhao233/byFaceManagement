@@ -12,7 +12,7 @@ public class FaceInfoServiceImp extends Info implements FaceInfoService {
     @Override
     public String searchFace(String search, int offset, int limit) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/query";
+            String url = "http://" + Info.serverIP + "/api/face/query";
 
             RestTemplate rest = new RestTemplate();
 

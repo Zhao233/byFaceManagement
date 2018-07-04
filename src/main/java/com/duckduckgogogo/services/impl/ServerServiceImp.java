@@ -26,7 +26,7 @@ public class ServerServiceImp extends Info implements ServerService {
     @Override
     public String searchServers(String search, String offset, String limit){
         try {
-            String url = "http://" + super.serverIP + "/api/server/search";
+            String url = "http://" + Info.serverIP + "/api/server/search";
 
             RestTemplate rest = new RestTemplate();
 
@@ -57,7 +57,7 @@ public class ServerServiceImp extends Info implements ServerService {
     @Override
     public String addServer(String serverName,String serverIP,String isMainServer){
         try {
-            String url = "http://" + super.serverIP + "/api/server/add";
+            String url = "http://" + Info.serverIP + "/api/server/add";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
@@ -89,7 +89,7 @@ public class ServerServiceImp extends Info implements ServerService {
     @Override
     public String updateServer(int id, String serverName,String serverIP,String isMainServer,int version){
 		try {
-            String url = "http://" + super.serverIP + "/api/server/update";
+            String url = "http://" + Info.serverIP + "/api/server/update";
 
             RestTemplate rest = new RestTemplate();
 
@@ -120,7 +120,7 @@ public class ServerServiceImp extends Info implements ServerService {
      * */
     @Override
     public String deleteServer(List<Integer> list){
-        String url = "http://"+super.serverIP+"/api/server/delete";
+        String url = "http://"+Info.serverIP+"/api/server/delete";
         //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
         RestTemplate rest = new RestTemplate();
@@ -142,7 +142,7 @@ public class ServerServiceImp extends Info implements ServerService {
     @Override
     public String getServerById(int id) {
         try {
-            String url = "http://" + super.serverIP + "/api/server/get/" + id;
+            String url = "http://" + Info.serverIP + "/api/server/get/" + id;
 
             RestTemplate rest = new RestTemplate();
             //FileSystemResource resource = new FileSystemResource(new File(filePath));

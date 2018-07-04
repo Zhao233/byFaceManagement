@@ -82,12 +82,13 @@
                 <!--管理员信息-->
                 <li>
                     <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+
                         <div>
-                            John Doe
+                            <label id="adminName"></label>
                         </div>
 
                         <div>
-                            john.doe@163.com
+                            <label id="adminEmail"></label>
                         </div>
                     </div>
                     <br></br>
@@ -266,6 +267,34 @@
         }
 
         refreshChartAndTable(data);
+
+        $.ajax({
+            type: "get",
+            url: "/console/user_management/getAdminInfo",
+            dataType:"json",
+            success : function(json) {
+                switch (json.status){
+                    case "SUCCEED" :
+                        $("#adminName").append(json.adminName);
+                        $("#adminEmail").append(json.adminEmail);
+                        console.log("管理员姓名 ： "+json.adminName);
+                        console.log("管理员邮箱 ： "+json.adminEmail);
+
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+
+
+            },
+            error : function () {
+                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").modal("show");
+            }
+        });
 
     });
 

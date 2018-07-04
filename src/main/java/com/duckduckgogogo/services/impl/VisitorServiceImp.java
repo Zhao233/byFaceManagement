@@ -18,7 +18,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     @Override
     public String searchVisitor(String search, int offset, int limit, String role) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/search";
+            String url = "http://" + Info.serverIP + "/api/face/search";
 
             RestTemplate rest = new RestTemplate();
 
@@ -46,7 +46,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     @Override
     public String addVisitor(FileSystemResource resource, String personName, String IDNumber, String phoneNumber, String startDate, String endData) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/add";
+            String url = "http://" + Info.serverIP + "/api/face/add";
             RestTemplate rest = new RestTemplate();
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 
@@ -76,7 +76,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     @Override
     public String updateVisitor(FileSystemResource resource, int personID, String personName, String IDNumber, String phoneNumber, int version, String startDate, String endDate) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/update";
+            String url = "http://" + Info.serverIP + "/api/face/update";
 
             RestTemplate rest = new RestTemplate();
 
@@ -109,7 +109,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     @Override
     public String deleteVisitor(List<Integer> list) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/delete";
+            String url = "http://" + Info.serverIP + "/api/face/delete";
 
             JSONArray array = new JSONArray();
             JSONObject object = new JSONObject();
@@ -135,7 +135,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     @Override
     public String getVisitorById(int id) {
         try{
-            String url = "http://" + super.serverIP + "/api/face/get/"+id;
+            String url = "http://" + Info.serverIP + "/api/face/get/"+id;
 
             RestTemplate rest = new RestTemplate();
 

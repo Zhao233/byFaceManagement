@@ -16,7 +16,7 @@ import java.util.List;
 public class ContactsServiceImp extends Info implements ContactsService {
     @Override
     public String searchContactsInfo(String search, String offset, String limit) {
-        String url = "http://" + super.serverIP + "/api/contacts/search";
+        String url = "http://" + Info.serverIP + "/api/contacts/search";
 
         RestTemplate rest = new RestTemplate();
 
@@ -32,7 +32,7 @@ public class ContactsServiceImp extends Info implements ContactsService {
 
     @Override
     public String addContactsInfo(String personName, String phoneNumber, String sendPhoneNumber, String email, String sendEmail) {
-        String url = "http://" + super.serverIP + "/api/contacts/add";
+        String url = "http://" + Info.serverIP + "/api/contacts/add";
         RestTemplate rest = new RestTemplate();
         JSONObject param = new JSONObject();
 
@@ -49,7 +49,7 @@ public class ContactsServiceImp extends Info implements ContactsService {
 
     @Override
     public String updateContactsInfo(int id, int version, String personName, String phoneNumber, String sendPhoneNumber, String email, String sendEmail) {
-        String url = "http://" + super.serverIP + "/api/contacts/update";
+        String url = "http://" + Info.serverIP + "/api/contacts/update";
 
         RestTemplate rest = new RestTemplate();
 
@@ -70,7 +70,7 @@ public class ContactsServiceImp extends Info implements ContactsService {
 
     @Override
     public String deleteContactsInfo(List<Integer> list) {
-        String url = "http://" + super.serverIP + "/api/contacts/delete";
+        String url = "http://" + Info.serverIP + "/api/contacts/delete";
 
         JSONArray array = new JSONArray();
         JSONObject object = new JSONObject();
@@ -88,7 +88,7 @@ public class ContactsServiceImp extends Info implements ContactsService {
 
     @Override
     public String getContactsInfoById(int id) {
-        String url = "http://" + super.serverIP + "/api/contacts/get/"+id;
+        String url = "http://" + Info.serverIP + "/api/contacts/get/"+id;
 
         RestTemplate rest = new RestTemplate();
 

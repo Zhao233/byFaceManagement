@@ -2,10 +2,12 @@ package com.duckduckgogogo.services.impl;
 
 import com.duckduckgogogo.domain.ConfigInfo;
 import com.duckduckgogogo.services.ConfigInfoService;
+import net.sf.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
@@ -13,13 +15,13 @@ import java.nio.charset.StandardCharsets;
 
 @Service("configInfoService")
 @Transactional
-public class ConfigInfoServiceImpl extends Info implements ConfigInfoService {
+public class ConfigInfoServiceImpl implements ConfigInfoService {
     @Override
     public ConfigInfo findById(long id) {
 
         //http://ip:port/api/config/queryhttp://ip:port/api/config/query
         try {
-            String url = "http://" + this.serverIP + "/api/server/search";
+            String url = "http://" + Info.serverIP + "/api/server/search";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
@@ -46,7 +48,7 @@ public class ConfigInfoServiceImpl extends Info implements ConfigInfoService {
     public String search(){
 
         try {
-            String url = "http://" + super.serverIP + "/api/config/query";
+            String url = "http://" + Info.serverIP + "/api/config/query";
 
             RestTemplate rest = new RestTemplate();
 
@@ -68,7 +70,7 @@ public class ConfigInfoServiceImpl extends Info implements ConfigInfoService {
                     int visitorquality, int similarscore, int warningscore, int time1,
                     int time2, int time3, int version) {
         try {
-            String url = "http://" + super.serverIP + "/api/config/update";
+            String url = "http://" + Info.serverIP + "/api/config/update";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             String request = "{\"visitorquality\":"+visitorquality+"," +
@@ -97,6 +99,31 @@ public class ConfigInfoServiceImpl extends Info implements ConfigInfoService {
             System.out.println("Error: search error");
 
             return "";
+        }
+    }
+
+    @Override
+    public String getServerIP(){
+        JSONObject object = JSONObject.fromObject(search());
+
+        return object.getString("serverIPandPort");
+    }
+
+    @Override
+    public String isActiveOption(String ipAndPort){
+        String url = "http://" + ipAndPort + "/api/config/query";
+
+        try {
+            RestTemplate rest = new RestTemplate();
+
+            String string = rest.getForObject(url, String.class);
+
+            System.out.print("查询_配置信息 成功：");
+            System.out.println(string);
+
+            return string;
+        } catch (ResourceAccessException e){
+            return "{}";
         }
     }
 }

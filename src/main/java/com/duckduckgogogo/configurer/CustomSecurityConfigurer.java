@@ -1,6 +1,9 @@
 package com.duckduckgogogo.configurer;
 
+import com.duckduckgogogo.domain.User;
+import com.duckduckgogogo.services.ConfigInfoService;
 import com.duckduckgogogo.services.UserService;
+import com.duckduckgogogo.services.impl.Info;
 import com.duckduckgogogo.utils.PasswordEncodeAssistant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,9 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private ConfigInfoService configInfoService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         ( auth.userDetailsService(userDetailsService) )
@@ -37,6 +43,9 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
                     }
                 }
         );
+
+        //Info.serverIP = configInfoService.getServerIP();
+
     }
 
     /**
@@ -76,6 +85,10 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 if (user == null) {
                     user = userService.findByEmail(username);
                 }
+            }
+            if(user != null){
+                Info.adminEmail = ((User) user).getEmail();
+                Info.adminName = username;
             }
 
             return user;

@@ -10,11 +10,11 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 
 @Service("attendanceService")
-public class AttendanceServiceImp extends Info implements AttendanceService {
+public class AttendanceServiceImp implements AttendanceService {
     @Override
     public String searchServers(String search, int offset, int limit, String startDate, String endDate) {
         try{
-            String url = "http://" + super.serverIP + "/api/attendance/search";
+            String url = "http://" + Info.serverIP + "/api/attendance/search";
 
             RestTemplate rest = new RestTemplate();
 

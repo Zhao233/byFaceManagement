@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.duckduckgogogo.utils.JSONHandler;
+import net.sf.json.JSONObject;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -58,7 +59,6 @@ public class ConfigInfoController {
             r.put("message", message);
         }
 
-
         return r;
     }
 
@@ -80,6 +80,24 @@ public class ConfigInfoController {
             }
         } else {
 
+        }
+
+        return map;
+    }
+
+    @RequestMapping("/isActive")
+    @ResponseBody
+    public Map<String, Object> isActive(@RequestParam("ipAndPort") String ip){
+        Map<String, Object> map = new HashMap();
+
+        String result = configInfoService.isActiveOption(ip);
+
+        JSONObject object = JSONObject.fromObject(result);
+
+        if(object.size() != 0 ){
+            map.put("status","SUCCEED");
+        } else {
+            map.put("status", "FAILED");
         }
 
         return map;

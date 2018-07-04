@@ -16,7 +16,7 @@ public class TraceServiceImp extends Info implements TraceService {
 
     @Override
     public String search(String startDate, String endDate, int id) {
-        String url = "http://" + super.serverIP + "/api/query/trace";
+        String url = "http://" + Info.serverIP + "/api/query/trace";
 
         RestTemplate rest = new RestTemplate();
 
@@ -33,7 +33,7 @@ public class TraceServiceImp extends Info implements TraceService {
 
     @Override
     public String search_trace(String search, int offset, int limit){
-        String url = "http://" + super.serverIP + "/api/tracefoldline/search";
+        String url = "http://" + Info.serverIP + "/api/tracefoldline/search";
 
         RestTemplate rest = new RestTemplate();
 

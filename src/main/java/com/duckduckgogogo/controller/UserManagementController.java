@@ -2,6 +2,7 @@ package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.domain.User;
 import com.duckduckgogogo.services.UserService;
+import com.duckduckgogogo.services.impl.Info;
 import com.duckduckgogogo.utils.PasswordEncodeAssistant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,10 @@ import java.util.regex.Pattern;
 public class UserManagementController {
     @Autowired
     private UserService userService;
+
+
+    private String adminName="John Doe";//默认值
+    private String adminEmail="john.doe@163.com";//默认值
 
     @RequestMapping("/search")
     @ResponseBody
@@ -156,6 +161,18 @@ public class UserManagementController {
         for(int temp : list){
             userService.delete(Long.valueOf(temp));
         }
+
+        r.put("status","SUCCEED");
+
+        return r;
+    }
+
+    @RequestMapping("/getAdminInfo")
+    @ResponseBody
+    public Map<String, Object> getAdminInfo(){
+        Map<String, Object> r = new HashMap<>();
+        r.put("adminName", Info.adminName);
+        r.put("adminEmail", Info.adminEmail);
 
         r.put("status","SUCCEED");
 

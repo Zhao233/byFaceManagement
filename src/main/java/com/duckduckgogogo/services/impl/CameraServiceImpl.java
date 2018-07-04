@@ -21,7 +21,7 @@ public class CameraServiceImpl extends Info implements CameraService {
     public String addCamera(String cameraName, String rtspUrl, int server, String entranceGuard,
                             String entranceGuardNO, String cameraXY) {
         try {
-            String url = "http://" + super.serverIP + "/api/camera/add";
+            String url = "http://" + Info.serverIP + "/api/camera/add";
             //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
@@ -56,7 +56,7 @@ public class CameraServiceImpl extends Info implements CameraService {
     @Override
     public String searchCamera(String search, String offset, String limit) {
         try{
-            String url = "http://" + super.serverIP + "/api/camera/search";
+            String url = "http://" + Info.serverIP + "/api/camera/search";
 
             RestTemplate rest = new RestTemplate();
 
@@ -78,7 +78,7 @@ public class CameraServiceImpl extends Info implements CameraService {
     public String updateCamera(int id, int version, String cameraName, String rtspUrl, int server,
                                String entranceGuard, String entranceGuardNO, String cameraXY) {
         try{
-            String url = "http://" + super.serverIP + "/api/camera/update";
+            String url = "http://" + Info.serverIP + "/api/camera/update";
 
             RestTemplate rest = new RestTemplate();
 
@@ -118,7 +118,7 @@ public class CameraServiceImpl extends Info implements CameraService {
     @Override
     public String deleteCamera(List<String> listOfcameraID) {
         try{
-            String url = "http://" + super.serverIP + "/api/camera/delete";
+            String url = "http://" + Info.serverIP + "/api/camera/delete";
 
             JSONArray array = new JSONArray();
 
@@ -141,7 +141,7 @@ public class CameraServiceImpl extends Info implements CameraService {
     @Override
     public String get(int id) {
         try{
-            String url = "http://" + super.serverIP + "/api/camera/get/"+id;
+            String url = "http://" + Info.serverIP + "/api/camera/get/"+id;
 
             RestTemplate rest = new RestTemplate();
 
