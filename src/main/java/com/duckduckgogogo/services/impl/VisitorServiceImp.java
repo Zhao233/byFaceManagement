@@ -114,6 +114,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
             JSONArray array = new JSONArray();
             JSONObject object = new JSONObject();
 
+
             for(int temp : list){
                 object.put("personID",temp);
 

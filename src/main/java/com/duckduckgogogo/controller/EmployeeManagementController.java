@@ -50,6 +50,7 @@ public class EmployeeManagementController {
             array.getJSONObject(i).remove("server");
         }
 
+
         array.remove("server");
         r.put("rows", array);
 

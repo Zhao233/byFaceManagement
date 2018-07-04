@@ -143,6 +143,11 @@
                     <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
@@ -278,11 +283,13 @@
                 $("#dialog-return").modal("show");
                 return;
             } else {
-                var start_time = startTime.replace(/-/,"");
-                var end_time = endTime.replace(/-/,"");
+                var start_time = startTime.replace(/-/,"").replace(/-/,"");
+
+                var end_time = endTime.replace(/-/,"").replace(/-/,"");
+
                 console.log("start_time: "+start_time);
                 console.log("end_time: "+end_time);
-                if(end_time < start_time){
+                if(parseInt(end_time) < parseInt(start_time)){
                     $("#dialog-return").find(".modal-body").html("开始时间需小于结束时间，请重新选择");
                     $("#dialog-return").modal("show");
                     return;

@@ -66,7 +66,6 @@ public class ServerServiceImp extends Info implements ServerService {
             param.add("personID", 83);
             param.add("personName", "test005");
 
-
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             String request = "{\"serverName\":\"" + serverName + "\",\"serverIP\":\"" + serverIP + "\",\"isMainServer\":\"" + isMainServer + "\"}";
@@ -157,5 +156,17 @@ public class ServerServiceImp extends Info implements ServerService {
         } catch (Exception e){
             return "";
         }
+    }
+
+    @Override
+    public String getServerInfoById(int id) {
+        String url_status = "http://127.0.0.1:8080/api/system/resource/" + id;
+
+        RestTemplate rest = new RestTemplate();
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        String string = rest.getForObject(url_status, String.class);
+
+        return string;
     }
 }

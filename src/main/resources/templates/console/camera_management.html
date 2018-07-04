@@ -119,6 +119,11 @@
                     <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
@@ -242,27 +247,17 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">Supplier List</div>
                                 <div class="panel-body">
-                                    <table id="serverList" data-toggle="table"
-                                           data-url="/console/server_management/search"
-                                           data-method="get"
-                                           data-striped="true"
-                                           data-show-refresh="true"
-                                           data-show-toggle="false"
-                                           data-show-columns="true"
-                                           data-search="true"
-                                           data-pagination="true"
-                                           data-sidePagination="client"
-                                           data-cache="false"
-                                           data-sort-name="serverIP"
-                                           data-idField="id">
+                                    <table id="serverList" class="table table-striped table-bordered table-hover">
                                         <thead>
                                         <tr>
-                                            <th data-field="id" name="serverID" data-formatter="_formatte_serverList_id" data-align="center"></th>
-                                            <th data-field="serverName">Server Name</th>
-                                            <th data-field="serverIP">Server IP</th>
-                                            <th data-field="mainServer">Is Main Server</th>
+                                            <th data-field="id" data-formatter="_formatte_serverList_id" data-align="center"></th>
+                                            <th data-field="serverName">服务器名</th>
+                                            <th data-field="serverIP">IP地址</th>
+                                            <th data-field="mainServer">是否为主服务器</th>
+                                            <th data-field="updateDateString">修改时间</th>
                                         </tr>
                                         </thead>
+
                                     </table>
                                 </div>
                             </div>
@@ -270,9 +265,9 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary add-new-user">保存</button>
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">data
+                            <button type="button" class="btn btn-default " -dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary add-new-add-new-user-closeuser">保存</button>
                         </div>
                     </div>
                 </form>
@@ -677,10 +672,6 @@
                     $(".btn.btn-default.add-new-user-close").click();
                     $(".panel.panel-default").find("button[name='refresh']").click();
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-                        // $("#dialog-user-management-update").modal("show");
-                        //
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
                         break
 
                     case "FAILED" :
@@ -699,7 +690,6 @@
         });
     })
 
-
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
 
         var id = $("input[type='radio']:checked").val();
@@ -714,62 +704,8 @@
             $("#dialog-return").find(".modal-body").html("You did not select the user.");
             $("#dialog-return").modal("show");
         }
-
-
-        // console.log('clicked the delete');
-        //
-        // var id = $("input[type='radio']:checked").val();
-        //
-        // var list_id = new Array();
-        //
-        // list_id[0] = (id);
-        //
-        // console.log(list_id);
-        //
-        // var form = new FormData();
-        //
-        // form.append("list_ID", list_id);
-        //
-        // $.ajax({
-        //     url: "/console/camera_management/delete",
-        //     type: "post",
-        //     data: form,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function (r) {
-        //         switch (r.status) {
-        //             case "SUCCEED" :
-        //             $("#dialog-return").find(".modal-body").html("删除成功");
-        //
-        //             $("#dialog-return").modal("show");
-        //
-        //             $(".btn.btn-default.add-new-user-close").click();
-        //             $(".panel.panel-default").find("button[name='refresh']").click();
-        //
-        //
-        //                 // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-        //                 // $("#dialog-user-management-update").modal("show");
-        //                 //
-        //                 // $(".panel.panel-default").find("button[name='refresh']").click();
-        //                 break
-        //
-        //             case "FAILED" :
-        //                 $("#dialog-return").find(".modal-body").html("删除失败");
-        //                 $("#dialog-return").modal("show");
-        //
-        //                 break
-        //         }
-        //     },
-        //     error: function (r) {
-        //
-        //         $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-        //         $("#dialog-return").modal("show");
-        //     }
-        //
-        // });
     })
 </script>
-
 
 <script>
     console.log("this script has been launched");

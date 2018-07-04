@@ -227,6 +227,11 @@
                     <a href="/console/trace_info"><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
@@ -267,9 +272,7 @@
                                         <th data-field="name" data-sortable="true" class="W30" style="border:none;">
                                             姓名
                                         </th>
-                                        <th data-field="updateDateString" data-sortable="true" class="W30"
-                                            style="border:none;">修改时间
-                                        </th>
+
                                         <th data-field="IDNumber" data-sortable="true" class="W30"
                                             style="border:none;">身份证号
                                         </th>
@@ -281,6 +284,10 @@
                                         </th>
                                         <th data-field="endDateString" data-sortable="true" class="W30"
                                             style="border:none;">结束时间
+                                        </th>
+
+                                        <th data-field="updateDateString" data-sortable="true" class="W30"
+                                            style="border:none;">修改时间
                                         </th>
 
                                         <th data-field="feature" data-formatter="_formatte_locale_image"
@@ -474,6 +481,8 @@
 
         _reset($(".form-horizontal.add-new-user"));
         $("#dialog-user-management-update-title").html("增加");
+
+
         $("#dialog-user-management-update").modal("show");
     });
 

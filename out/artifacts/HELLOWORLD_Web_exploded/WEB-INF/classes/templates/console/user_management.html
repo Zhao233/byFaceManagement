@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Morris Chart Styles-->
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <!-- it's about file upload box -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+ 
+    <style>
+
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+                        <div class="image" style="padding-bottom: 20dp">
+                            <img src="/images/default_avatar_male.jpg" width="120" height="120" alt="User">
+                        </div>
+
+                        <div>
+                            John Doe
+                        </div>
+
+                        <div>
+                            john.doe@163.com
+                        </div>
+                    </div>
+                    <br></br>
+                </li>
+
+                <!-- 用户管理 -->
+                <li>
+                    <a href="/console/user_management" class="active-menu"><i class="fa fa-table"></i> 用户管理</a>
+                </li>
+
+                <!-- 员工管理 -->
+                <li>
+                    <a href="/console/employee_management" >
+                        <i class="fa fa-dashboard"></i>
+                        员工管理
+                    </a>
+                </li>
+
+                <!-- 访客管理 -->
+                <li>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
+                </li>
+
+                <!-- 摄像头管理 -->
+                <li>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
+                </li>
+
+                <!-- 服务器管理 -->
+                <li>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
+                </li>
+
+                <!-- 考勤管理 -->
+                <li>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>考勤管理</a>
+                </li>
+
+                <!-- 摄像头信息 -->
+                <li>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>摄像头信息</a>
+                </li>
+
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
+                </li>
+
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
+                <!--配置信息-->
+                <li>
+                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        用户管理
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+
+                                <table id="_table_user_search" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
+                                        <th data-field="username">用户名</th>
+                                        <th data-field="firstName">姓</th>
+                                        <th data-field="lastName">名</th>
+                                        <th data-field="email">邮箱地址</th>
+                                        <th data-field="role">级别</th>
+                                        <th data-field="enabled">是否启用</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加</button>
+                                <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
+                                <button class="btn btn-danger delete-employee-dialog">删除</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+            <!-- /. ROW  -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<!--//弹出框-->
+<div id="dialog-user-management-update" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">用户管理  | <span id="dialog-user-management-update-title"></span></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal add-new-user" method="POST">
+                    <input type="text" style="display:none;" id="id" name="id" />
+                    <input type="text" style="display:none;" id="version" name="version" />
+                    <div class="form-group">
+                        <label for="username" class="col-sm-4 control-label">Username</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="username" name="username" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName" class="col-sm-4 control-label">First Name</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="firstName" name="firstName" maxlength="30" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="col-sm-4 control-label">Last Name</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="lastName" name="lastName" maxlength="30" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-4 control-label">Email</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" id="email" name="email" data-toggle="tooltip" data-placement="top" maxlength="200" placeholder="e.g john@example.com" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-4 control-label">Password</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="password" name="password" data-toggle="tooltip" maxlength="20" data-placement="bottom" required="required" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="col-sm-4 control-label">Confirm Password</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" required="required" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role" class="col-sm-4 control-label">Role</label>
+                        <div class="col-sm-7">
+                            <select id="role" name="role" class="form-control" required="required">
+                                <option value="S">S - Supplier</option>
+                                <option value="A">A - Admin</option>
+                                <option value="C">C - Customer</option>
+                                <option value="PM">PM - Project Management</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="enabled" class="col-sm-4 control-label">Enabled</label>
+                        <div class="col-sm-7">
+                            <select id="enabled" name="enabled" class="form-control" required="required">
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+<!-- jQuery Js -->
+<!-- <script src="javascript/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="/javascript/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="/javascript/jquery.metisMenu.js"></script>
+
+<!-- DATA TABLE SCRIPTS -->
+<script src="/javascript/jquery.dataTables.js"></script>
+<script src="/javascript/dataTables.bootstrap.js"></script>
+
+<!-- Custom Js -->
+<script>
+    $(document).ready(function() {
+        /*bootstrap table*/
+        $('#dataTables-example').bootstrapTable({
+            url:"/console/user_management/getAllUser",//请求数据url
+            queryParams: function (params) {
+                return {
+                    offset: params.offset,  //页码
+                    limit: params.limit,   //页面大小
+                    search : params.search, //搜索
+                    order : params.order, //排序
+                    ordername : params.sort, //排序
+                };
+            },
+
+            showHeader : true,
+            showColumns : true,
+            showRefresh : true,
+            pagination: true,//分页
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
+        });
+
+        $('#_table_user_search').bootstrapTable({
+            method: 'get',
+            url: "/console/user_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function(res) {
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            },
+        });
+    });
+</script>
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _formatte_user_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
+        _reset($(".form-horizontal.add-new-user"));
+        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update").modal("show");
+    });
+
+    $(".btn.btn-success.open-update-use-dialog").click(function() {
+        var id = $("input[type='radio']:checked").val();
+        if (id != undefined) {
+            _reset($(".form-horizontal.add-new-user"));
+            // 读取用户选中的用户信息
+            $.get("/console/user_management/get/" + id, null, function(r, status) {
+                $("#dialog-user-management-update").find("input[id='id']").val(r.id);
+                $("#dialog-user-management-update").find("input[id='version']").val(r.version);
+                $("#dialog-user-management-update").find("input[id='username']").val(r.username);
+                $("#dialog-user-management-update").find("input[id='firstName']").val(r.firstName);
+                $("#dialog-user-management-update").find("input[id='lastName']").val(r.lastName);
+                $("#dialog-user-management-update").find("input[id='email']").val(r.email);
+                $("#dialog-user-management-update").find("select[id='role']").val(r.role);
+                $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
+
+                $("#dialog-user-management-update-title").html("Update user");
+                $("#dialog-user-management-update").modal("show");
+            });
+        } else {
+            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
+            $(".bs-example-modal-sm").modal("show");
+        }
+    });
+
+    $(".btn.btn-primary.add-new-user").click(function() {
+        _reset_input($(".form-horizontal.add-new-user").find("input"));
+
+        var data = $(".form-horizontal.add-new-user").serializeArray();
+        $.post("/console/user_management/save", data, function(r, status) {
+            switch (r.status) {
+                case "SUCCEED" :
+                    $(".bs-example-modal-sm").find(".modal-body").html(
+                        $("#dialog-user-management-update-title").html() + " succeeded."
+                    );
+                    $(".bs-example-modal-sm").modal("show");
+                    $(".btn.btn-default.add-new-user-close").click();
+                    $(".panel.panel-default").find("button[name='refresh']").click();
+
+
+                    // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                    // $("#dialog-user-management-update").modal("show");
+                    //
+                    // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                    break
+
+                case "FAILED" :
+                    $("#dialog-user-management-update").find(".modal-body").html("增加失败:"+r.message);
+                    $("#dialog-user-management-update").modal("show");
+
+                    break
+            }
+
+
+            // if (r.status == "SUCCEED") {
+            //     $(".bs-example-modal-sm").find(".modal-body").html(
+            //         $("#dialog-user-management-update-title").html() + " succeeded."
+            //     );
+            //     $(".bs-example-modal-sm").modal("show");
+            //     $(".btn.btn-default.add-new-user-close").click();
+            //     $(".panel.panel-default").find("button[name='refresh']").click();
+            //     // location.reload();
+            // } else {
+            //     if (r.message.username) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
+            //     }
+            //     if (r.message.email) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
+            //     }
+            //     if (r.message.password) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
+            //     }
+            //     if (r.message.firstName) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
+            //     }
+            //     if (r.message.lastName) {
+            //         _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
+            //     }
+            //     if (r.message.WARNING) {
+            //         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+            //         $(".bs-example-modal-sm").modal("show");
+            //     }
+            // }
+        });
+    });
+
+    $(".btn.btn-danger.delete-employee-dialog").click(function (){
+        console.log('clicked the delete');
+
+        var id = $("input[type='radio']:checked").val();
+
+        var list_id = new Array();
+
+        list_id[0] = (id);
+
+        console.log(list_id);
+
+        var form = new FormData();
+
+        form.append("list_ID", list_id);
+
+        $.ajax({
+            url: "/console/user_management/delete",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $(".bs-example-modal-sm").find(".modal-body").html(
+                            $("#dialog-user-management-update-title").html() + " succeeded."
+                        );
+                        $(".bs-example-modal-sm").modal("show");
+                        $(".btn.btn-default.add-new-user-close").click();
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
+                        $("#dialog-user-management-update").modal("show");
+
+                        break
+                }
+            },
+            error: function (r) {
+
+                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").modal("show");
+            }
+
+        });
+    })
+
+
+</script>
+
+
+<script>
+    console.log("this script has been launched");
+</script>
+
+</body>
+</html>

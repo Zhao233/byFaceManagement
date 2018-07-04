@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <script src="/javascript/jquery-1.11.1.min.js"></script>
+
+    <!--add-->
+    <link href="/style/jquery-ui.css" rel="stylesheet">
+    <script src="/javascript/jquery-1.11.1.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <!-- Metis Menu Js -->
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+    <script src="/javascript/custom-scripts.js"></script>
+
+    <script src="/javascript/jquery.dataTables.js"></script>
+    <script src="/javascript/dataTables.bootstrap.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
+
+    <script src="/javascript/jquery-ui.js"></script>
+    <!--<script src="/javascript/jquery.dataTables.js"></script>-->
+    <!--<script src="/javascript/dataTables.bootstrap.js"></script>-->
+    <!--<script src="/javascript/bootstrap-table.min.js"></script>-->
+
+
+    <style>
+        .kv-avatar .krajee-default.file-preview-frame, .kv-avatar .krajee-default.file-preview-frame:hover {
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            text-align: center;
+        }
+        .kv-avatar {
+            display: inline-block;
+        }
+        .kv-avatar .file-input {
+            display: table-cell;
+            width: 213px;
+        }
+        .kv-reqd {
+            color: red;
+            font-family: monospace;
+            font-weight: normal;
+        }
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .search{
+            height: 10em;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+                        <div>
+                            John Doe
+                        </div>
+
+                        <div>
+                            john.doe@163.com
+                        </div>
+                    </div>
+                    <br></br>
+                </li>
+
+                <!-- 用户管理 -->
+                <li>
+                    <a href="/console/user_management"><i class="fa fa-table"></i> 用户管理</a>
+                </li>
+
+                <!-- 员工管理 -->
+                <li>
+                    <a href="/console/employee_management" >
+                        <i class="fa fa-dashboard"></i>
+                        员工管理
+                    </a>
+                </li>
+
+                <!-- 访客管理 -->
+                <li>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
+                </li>
+
+                <!-- 摄像头管理 -->
+                <li>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
+                </li>
+
+                <!-- 服务器管理 -->
+                <li>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
+                </li>
+
+                <!-- 考勤管理 -->
+                <li>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>考勤管理</a>
+                </li>
+
+                <!-- 摄像头信息 -->
+                <li>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>摄像头信息</a>
+                </li>
+
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
+                </li>
+
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
+                <!-- 服务器信息 -->
+                <li>
+                    <a href="/console/server_info" class="active-menu"><i class="fa fa-desktop"></i>服务器信息</a>
+                </li>
+
+                <!--配置信息-->
+                <li>
+                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        服务器信息
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <!--main-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div  class="panel-heading">
+                                <h3>
+                                    <label for="serverName_show">服务器名称：</label>
+                                    <input type="text" id="serverName_show">
+                                </h3>
+
+                            </div>
+                            <br class="panel-body">
+
+                            <table id="table_status" class="table table-striped table-bordered table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="W30" style="border:none;">项目</th>
+                                    <th class="W30" style="border:none;">状态</th>
+                                    <th class="W30" style="border:none;">说明</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>IP地址</td>
+                                        <td id="ipAddress"></td>
+                                        <td >192.168.333.2</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>CPU使用率</td>
+                                        <td id="cpuUsage"></td>
+                                        <td >192.168.333.2</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>内存使用率</td>
+                                        <td id="memoUsage"></td>
+                                        <td >192.168.333.2</td>
+
+                                    <tr>
+                                        <td>磁盘使用率</td>
+                                        <td id="diskUsage"></td>
+                                        <td >192.168.333.2</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>显卡使用率</td>
+                                        <td id="gpuUsage"></td>
+                                        <td >192.168.333.2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                   </div>
+                </div>
+                <!--End Advanced Tables -->
+            </div>
+        </div>
+        <!-- /. ROW  -->
+
+    </div>r
+</div>
+<!-- /. PAGE INNER  -->
+</div>
+
+<!--//弹出框-->
+<div id="dialog-select-server" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span id="dialog-select-person-title"></span>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal add-new-user">
+                    <input type="text" style="display:none;" id="id" name="id" />
+                    <input type="text" style="display:none;" id="version" name="version" />
+                    <!--<input type="text" style="display:none;" id="version" name="version" />-->
+
+                    <div class="form-group">
+                        <div class="col-sm-22">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table id="serverList" class="table table-striped table-bordered table-hover table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="userid" data-formatter="_formatte_server_id" data-align="center"></th>
+                                            <th id="serverName" data-field="serverName" class="W30" style="border:none;">服务器名</th>
+                                            <th data-field="serverIP" class="W30" style="border:none;">IP地址</th>
+                                            <th data-field="mainServer" class="W30" style="border:none;">是否为主服务器</th>
+                                            <th data-field="updateDateString" class="W30" style="border:none;">修改时间</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script>
+    var id = getUrlParam("id");
+
+    var data_chart = {
+        labels : ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
+        datasets : [
+            {
+                fillColor : "rgba(151,187,205,0.5)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                data : [0,0,0,0,0,0,0,4,0,0,10,0,0,0,0,0,0,0,0,4,3,0,0,0]
+            }
+        ]
+    };
+    //alert(11111);
+    var args = window.location.href.split("?");
+    //alert(args[1]);
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+    })
+
+    $(document).ready(function() {
+        var name='';
+        var id=getUrlParam("id");
+
+        var data = {
+            "serverId": id,
+        }
+
+        $.get("/console/server_info/getStatus/", data, function(r, status) {
+            console.log("received data : "+r.serverStatus);
+
+            $("#ipAddress").val(r.serverName);
+            $("#cpuUsage").val(r.cpu.percent+"%");
+            $("#memoUsage").val(r.memory.percent+"%");
+            $("#diskUsage").val(r.disk.percent+"%");
+            $("#gpuUsage").val(r.gpu.slice.percent+"%");
+
+
+        });
+
+    });
+
+    function refreshChartAndTable(data){
+        $.ajaxSettings.async = false;
+
+        $.get("/console/server_management/search/", data, function(r, status) {
+            console.log("recived chart data : "+r.data.chartData);
+            console.log("recived chart data : "+r.data.rankData);
+
+            var chart_data = r.data.chartData;
+            var rank_data = r.data.rankData;
+
+            data_chart.datasets[0].data = chart_data;
+
+            //设置标题信息
+            $("#panel-head").empty();
+
+            $("#panel-head").append(r.data.cameraName+": ");
+            $("#datepicker").val(data.date);
+
+            $("#personInfo").empty();
+
+            for(var i = 0; i < rank_data.length; i++){
+                var content = rank_data[i];
+
+                console.log(content);
+
+                $("#personInfo").append("<div class=\"col-sm-3 col-md-6\">" +
+                    "<div class=\"col-sm-6 col-md-6\">"+
+                    "<img src=\""+content.feature+"\" style='height: 10em'></img>" +
+                    "</div>"+
+                    "<div class=\"col-sm-6 col-md-6\">" +
+                    "<label>排行: "+i+"</label><br/>" +
+                    "<label>ID: "+content.personid+"</label><br/>" +
+                    "<label>姓名: "+content.personname+"</label><br/>" +
+                    "<label>编号: "+content.personnumber+"</label><br/>" +
+                    "<label>出现次数: "+content.times+"</label><br>" +
+                    "</div>" +
+                    "</div>");
+            }
+
+            //lineChartData.datasets[0].data = chart_data;
+            // debugger;
+            // var ctx=document.getElementById("line-chart").getContext("2d");
+            // myLine = new Chart(ctx).Line(lineChartData,defaults);
+
+            displayLineChart();
+        });
+
+        $.ajaxSettings.async = true;
+    }
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+
+    function makeContent(ranking, id, name, time,number, picUrl){
+        return "<div class=\"col-xs-12 col-sm-6\">" +
+            "<img src=\""+picUrl+"\"></img>" +
+            "<label value=\"Ranking: \""+ranking+"></label>" +
+            "<label value=\"ID: \""+id+"></label>" +
+            "<label value=\"Name: \""+name+"></label>" +
+            "<label value=\"PersonNumber: \""+number+"></label>" +
+            "<label value=\"Time: \""+time+"></label>" +
+            "</div>"
+    }
+
+    function displayLineChart() {
+        var ctx = document.getElementById("line-chart").getContext("2d");
+        var options = {};
+        var lineChart = new Chart(ctx).Line(data_chart, options);
+    }
+
+    $(".searchData").click(function () {
+        var date = $( "#datepicker" ).val();
+
+        console.log("choosed date : "+ date);
+
+        var new_data = {
+            "cameraID": id,
+            "date": date
+        }
+
+        refreshChartAndTable(new_data);
+    })
+
+    $("#serverName_show").focus(function () {
+        $('#serverList').bootstrapTable({
+            method: 'get',
+            url: "/console/server_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber: 1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+            queryParams: function (params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function (res) {
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+        });
+
+        $("#dialog-select-server").modal("show");
+
+    })
+
+    function _formatte_server_id(value, row, index) {
+        return '<input id="serverId" name="id" type="radio" value="' + value + '" />';
+    }
+
+    $("btn.btn-primary.add-new-user").click(function () {
+        var serverName = $("#serverName").val();
+        var id_select = $("#serverId").val();
+
+        console.log("选中的serverName："+serverName);
+        console.log("选中的serverId："+id_select);
+
+        $("#serverName_show").val(serverName);
+
+        id = id_select;
+
+    })
+</script>
+
+</body>
+</html>

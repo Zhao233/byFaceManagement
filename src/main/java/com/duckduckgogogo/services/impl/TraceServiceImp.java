@@ -30,4 +30,21 @@ public class TraceServiceImp extends Info implements TraceService {
 
         return rest.postForObject(url, param, String.class);
     }
+
+    @Override
+    public String search_trace(String search, int offset, int limit){
+        String url = "http://" + super.serverIP + "/api/tracefoldline/search";
+
+        RestTemplate rest = new RestTemplate();
+
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+
+        param.add("search", search);
+        param.add("offset", offset);
+        param.add("limit", limit);
+
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        return rest.postForObject(url, param, String.class);
+    }
 }

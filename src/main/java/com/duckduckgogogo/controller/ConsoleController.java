@@ -105,6 +105,15 @@ public class ConsoleController {
         return new ModelAndView("console/trace_info");
     }
 
+    @RequestMapping("/server_info")
+    public ModelAndView toServerInfo() {
+        return new ModelAndView("console/server_info");
+    }
+
+    @RequestMapping("/contacts_management")
+    public ModelAndView tocontacts() {
+        return new ModelAndView("console/contacts_management");
+    }
 
     @RequestMapping("/test_trace")
     public ModelAndView toA() {

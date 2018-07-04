@@ -26,8 +26,7 @@ public class AttendanceServiceImp extends Info implements AttendanceService {
             param.add("endDate", endDate);
 
             //默认值
-
-
+            
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
             return rest.postForObject(url, param, String.class);

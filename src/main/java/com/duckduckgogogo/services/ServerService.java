@@ -12,4 +12,7 @@ public interface ServerService {
     String deleteServer(List<Integer> list);
 
     String getServerById(int id);
+
+    //获取状态信息
+    String getServerInfoById(int id);
 }

@@ -13,6 +13,11 @@
     <link href="/style/custom-styles.css" rel="stylesheet"/>
     <!-- Google Fonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+
+    <link href="/style/jquery-ui.css" rel="stylesheet"/>
+
+
 
     <script src="/javascript/jquery-1.11.1.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -23,6 +28,11 @@
 
     <script src="/javascript/custom-scripts.js"></script>
 
+    <script src="/javascript/jquery.dataTables.js"></script>
+    <script src="/javascript/dataTables.bootstrap.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
+
+    <script src="/javascript/jquery-ui.js"></script>
 
     <style>
         #canvas{
@@ -59,9 +69,6 @@
                 <!--管理员信息-->
                 <li>
                     <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
-                        <div class="image" style="padding-bottom: 20dp">
-                            <img src="/images/default_avatar_male.jpg" width="120" height="120" alt="User">
-                        </div>
 
                         <div>
                             John Doe
@@ -117,6 +124,11 @@
                     <a href="/console/trace_info" class="active-menu"><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
@@ -134,7 +146,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        访客管理
+                        轨迹信息
                     </h1>
                 </div>
             </div>
@@ -145,8 +157,25 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
+                            <div class="form-group">
+
+                                <select id="searchType">
+                                    <option value="employee">员工</option>
+                                    <option value="visitor">访客</option>
+                                </select>
+                                <input type="text" id="personName_show">
+
+                                <label for="datepicker_start">开始时间</label>
+                                <input type="text" id="datepicker_start">
+
+                                <label for="datepicker_end">结束时间</label>
+                                <input type="text" id="datepicker_end">
+
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">搜索</button>
+                            </div>
+
                             <canvas id="canvas" width="1200" height="680">
-                                Your browser doesn't support canvas
+                                浏览器不支持canvas
                             </canvas>
 
                             <script>
@@ -170,6 +199,8 @@
                                 var cameraList_all;
                                 var cameraList_enable;
 
+                                var trace_list;
+
                                 function search(id, startDate, endDate){
                                     var data_ = {
                                         id : id,
@@ -188,8 +219,10 @@
 
                                                     cameraList_all = r.cameras.allCamera;
                                                     cameraList_enable = r.cameras.traceCamera;
-                                                    console.log("camera_enable: "+ cameraList_enable);
-                                                    console.log("camera_all: "+ cameraList_all);
+                                                    console.log("camera_enable: ");
+                                                    console.log(cameraList_enable);
+                                                    console.log("camera_all: ");
+                                                    console.log(cameraList_all);
                                                     break
                                                 case "FAILED" :
                                                     $("#dialog-return").find(".modal-body").html("查询失败");
@@ -206,6 +239,8 @@
                                             $("#dialog-return").modal("show");
                                         }
                                     });
+
+                                    search_trace_gap();
                                 }
 
                                 function drawTrace(cameraList_, context){
@@ -217,21 +252,39 @@
                                     context.strokeStyle = '#ff0000';
                                     context.lineJoin = context.lineCap = 'round';
 
-                                    var location
+                                    var location;
+                                    var length = cameraList_.length;
 
-                                    // if(cameraList_[0].cameraXY != undefined){
-                                    //     location = cameraList_[0].cameraXY.split(",");//0: x, 1: y
-                                    // } else {
-                                    //      location = cameraList_[0].camereXY.split(",");//0: x, 1: y
-                                    // }
-
-                                    location = cameraList_[0].cameraXY.split(",");//0: x, 1: y
+                                    location = cameraList_[length-1].cameraXY.split(",");//0: x, 1: y
 
                                     console.log("trace_start: "+(parseInt(location[0])+ offset_trace.x) + ", "+ (parseInt(location[1])+ offset_trace.y));
                                     context.moveTo(parseInt(location[0])+ offset_trace.x,parseInt(location[1])+ offset_trace.y);
 
-                                    var length = cameraList_.length;
-                                    for(var i = 1; i < length; i++){
+
+                                    for(var i = length -2; i >= 0; i--){
+                                        var trace;
+
+                                        if(i == (length-2)){ //first drawed camera
+                                            trace = searchFortrace(cameraList_[length-1].camereid,cameraList_[i].camereid);
+                                        } else {
+                                            if(i > 0) {
+                                                trace = searchFortrace(cameraList_[i - 1].camereid, cameraList_[i].camereid);
+                                            }
+                                        }
+
+                                        if(trace != undefined){//中间需要画折线段
+                                            var traces = trace.split(";");
+
+                                            for(var j = 0; j < traces.length; j++){
+                                                var trace_location = traces[j].split(",");
+
+                                                var trace_location_x = trace_location[0];
+                                                var trace_location_y = trace_location[1];
+
+                                                context.lineTo( parseInt(trace_location_x),parseInt(trace_location_y) );
+                                            }
+                                        }
+
                                         var temp_camera = cameraList_[i];
 
                                         if(temp_camera.cameraXY != undefined){
@@ -261,13 +314,13 @@
 
                                     camera.onload = function (ev) {
                                         var length = cameraList_.length;
-                                        for(var i = 0 ; i < length; i++){
+                                        for(var i = length - 1 ; i >= 0; i--){
                                             var temp_camera = cameraList_[i];
 
                                             var location;
 
                                             // if(temp_camera.cameraXY != undefined){
-                                            //     location = temp_camera.cameraXY.split(",");//0: x, 1: y
+                                            //     location = temp_camera.cameraXY.spli--",");//0: x, 1: y
                                             // } else {
                                             //     location = temp_camera.camereXY.split(",");//0: x, 1: y
                                             // }
@@ -289,18 +342,63 @@
                                     context.font = "italic 10px sans-serif";
 
                                     var length = cameraList_.length;
-                                    for(var i = 0 ; i < length; i++){
-                                        var temp_camera = cameraList[i];
+                                    for(var i = length-1 ; i >= 0; i--){
+                                        var temp_camera = cameraList_[i];
+
+                                        var location;
 
                                         if(temp_camera.cameraXY != undefined){
                                             location = temp_camera.cameraXY.split(",");//0: x, 1: y
                                         } else {
                                             location = temp_camera.camereXY.split(",");//0: x, 1: y
-                                        }                                        var message = temp_camera.tracedate;
+                                        }
+                                        var message = temp_camera.camerename;
 
                                         context.fillText(message, parseInt(location[0]) + offset_message.x, parseInt(location[1]) + offset_message.y + offset_vertical_location);
 
-                                        offset_vertical_locatioin += 0;
+                                        // parseInt(offset_vertical_locatioin ) += 0;
+                                    }
+                                }
+
+                                function search_trace_gap(){
+                                    $.ajax({
+                                        type: "get",
+                                        url: "/console/trace/search_trace",
+                                        dataType:"json",
+                                        success: function (r) {
+                                            switch (r.status) {
+                                                case "SUCCEED" :
+                                                    trace_list = r.trace_gap_list;
+
+                                                    console.log("trace_list_gap:");
+                                                    console.log(trace_list);
+
+                                                    break
+                                                case "FAILED" :
+                                                    $("#dialog-return").find(".modal-body").html("查询失败");
+                                                    $("#dialog-return").modal("show");
+                                                    break
+                                            }
+                                        },
+                                        error: function (r) {
+                                            $("#dialog-return").find(".modal-body").html("网络故障，请恢复网络后重试");
+                                            $("#dialog-return").modal("show");
+                                        }
+                                    });
+                                }
+
+                                function searchFortrace(cameraA_id, cameraB_id){
+                                    var length = trace_list.length;
+                                    for(var i = 0; i < length; i++){
+                                        var temp_trace = trace_list[i];
+
+                                        if(temp_trace.cameraA.id == cameraA_id){
+                                            if(temp_trace.cameraB.id == cameraB_id){
+                                                return temp_trace.trace;
+                                            }
+                                        }
+
+                                        return ;
                                     }
                                 }
 
@@ -311,10 +409,11 @@
                                 var can = document.getElementById('canvas');
                                 var context = can.getContext('2d');
 
+                                search_trace_gap();
                                 drawCamera(cameraList_all,context,false);
                                 drawTrace(cameraList_enable,context);
                                 drawCamera(cameraList_enable,context, true);
-
+                                drawMessage(cameraList_enable,context)
                             </script>
                         </div>
                     </div>
@@ -326,6 +425,51 @@
     <!-- /. PAGE INNER  -->
 </div>
 
+<div id="dialog-select-person" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span id="dialog-select-person-title"></span>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal add-new-user">
+                    <input type="text" style="display:none;" id="id" name="id" />
+                    <input type="text" style="display:none;" id="version" name="version" />
+                    <!--<input type="text" style="display:none;" id="version" name="version" />-->
+
+                    <div class="form-group">
+                        <div class="col-sm-22">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table id="personList" class="table table-striped table-bordered table-hover table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="userid" data-formatter="_formatte_person_id" data-align="center"></th>
+                                            <th id="person_name" data-field="name" class="W30" style="border:none;">姓名</th>
+                                            <th data-field="IDNumber" class="W30" style="border:none;">身份证号码</th>
+                                            <th data-field="phoneNumber" class="W30" style="border:none;">电话</th>
+                                            <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -356,110 +500,116 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        //初始化日历
+        $("#datepicker_start").datepicker({
+            dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+            /* 每周从周一开始 */
+            firstDay: 1,
+            /* 区域化月名为中文习惯 */
+            monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+                "7月", "8月", "9月", "10月", "11月", "12月"],
+            /* 月份显示在年后面 */
+            showMonthAfterYear: true,
+            /* 年份后缀字符 */
+            yearSuffix: "年",
+            /* 格式化中文日期
+            （因为月份中已经包含“月”字，所以这里省略） */
+            dateFormat: "yy-mm-dd"
+        });
+        $("#datepicker_end").datepicker({
+            dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+            /* 每周从周一开始 */
+            firstDay: 1,
+            /* 区域化月名为中文习惯 */
+            monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+                "7月", "8月", "9月", "10月", "11月", "12月"],
+            /* 月份显示在年后面 */
+            showMonthAfterYear: true,
+            /* 年份后缀字符 */
+            yearSuffix: "年",
+            /* 格式化中文日期
+            （因为月份中已经包含“月”字，所以这里省略） */
+            dateFormat: "yy-mm-dd"
+        });
 
 
-    $().ready(function () {
-         // $.ajaxSettings.async = false;
-         // search(97,"2018-06-01","2018-06-01");
-         // $.ajaxSettings.async = true;
-         //
-         // var can = document.getElementById('canvas');
-         // var context = can.getContext('2d');
-         //
-         // context.drawImage(camera, 520,350,camera_size.width, camera_size.height);
-         //
-         // drawCamera(cameraList,context,false);
+         $("#personName_show").focus(function () {
+             var searchURL;
 
+             if($("#searchType").val() == "employee"){//员工
+                 $("#dialog-select-person-title").html("选择员工");
 
+                 searchURL = "/console/employee_management/search";
+             } else {//访客
+                 $("#dialog-select-person-title").html("选择访客");
+                 searchURL = "/console/visitor_management/search";
+             }
 
-            //search(97,"2018-06-01", "2018-06-01");
+             $('#personList').bootstrapTable({
+                 method: 'get',
+                 url: searchURL,
+                 striped: true,
+                 dataType: "json",
+                 pagination: true,
+                 queryParamsType: "limit",
+                 singleSelect: true,
+                 contentType: "application/x-www-form-urlencoded",
+                 pageSize: 10,
+                 pageNumber: 1,
+                 search: true,
+                 showColumns: true,
+                 showRefresh: true,
+                 sidePagination: "server", //服务端请求
+                 queryParams: function (params) {
+                     return {
+                         limit: params.limit,
+                         offset: params.offset / params.limit,
+                         search: $(".search").find("input").val()
+                     };
+                 },
+                 responseHandler: function (res) {
+                     return {
+                         "rows": res.rows,
+                         "total": res.total
+                     };
+                 }
+             });
+
+             $("#dialog-select-person").modal("show");
+
+             //$("#dialog-select-person").find("[input id= ]")
+         })
+
+    })
+    $(".btn.btn-primary.add-new-user").click(function () {
+        window.personID = $("#personList").find("input[type='radio']:checked").val();
+
+        var searchURL;
+
+        if($("#searchType").val() == "employee"){//员工
+            searchURL = "/console/employee_management/get/"+window.personID;
+        } else {//访客
+            $("#dialog-select-person-title").html("选择访客");
+            searchURL = "/console/visitor_management/get/"+window.personID;
+        }
+
+        $.get(searchURL, null, function(r, status) {
+            $("#personName_show").val(r.name);
+        });
+
+        $(".btn.btn-default.add-new-user-close").click();
+
     })
 
-    //     // debugger;
-        //     var can = document.getElementById('canvas');
-        //     var ctx = can.getContext('2d');
-        //
-        //     //线宽
-        //     ctx.lineWidth = 2;
-        //     //颜色
-        //     ctx.strokeStyle = '#ff0000';
-        //
-        //     ctx.lineJoin = ctx.lineCap = 'round';
-        //
-        //     //drawLine(10, 20, 100, 200);
-        //     //drawLine(100, 200, 200, 256);
-        //     //drawLine(200, 256, 300, 300);
-        //
-        //     //ctx.strokeStyle = "rgb(250,0,0)";
-        //
-        //     //ctx.fillStyle = "rgb(250,0,0)";
-        //
-        //     var img0 = new Image();
-        //     img0.src = "/images/test_camera0.png";
-        //
-        //     img0.onload = function (ev) {
-        //         ctx.drawImage(img0,300,135,20,20);
-        //         ctx.drawImage(img0,520,120,20,20);
-        //         ctx.drawImage(img0,830,100,20,20);
-        //         ctx.drawImage(img0,830,220,20,20);
-        //         ctx.drawImage(img0,830,330,20,20);
-        //         ctx.drawImage(img0,520,350,20,20);
-        //     }
-        //
-        //     ctx.beginPath();
-        //
-        //     ctx.moveTo(530,130);
-        //
-        //     ctx.lineTo(840,110);
-        //
-        //     ctx.lineTo(840,230);
-        //
-        //     ctx.lineTo(840,340);
-        //
-        //     ctx.lineTo(530,360);
-        //
-        //     ctx.stroke();
-        //
-        //     ctx.fillStyle = "black";
-        //     ctx.font = "italic 10px sans-serif";
-        //     var txt="2018-06-20 11:29:57";
-        //     ctx.fillText(txt, 480, 110);
-        //     ctx.fillText(txt, 480, 95);
-        //     ctx.fillText(txt, 480, 80);
-        //
-        //     ctx.fillText(txt, 790, 90);
-        //     ctx.fillText(txt, 790, 75);
-        //     ctx.fillText(txt, 790, 60);
-        //
-        //     ctx.fillText(txt, 790, 210);
-        //     ctx.fillText(txt, 790, 195);
-        //     ctx.fillText(txt, 790, 180);
-        //
-        //     ctx.fillText(txt, 790, 320);
-        //     ctx.fillText(txt, 790, 305);
-        //     ctx.fillText(txt, 790, 290);
-        //
-        //     ctx.fillText(txt, 480, 340);
-        //     ctx.fillText(txt, 480, 325);
-        //     ctx.fillText(txt, 480, 310);
-        //
-        //     var img = new Image();
-        //     img.src = "/images/test_camera.png";
-        //
-        //     img.onload = function (ev) {
-        //         ctx.drawImage(img,520,120,20,20);
-        //         ctx.drawImage(img,830,100,20,20);
-        //         ctx.drawImage(img,830,220,20,20);
-        //         ctx.drawImage(img,830,330,20,20);
-        //         ctx.drawImage(img,520,350,20,20);
-        //     }
-        //     search(97,"2018-06-01", "2018-06-01");
-        //
-        // })
+    function _formatte_locale_image(value, row, index) {
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
+        return s;
+    }
 
-
-
-
+    function _formatte_person_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
 </script>
 
 </body>

@@ -31,6 +31,8 @@ public class AttendanceManagementController {
 
         String result = attendanceService.searchServers(search,offset,limit,startDate,endDate);
 
+        System.out.println(result);
+
         JSONObject object = JSONObject.fromObject(result);
 
         r.put("total",object.getInt("total"));

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Morris Chart Styles-->
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <!-- it's about file upload box -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+    <style>
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    console.log('Ready function');
+
+    $(document).ready(function() {
+        console.log('Ready function');
+
+        $.get("/console/faceconfig_management/search", null, function(r, status) {
+            $("#config-info").find("input[id='id']").val(r.id);
+            $("#config-info").find("input[id='version']").val(r.version);
+            // $("#config-info").find("input[id='serverIP']").val(r.serverIP);
+            $("#config-info").find("input[id='imageDBName']").val(r.imageDBName);
+            $("#config-info").find("input[id='userquality']").val(r.userquality);
+            $("#config-info").find("input[id='visitorquality']").val(r.visitorquality);
+            $("#config-info").find("input[id='similarscore']").val(r.similarscore);
+            $("#config-info").find("input[id='time1']").val(r.time1);
+            $("#config-info").find("input[id='time2']").val(r.time2);
+            $("#config-info").find("input[id='time3']").val(r.time3);
+            $("#config-info").find("input[id='receiveURL']").val(r.receiveURL);
+            $("#config-info").find("input[id='warningscore']").val(r.warningscore);
+            $("#config-info").find("input[id='serverIPandPort']").val(r.serverIPandPort);
+            $("#config-info").find("input[id='updateDateString']").val(r.updateDateString);
+            $("#config-info").find("input[id='version']").val(r.version);
+
+            console.log('get message : '+ r.id);
+
+        });
+    });
+</script>
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+                        <div class="image" style="padding-bottom: 20dp">
+                            <img src="/images/default_avatar_male.jpg" width="120" height="120" alt="User">
+                        </div>
+
+                        <div>
+                            John Doe
+                        </div>
+
+                        <div>
+                            john.doe@163.com
+                        </div>
+                    </div>
+                    <br></br>
+                </li>
+
+                <!-- 用户管理 -->
+                <li>
+                    <a href="/console/user_management"><i class="fa fa-table"></i> 用户管理</a>
+                </li>
+
+                <!-- 员工管理 -->
+                <li>
+                    <a href="/console/employee_management" >
+                        <i class="fa fa-dashboard"></i>
+                        员工管理
+                    </a>
+                </li>
+
+                <!-- 访客管理 -->
+                <li>
+                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
+                </li>
+
+                <!-- 摄像头管理 -->
+                <li>
+                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
+                </li>
+
+                <!-- 服务器管理 -->
+                <li>
+                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
+                </li>
+
+                <!-- 考勤管理 -->
+                <li>
+                    <a href="/console/attendance_management"  ><i class="fa fa-qrcode"></i>考勤管理</a>
+                </li>
+
+                <!-- 摄像头信息 -->
+                <li>
+                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>摄像头信息</a>
+                </li>
+
+                <!-- 轨迹信息 -->
+                <li>
+                    <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
+                </li>
+
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
+                <!--配置信息-->
+                <li>
+                    <a href="/console/face_config" class="active-menu"><i class="fa fa-qrcode"></i>配置信息</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        服务器配置
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <!--基本信息-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="display:none;"><span class="glyphicon glyphicon-user"></span>Config Info</div>
+                        <div id="config-info" class="panel-body">
+                            <form class="form-horizontal form-profile-save" method="post">
+                                <fieldset>
+                                    <input type="text" style="display:none;" id="id" name="id" />
+                                    <input type="text" style="display:none;" id="version" name="version" />
+
+                                    <div class="form-group">
+                                        <label for="imageDBName" class="col-sm-3 control-label">图像服务器名称</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="imageDBName" name="imageDBName" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="userquality" class="col-sm-3 control-label">用户图像质量分值</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="userquality" name="userquality" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="visitorquality" class="col-sm-3 control-label">访客图像质量分值</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="visitorquality" name="visitorquality" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="similarscore" class="col-sm-3 control-label">相似度分值</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="similarscore" name="similarscore" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="time1" class="col-sm-3 control-label">时间间隔</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="time1" name="time1" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="time2" class="col-sm-3 control-label">同一用户检测时间间隔</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="time2" name="time2" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="time3" class="col-sm-3 control-label">Popup disappearance time</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="time3" name="time3" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="receiveURL" class="col-sm-3 control-label">接收地址</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="receiveURL" name="receiveURL" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="warningscore" class="col-sm-3 control-label">警告分值</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="warningscore" name="warningscore" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="serverIPandPort" class="col-sm-3 control-label">服务器IP端口</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="serverIPandPort" name="serverIPandPort" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="updateDateString" class="col-sm-3 control-label">修改时间</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="updateDateString" name="updateDateString" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12 widget-left">
+                                            <button type="button" class="btn btn-primary form-profile-save pull-left">Save Changes</button>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div><!--/.col-->
+            </div>
+            <!-- /. ROW  -->
+
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                        </div>
+                        <div class="modal-body"></div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+<!-- jQuery Js -->
+<!-- <script src="javascript/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="/javascript/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="/javascript/jquery.metisMenu.js"></script>
+
+<!-- DATA TABLE SCRIPTS -->
+<script src="/javascript/jquery.dataTables.js"></script>
+<script src="/javascript/dataTables.bootstrap.js"></script>
+
+<!-- Custom Js -->
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $(".btn.btn-primary.form-profile-save").click(function() {
+        _reset_input($(".form-horizontal.form-profile-save").find("input"));
+
+        var data = $(".form-horizontal.form-profile-save").serializeArray();
+        $.post("/console/faceconfig_management/save", data, function(r, status) {
+            if (r.status == "SUCCEED") {
+                $(".bs-example-modal-sm").find(".modal-body").html("Modified successfully.");
+                $(".bs-example-modal-sm").modal("show");
+                $('.bs-example-modal-sm').on('hidden.bs.modal', function (e) {
+                    location.reload();
+                });
+            } else {
+                if (r.message.username) {
+                    _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
+                }
+
+                if (r.message.WARNING) {
+                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                    $(".bs-example-modal-sm").modal("show");
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -24,7 +24,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
 
     <style>
-
         .center-vertical {
             position: relative;
             top: 50%;
@@ -119,6 +118,11 @@
                     <a href="/console/trace_info" ><i class="fa fa-desktop"></i>轨迹信息</a>
                 </li>
 
+                <!--报警信息管理-->
+                <li>
+                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
+                </li>
+
                 <!--配置信息-->
                 <li>
                     <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
@@ -152,7 +156,7 @@
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="serverName">服务器名</th>
+                                        <th data-field="serverName" data-formatter="_formatte_name">服务器名</th>
                                         <th data-field="serverIP">IP地址</th>
                                         <th data-field="mainServer">是否为主服务器</th>
                                         <th     data-field="updateDateString">修改时间</th>
@@ -184,7 +188,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Server Management  | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">服务器管理  | <span id="dialog-user-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user" method="POST">
@@ -330,6 +334,12 @@
 
     function _formatte_user_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _formatte_name(value,row,index){
+        if (value != undefined) {
+            return '<a href="/console/server_info/?id=' + row.id +'">' + value + '</a>';
+        }
     }
 
     function _reset(from) {

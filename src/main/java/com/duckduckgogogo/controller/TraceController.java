@@ -34,7 +34,7 @@ public class TraceController {
         String result_trace = traceService.search(startTime,endTime,id);
         String result_all = cameraService.searchCamera("","0","10000");
 
-        System.out.println("查询成功："+result_trace+"\n"+result_all);
+        System.out.println("search,查询成功："+result_trace+"\n"+result_all);
 
         JSONArray array_trace = JSONArray.fromObject(result_trace);
         JSONObject array_all = JSONObject.fromObject(result_all);
@@ -44,6 +44,25 @@ public class TraceController {
         object.put("allCamera",array_all.getJSONArray("rows"));
 
         map.put("cameras", object);
+        map.put("status", "SUCCEED");
+
+        return map;
+    }
+
+    @RequestMapping("/search_trace")
+    @ResponseBody
+    public Map<String, Object> search_trace() {
+        Map<String, Object> map = new HashMap<>();
+
+        String result_trace = traceService.search_trace("",0,10000);
+
+        System.out.println("search_trace,查询成功："+result_trace+"\n"+result_trace);
+
+        JSONObject object = JSONObject.fromObject(result_trace);
+
+        JSONArray array_trace = object.getJSONArray("rows");
+
+        map.put("trace_gap_list",array_trace);
         map.put("status", "SUCCEED");
 
         return map;
