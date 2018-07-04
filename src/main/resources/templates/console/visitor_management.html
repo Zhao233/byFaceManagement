@@ -322,7 +322,7 @@
                                     </thead>
                                 </table>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增
                                 </button>
                                 <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改
                                 </button>
@@ -375,7 +375,7 @@
 
                         <div class="col-sm-7 ">
                             <div class="form-group">
-                                <label for="personName" class="col-sm-4 control-label">Name</label>
+                                <label for="personName" class="col-sm-4 control-label">姓名</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="personName" name="personName"
                                            data-toggle="tooltip" data-placement="top" maxlength="30"
@@ -385,7 +385,7 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="IDNumber" class="col-sm-4 control-label">ID Number</label>
+                                <label for="IDNumber" class="col-sm-4 control-label">身份证号</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="IDNumber" name="IDNumber"
                                            maxlength="30"/>
@@ -393,7 +393,7 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="phoneNumber" class="col-sm-4 control-label">Phone Number</label>
+                                <label for="phoneNumber" class="col-sm-4 control-label">电话号码</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                            maxlength="30"/>
@@ -401,20 +401,20 @@
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
-                                <label for="datepicker_start" class="col-sm-4 control-label">StartDate</label>
+                                <label for="datepicker_start" class="col-sm-4 control-label">开始时间</label>
                                 <div class="col-sm-7">
                                     <!--<input type="text" class="form-control" id="startDate" name="startDate"-->
                                     <!--maxlength="30"/>-->
-                                    <input type="text" id="datepicker_start">
+                                    <input type="text" readonly id="datepicker_start">
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group ">
-                                <label for="datepicker_end" class="col-sm-4 control-label">EndDate</label>
+                                <label for="datepicker_end" class="col-sm-4 control-label">结束时间</label>
                                 <div class="col-sm-7">
                                     <!--<input type="text" class="form-control" id="endDate" name="endDate"-->
                                     <!--maxlength="30"/>-->
-                                    <input type="text" id="datepicker_end">
+                                    <input type="text" readonly id="datepicker_end">
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
@@ -505,7 +505,7 @@
         window.flag = 'add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("增加");
+        $("#dialog-user-management-update-title").html("新增");
 
 
         $("#dialog-user-management-update").modal("show");
@@ -635,7 +635,7 @@
                         case "SUCCEED" :
                             var message;
                             if (flag_ == 'add') {
-                                message = "增加成功";
+                                message = "新增成功";
                             } else {
                                 message = "修改成功";
                             }
@@ -647,7 +647,7 @@
                             $(".panel.panel-default").find("button[name='refresh']").click();
 
 
-                            // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                            // $("#dialog-user-management-update").find(".modal-body").html("新增成功");
                             // $("#dialog-user-management-update").modal("show");
                             //
                             // $(".panel.panel-default").find("button[name='refresh']").click();
@@ -655,7 +655,7 @@
                             break
 
                         case "FAILED" :
-                            $("#dialog-user-management-update").find(".modal-body").html("增加失败");
+                            $("#dialog-user-management-update").find(".modal-body").html("新增失败");
                             $("#dialog-user-management-update").modal("show");
 
                             break

@@ -314,7 +314,7 @@
                                     </thead>
                                 </table>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增
                                 </button>
                                 <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改
                                 </button>
@@ -475,7 +475,7 @@
         window.flag = 'add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("增加");
+        $("#dialog-user-management-update-title").html("新增");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -580,7 +580,7 @@
                         case "SUCCEED" :
                             var message;
                             if (flag_ == 'add') {
-                                message = "增加成功";
+                                message = "新增成功";
                             } else {
                                 message = "修改成功";
                             }
@@ -596,7 +596,7 @@
                         case "FAILED" :
                             var message;
                             if (flag_ == 'add') {
-                                message = "增加成功";
+                                message = "新增成功";
                             } else {
                                 message = "修改成功";
                             }

@@ -160,7 +160,7 @@
                                     </thead>
                                 </table>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加</button>
+                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
                                 <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
                                 <button class="btn btn-danger delete-employee-dialog">删除</button>
 
@@ -454,7 +454,7 @@
                     $(".panel.panel-default").find("button[name='refresh']").click();
 
 
-                    // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+                    // $("#dialog-user-management-update").find(".modal-body").html("新增成功");
                     // $("#dialog-user-management-update").modal("show");
                     //
                     // $(".panel.panel-default").find("button[name='refresh']").click();
@@ -462,7 +462,7 @@
                     break
 
                 case "FAILED" :
-                    $("#dialog-user-management-update").find(".modal-body").html("增加失败:"+r.message);
+                    $("#dialog-user-management-update").find(".modal-body").html("新增失败:"+r.message);
                     $("#dialog-user-management-update").modal("show");
 
                     break

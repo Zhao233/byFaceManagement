@@ -153,16 +153,15 @@
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="cameraName" data-formatter="_formatte_name">Camera Name</th>
-                                        <th data-field="taskId">Task Id</th>
-                                        <th data-field="server.serverName">Server Name</th>
-                                        <th data-field="entranceGuardNO">Entrance Guard Number</th>
-                                        <th data-field="entranceGuard">Entrance Guard</th>
-                                        <th data-field="enabled">Enable</th>
-                                        <th data-field="rtspUrl">rtspUrl</th>
-                                        <th data-field="cameraXY">Camera Location</th>
-                                        <th data-field="updateDateString">Modify Time</th>
-                                        <th data-field="version">Version</th>
+                                        <th data-field="cameraName" data-formatter="_formatte_name">摄像头名称</th>
+                                        <th data-field="taskId">任务ID</th>
+                                        <th data-field="server.serverName">服务器名称</th>
+                                        <th data-field="entranceGuardNO">门禁编号</th>
+                                        <th data-field="entranceGuard">是否门禁摄像头</th>
+                                        <th data-field="enabled">是否启用</th>
+                                        <th data-field="rtspUrl">rtspURL地址</th>
+                                        <th data-field="cameraXY">地图坐标</th>
+                                        <th data-field="updateDateString">修改时间</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -189,7 +188,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Camera Management  | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">摄像头管理  | <span id="dialog-user-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user" method="POST">
@@ -198,7 +197,7 @@
                     <!--<input type="text" style="display:none;" id="version" name="version" />-->
 
                     <div class="form-group">
-                        <label for="cameraName" class="col-sm-4 control-label">Camera Name</label>
+                        <label for="cameraName" class="col-sm-4 control-label">摄像头名称</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="cameraName" name="cameraName" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
                         </div>
@@ -206,7 +205,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="rtspUrl" class="col-sm-4 control-label">rtspUrl</label>
+                        <label for="rtspUrl" class="col-sm-4 control-label">rtspUrl地址</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="rtspUrl" name="rtspUrl" maxlength="70" />
                         </div>
@@ -214,14 +213,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="entranceGuardNO" class="col-sm-4 control-label">Entrance Guard Number</label>
+                        <label for="entranceGuardNO" class="col-sm-4 control-label">门禁编号</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="entranceGuardNO" name="entranceGuardNO" maxlength="30" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="entranceGuardNO" class="col-sm-4 control-label">Camera XY</label>
+                        <label for="entranceGuardNO" class="col-sm-4 control-label">地图坐标</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="cameraXY" name="cameraXY" maxlength="30" />
                         </div>
@@ -229,7 +228,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="entranceGuard" class="col-sm-4 control-label">Entrance Guard</label>
+                        <label for="entranceGuard" class="col-sm-4 control-label">是否门禁摄像头</label>
                         <div class="col-sm-7">
                             <select id="entranceGuard" name="entranceGuard" class="form-control" required="required">
                                 <option value="True">True</option>
@@ -475,7 +474,7 @@
             }
         });
 
-        $("#dialog-user-management-update-title").html("增加新摄像头");
+        $("#dialog-user-management-update-title").html("新增摄像头");
         $("#dialog-user-management-update").modal("show");
     });
 
