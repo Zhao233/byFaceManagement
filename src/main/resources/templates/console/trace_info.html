@@ -16,12 +16,12 @@
     <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
 
     <link href="/style/jquery-ui.css" rel="stylesheet"/>
+    <link href="/style/font-awesome.css" rel="stylesheet"/>
 
-
+    <link href="/style/font-awesome.css" rel="stylesheet"/>
 
     <script src="/javascript/jquery-1.11.1.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-
 
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
@@ -78,60 +78,80 @@
                             <label id="adminEmail"></label>
                         </div>
                     </div>
-                    <br></br>
+                    <br>
                 </li>
 
-                <!-- 用户管理 -->
+                <!--区域安全防范系统-->
                 <li>
-                    <a href="/console/user_management"><i class="fa fa-table"></i> 用户管理</a>
+                    <a  class="active-menu"><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--轨迹图-->
+                        <li>
+                            <a href="/console/trace_info" class="active-menu">轨迹图</a>
+                        </li>
+
+                        <!--轨迹统计图表-->
+                        <li>
+                            <a href="/console/camera_info">轨迹统计图表</a>
+                        </li>
+
+                        <!--报警设置-->
+                        <li>
+                            <a href="/console/contacts_management">报警设置</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <!-- 员工管理 -->
+                <!--内部人员管理-->
                 <li>
-                    <a href="/console/employee_management">
-                        <i class="fa fa-dashboard"></i>
-                        员工管理
-                    </a>
+                    <a><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--员工管理-->
+                        <li>
+                            <a href="/console/user_management">员工管理</a>
+                        </li>
+
+                        <!--访客管理-->
+                        <li>
+                            <a href="/console/visitor_management">访客管理</a>
+                        </li>
+
+                        <!--考勤信息-->
+                        <li>
+                            <a href="/console/attendance_management">考勤信息</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <!-- 访客管理 -->
+                <!--系统管理-->
                 <li>
-                    <a href="/console/visitor_management.html"><i class="fa fa-bar-chart-o"></i>访客管理</a>
-                </li>
+                    <a><i class="fa fa-sitemap"></i> 系统管理<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--服务器管理-->
+                        <li>
+                            <a href="/console/server_management">服务器管理</a>
+                        </li>
 
-                <!-- 摄像头管理 -->
-                <li>
-                    <a href="/console/camera_management"><i class="fa fa-desktop"></i>摄像头管理</a>
-                </li>
+                        <!--服务器信息-->
+                        <li>
+                            <a href="/console/server_info">服务器信息</a>
+                        </li>
 
-                <!-- 服务器管理 -->
-                <li>
-                    <a href="/console/server_management"><i class="fa fa-qrcode"></i>服务器管理</a>
-                </li>
+                        <!--摄像头管理-->
+                        <li>
+                            <a href="/console/camera_management">摄像头管理</a>
+                        </li>
 
-                <!-- 考勤管理 -->
-                <li>
-                    <a href="/console/attendance_management"><i class="fa fa-qrcode"></i>考勤管理</a>
-                </li>
+                        <!--参数设置-->
+                        <li>
+                            <a href="/console/face_config">参数设置</a>
+                        </li>
 
-                <!-- 摄像头信息 -->
-                <li>
-                    <a href="/console/camera_info"><i class="fa fa-desktop"></i>摄像头信息</a>
-                </li>
-
-                <!-- 轨迹信息 -->
-                <li>
-                    <a href="/console/trace_info" class="active-menu"><i class="fa fa-desktop"></i>轨迹信息</a>
-                </li>
-
-                <!--报警信息管理-->
-                <li>
-                    <a href="/console/contacts_management"  ><i class="fa fa-qrcode"></i>报警信息</a>
-                </li>
-
-                <!--配置信息-->
-                <li>
-                    <a href="/console/face_config"><i class="fa fa-qrcode"></i>配置信息</a>
+                        <!--用户管理-->
+                        <li>
+                            <a href="/console/user_management">用户管理</a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
@@ -173,6 +193,8 @@
 
                                 <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">搜索</button>
                             </div>
+
+                            
 
                             <canvas id="canvas" width="1200" height="680">
                                 浏览器不支持canvas

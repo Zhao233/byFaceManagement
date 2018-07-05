@@ -3,7 +3,7 @@
 ------------------------------------------------*/
 body {
     font-family: 'Open Sans', sans-serif;
-    background: #32C2CD url(../img/bg-img.jpg) !important;
+    background: #32C2CD url(../images/bg-img.jpg) !important;
 
 }
 
@@ -544,7 +544,7 @@ footer p {
 }
 
 .fa.arrow:before {
-    content: "\f104";
+    content: "\f104" !important;
 }
 
 .active > a > .fa.arrow:before {
@@ -598,7 +598,7 @@ ul.nav.nav-second-level.collapse.in {
 
 .navbar-side {
     border: none;
-    background: #32C2CD url(../img/bg-img.jpg) !important;
+    background: #32C2CD url(../images/bg-img.jpg) !important;
 }
 
 .top-navbar {
