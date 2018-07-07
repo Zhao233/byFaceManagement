@@ -70,13 +70,15 @@
                 <li>
                     <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
 
-                        <div >
-                            <label id="adminName"></label>
-                        </div>
+                        <img src="/style/images/avtar.png">
 
-                        <div>
-                            <label id="adminEmail"></label>
-                        </div>
+                        <!--<div>-->
+                        <!--<label id="adminName" style="alignment: center"></label>-->
+                        <!--</div>-->
+
+                        <!--<div>-->
+                        <!--<label id="adminEmail" style="alignment: center"></label>-->
+                        <!--</div>-->
                     </div>
                     <br>
                 </li>
@@ -108,7 +110,7 @@
                     <ul class="nav ">
                         <!--员工管理-->
                         <li>
-                            <a href="/console/user_management">员工管理</a>
+                            <a href="/console/employee_management">员工管理</a>
                         </li>
 
                         <!--访客管理-->
@@ -164,11 +166,9 @@
     <div id="page-wrapper">
         <div id="page-inner">
             <div class="row">
-                <div class="col-md-12">
-                    <h1 class="page-header">
+                    <h1 class="page-header" style="color: #FFFFFF;">
                         轨迹信息
                     </h1>
-                </div>
             </div>
             <!-- /. ROW  -->
 
@@ -183,24 +183,25 @@
                                     <option value="employee">员工</option>
                                     <option value="visitor">访客</option>
                                 </select>
-                                <input type="text" id="personName_show">
+                                <input type="text" id="personName_show" style="width: 5em">
 
-                                <label for="datepicker_start">开始时间</label>
-                                <input type="text" id="datepicker_start">
+                                <label for="datepicker_start" style="padding-left: 1em">开始时间</label>
+                                <input type="text" id="datepicker_start" style="width: 6em" readonly>
 
-                                <label for="datepicker_end">结束时间</label>
-                                <input type="text" id="datepicker_end">
+                                <label for="datepicker_end" style="padding-left: 1em">结束时间</label>
+                                <input type="text" id="datepicker_end" style="width: 6em" readonly>
 
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">搜索</button>
+                                <button class="btn btn-primary searchTrace" data-toggle="modal" style="padding-left: 1em">搜索</button>
                             </div>
 
-                            
-
-                            <canvas id="canvas" width="1200" height="680">
+                            <canvas id="canvas" class="col-sm-12 col-xs-12" width="1200" height="680">
                                 浏览器不支持canvas
                             </canvas>
 
                             <script>
+                                var personId = getUrlParam("id");
+                                var personType = getUrlParam("type");
+
                                 var camera_size = {
                                     width : 20,
                                     height : 20
@@ -429,18 +430,58 @@
                                     return ;
                                 }
 
-                                $.ajaxSettings.async = false;
-                                search(97,"2018-06-01","2018-06-01");
-                                $.ajaxSettings.async = true;
+                                function getUrlParam(name) {
+                                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                                    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                                    if (r != null) return unescape(r[2]); return null; //返回参数值
+                                }
 
-                                var can = document.getElementById('canvas');
-                                var context = can.getContext('2d');
+                                function getPersonNameAndShow(id,type){
+                                    var searchURL;
 
-                                search_trace_gap();
-                                drawCamera(cameraList_all,context,false);
-                                drawTrace(cameraList_enable,context);
-                                drawCamera(cameraList_enable,context, true);
-                                drawMessage(cameraList_enable,context)
+                                    if(type == "employee"){//员工
+                                        searchURL = "/console/employee_management/get/"+id;
+                                    } else {//访客
+                                        $("#dialog-select-person-title").html("选择访客");
+                                        searchURL = "/console/visitor_management/get/"+id;
+                                    }
+
+                                    $.get(searchURL, null, function(r, status) {
+                                        $("#personName_show").val(r.name);
+                                    });
+                                }
+
+                                // $.ajaxSettings.async = false;
+                                // search(97,"2018-06-01","2018-06-01");
+                                // $.ajaxSettings.async = true;
+                                //
+                                // var can = document.getElementById('canvas');
+                                // var context = can.getContext('2d');
+                                //
+                                // search_trace_gap();
+                                // drawCamera(cameraList_all,context,false);
+                                // drawTrace(cameraList_enable,context);
+                                // drawCamera(cameraList_enable,context, true);
+                                // drawMessage(cameraList_enable,context)
+
+                                if(personId != undefined){
+
+                                }
+                                
+                                function start_draw(id, startTime, endTime) {
+                                    $.ajaxSettings.async = false;
+                                    search(id,startTime,endTime);
+                                    $.ajaxSettings.async = true;
+
+                                    var can = document.getElementById('canvas');
+                                    var context = can.getContext('2d');
+
+                                    search_trace_gap();
+                                    drawCamera(cameraList_all,context,false);
+                                    drawTrace(cameraList_enable,context);
+                                    drawCamera(cameraList_enable,context, true);
+                                    drawMessage(cameraList_enable,context)
+                                }
                             </script>
                         </div>
                     </div>
@@ -469,7 +510,9 @@
                         <div class="col-sm-22">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <table id="personList" class="table table-striped table-bordered table-hover table-condensed">
+                                    <div class="table-responsive" style="height: 48em; overflow:scroll;">
+
+                                        <table id="personList" class="table table-striped table-bordered table-hover table-condensed">
                                         <thead>
                                         <tr>
                                             <th data-field="userid" data-formatter="_formatte_person_id" data-align="center"></th>
@@ -481,6 +524,8 @@
                                         </tr>
                                         </thead>
                                     </table>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -488,8 +533,8 @@
 
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary add-new-user">保存</button>
+                            <button type="button" class="btn btn-default savePerson-close" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary savePerson">保存</button>
                         </div>
                     </div>
                 </form>
@@ -560,52 +605,57 @@
             dateFormat: "yy-mm-dd"
         });
 
-
-         $("#personName_show").focus(function () {
+        $("#personName_show").focus(function () {
              var searchURL;
 
-             if($("#searchType").val() == "employee"){//员工
+            $("#personList").bootstrapTable('destroy');
+
+            if($("#searchType").val() == "employee"){//员工
                  $("#dialog-select-person-title").html("选择员工");
 
                  searchURL = "/console/employee_management/search";
-             } else {//访客
+            } else {//访客
                  $("#dialog-select-person-title").html("选择访客");
                  searchURL = "/console/visitor_management/search";
-             }
+            }
 
-             $('#personList').bootstrapTable({
-                 method: 'get',
-                 url: searchURL,
-                 striped: true,
-                 dataType: "json",
-                 pagination: true,
-                 queryParamsType: "limit",
-                 singleSelect: true,
-                 contentType: "application/x-www-form-urlencoded",
-                 pageSize: 10,
-                 pageNumber: 1,
-                 search: true,
-                 showColumns: true,
-                 showRefresh: true,
-                 sidePagination: "server", //服务端请求
-                 queryParams: function (params) {
-                     return {
-                         limit: params.limit,
-                         offset: params.offset / params.limit,
-                         search: $(".search").find("input").val()
-                     };
-                 },
-                 responseHandler: function (res) {
-                     return {
-                         "rows": res.rows,
-                         "total": res.total
-                     };
-                 }
-             });
+            $('#personList').bootstrapTable({
+                method: 'get',
+                url: searchURL,
+                striped: true,
+                dataType: "json",
+                pagination: true,
+                queryParamsType: "limit",
+                singleSelect: true,
+                contentType: "application/x-www-form-urlencoded",
+                pageSize: 10,
+                pageNumber: 1,
+                search: true,
+                showColumns: true,
+                showRefresh: true,
+                sidePagination: "server", //服务端请求
 
-             $("#dialog-select-person").modal("show");
+                queryParams: function (params) {
+                    return {
+                        limit: params.limit,
+                        offset: params.offset / params.limit,
+                        search: $(".search").find("input").val()
+                    };
+                },
+                responseHandler: function (res) {
+                    return {
+                        "rows": res.rows,
+                        "total": res.total
+                    };
+                }
+            });
 
-             //$("#dialog-select-person").find("[input id= ]")
+            $("#dialog-select-person").modal("show");
+
+            $('#personList').bootstrapTable('refresh');
+
+
+            //$("#dialog-select-person").find("[input id= ]")
          })
 
         $.ajax({
@@ -637,34 +687,30 @@
         });
 
     })
-    $(".btn.btn-primary.add-new-user").click(function () {
+
+    $(".btn.btn-primary.savePerson").click(function () {
         window.personID = $("#personList").find("input[type='radio']:checked").val();
 
         var searchURL;
 
-        if($("#searchType").val() == "employee"){//员工
-            searchURL = "/console/employee_management/get/"+window.personID;
-        } else {//访客
-            $("#dialog-select-person-title").html("选择访客");
-            searchURL = "/console/visitor_management/get/"+window.personID;
-        }
+        getPersonNameAndShow(window.personID,$("#searchType").val())
 
-        $.get(searchURL, null, function(r, status) {
-            $("#personName_show").val(r.name);
-        });
-
-        $(".btn.btn-default.add-new-user-close").click();
+        $(".btn.btn-default.savePerson-close").click();
 
     })
 
-    function _formatte_locale_image(value, row, index) {
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
-        return s;
-    }
+    $(".searchTrace").click(function () {
+        var id = $("input[name='id']:checked").val();
+        var startTime = $("#datepicker_start").val();
+        var endTime = $("#datepicker_end").val();
+
+        start_draw(id,startTime,endTime);
+    })
 
     function _formatte_person_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
     }
+
 </script>
 
 </body>

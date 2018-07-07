@@ -117,13 +117,15 @@
                 <li>
                     <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
 
-                        <div>
-                            <label id="adminName"></label>
-                        </div>
+                        <img src="/style/images/avtar.png">
 
-                        <div>
-                            <label id="adminEmail"></label>
-                        </div>
+                        <!--<div>-->
+                        <!--<label id="adminName" style="alignment: center"></label>-->
+                        <!--</div>-->
+
+                        <!--<div>-->
+                        <!--<label id="adminEmail" style="alignment: center"></label>-->
+                        <!--</div>-->
                     </div>
                     <br></br>
                 </li>
@@ -155,7 +157,7 @@
                     <ul class="nav ">
                         <!--员工管理-->
                         <li>
-                            <a href="/console/user_management">员工管理</a>
+                            <a href="/console/employee_management">员工管理</a>
                         </li>
 
                         <!--访客管理-->
@@ -212,7 +214,7 @@
         <div id="page-inner">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="page-header">
+                    <h1 class="page-header" style="color: #FFFFFF;">
                         服务器配置
                     </h1>
                 </div>
@@ -231,49 +233,56 @@
                                     <input type="text" style="display:none;" id="version" name="version" />
 
                                     <div class="form-group">
-                                        <label for="imageDBName" class="col-sm-3 control-label">图像服务器名称</label>
+                                        <label for="imageDBName" class="col-sm-3 control-label">图片库名称</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="imageDBName" name="imageDBName" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="userquality" class="col-sm-3 control-label">用户图像质量分值</label>
+                                        <label for="userquality" class="col-sm-3 control-label">用户照片质量分值下限（0-100）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="userquality" name="userquality" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="visitorquality" class="col-sm-3 control-label">访客图像质量分值</label>
+                                        <label for="visitorquality" class="col-sm-3 control-label">陌生人照片质量分值下限（0-100）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="visitorquality" name="visitorquality" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="similarscore" class="col-sm-3 control-label">相似度分值</label>
+                                        <label for="similarscore" class="col-sm-3 control-label">人脸比对相似度分值下限（0-100）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="similarscore" name="similarscore" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="time1" class="col-sm-3 control-label">时间间隔</label>
+                                        <label for="warningscore" class="col-sm-3 control-label">目标告警阈值（0-100）</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="warningscore" name="warningscore" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="time1" class="col-sm-3 control-label">门禁开门时间间隔（秒）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="time1" name="time1" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="time2" class="col-sm-3 control-label">同一用户检测时间间隔</label>
+                                        <label for="time2" class="col-sm-3 control-label">同一用户检测时间间隔（秒）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="time2" name="time2" maxlength="30" required="required" />
                                         </div>
                                         <div class="col-sm-4"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="time3" class="col-sm-3 control-label">Popup disappearance time</label>
+                                        <label for="time3" class="col-sm-3 control-label">识别弹出框显示时间（秒）</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="time3" name="time3" maxlength="30" required="required" />
                                         </div>
@@ -282,7 +291,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="receiveURL" class="col-sm-3 control-label">接收地址</label>
+                                        <label for="receiveURL" class="col-sm-3 control-label">识别结果接收地址</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="receiveURL" name="receiveURL" maxlength="30" required="required" />
                                         </div>
@@ -290,16 +299,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="warningscore" class="col-sm-3 control-label">警告分值</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="warningscore" name="warningscore" maxlength="30" required="required" />
-                                        </div>
-                                        <div class="col-sm-4"></div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="serverIPandPort" class="col-sm-3 control-label">服务器IP端口</label>
+                                        <label for="serverIPandPort" class="col-sm-3 control-label">API服务器地址</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="serverIPandPort" name="serverIPandPort" maxlength="30" required="required" />
                                         </div>
@@ -319,18 +319,6 @@
                 </div><!--/.col-->
             </div>
             <!-- /. ROW  -->
-
-            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
-                        </div>
-                        <div class="modal-body"></div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
         </div>
     </div>
     <!-- /. PAGE INNER  -->
@@ -348,6 +336,22 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
@@ -431,34 +435,65 @@
                         break
                 }
             },
+
             error: function (r) {
                 $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
                 $("#dialog-user-management-update").modal("show");
             }
         });
 
-        if(flag) {
-            var data = $(".form-horizontal.form-profile-save").serializeArray();
-            $.post("/console/faceconfig_management/save", data, function (r, status) {
-                if (r.status == "SUCCEED") {
-                    $(".bs-example-modal-sm").find(".modal-body").html("Modified successfully.");
-                    $(".bs-example-modal-sm").modal("show");
-                    $('.bs-example-modal-sm').on('hidden.bs.modal', function (e) {
-                        location.reload();
-                    });
-                } else {
-                    if (r.message.username) {
-                        _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
-                    }
 
-                    if (r.message.WARNING) {
-                        $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-                        $(".bs-example-modal-sm").modal("show");
-                    }
-                }
-            });
+        flag = true;//test after checked the iPandPort
+
+
+        if(flag) {
+            $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
+
         }
     });
+
+    $(".btn-task-delete-confirm").click(function () {
+        var data = $(".form-horizontal.form-profile-save").serializeArray();
+        $.post("/console/faceconfig_management/save", data, function (r, status) {
+            switch (r.status){
+                case "SUCCEED" :
+                    $("#dialog-return").find(".modal-body").html("保存修改成功");
+                    $("#dialog-return").modal("show");
+
+                    break;
+                case "FAILED" :
+                    var message = "保存修改失败";
+
+
+                    if(r.message != undefined){
+                        message = message + "\n原因："+r.message;
+                    }
+
+                    $("#dialog-return").find(".modal-body").html(message);
+                    $("#dialog-return").modal("show");
+
+                    break
+            }
+
+            if (r.status == "SUCCEED") {
+
+                $('#dialog-return').on('hidden.bs.modal', function (e) {
+                    location.reload();
+                });
+            } else {
+                if (r.message.username) {
+                    _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
+                }
+
+                if (r.message.WARNING) {
+                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                    $(".bs-example-modal-sm").modal("show");
+                }
+            }
+        });
+    })
 </script>
 
 </body>

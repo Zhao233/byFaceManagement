@@ -111,24 +111,10 @@ public class ConsoleController {
     }
 
     @RequestMapping("/contacts_management")
-    public ModelAndView tocontacts() {
+    public ModelAndView toContacts() {
         return new ModelAndView("console/contacts_management");
     }
 
-    @RequestMapping("/test_trace")
-    public ModelAndView toA() {
-        return new ModelAndView("console/test_trace");
-    }
-
-    @RequestMapping("/test_trace_1")
-    public ModelAndView toTest_trace_1() {
-        return new ModelAndView("console/test_trace_1");
-    }
-
-    @RequestMapping("/test_trace_2")
-    public ModelAndView toTest_trace_2() {
-        return new ModelAndView("console/test_trace_2");
-    }
 
     /**
      * CUSTOMER

@@ -3,7 +3,10 @@
 ------------------------------------------------*/
 body {
     font-family: 'Open Sans', sans-serif;
-    background: #32C2CD url(../images/bg-img.jpg) !important;
+    background-image: url(images/background.png) !important;
+    background-repeat:no-repeat;
+    background-position: 0em 25em;
+    background-color: #14467E;
 
 }
 
@@ -13,16 +16,15 @@ body {
 
 #page-wrapper {
     padding: 15px 15px;
-    min-height: 600px;
-    background: #E6E6E6;
+    background: transparent;
 }
 
 #page-inner {
     width: 100%;
     margin: 10px 20px 10px 0px;
-    background-color: transparent;
+    background: transparent; !important;
     padding: 10px;
-    min-height: 1200px;
+    /*min-height: 1200px;*/
 }
 
 .text-center {
@@ -76,8 +78,9 @@ p {
     border-radius: 0px;
 }
 
+/*背景*/
 .navbar-side .nav > li > a > i {
-    color: #FFFFFF;
+    color: #f5fff8;
     padding: 8px;
     width: 30px;
     text-align: center;
@@ -154,7 +157,7 @@ p {
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    background-color: #24C2CE;
+    background-color: #ffff;
     border-radius: 10px;
 }
 
@@ -530,7 +533,7 @@ footer p {
 }
 
 .active-menu {
-    background-color: #18A0A9 !important;
+    background-color: #275ab2 !important;
     color: #fff !important;
 }
 
@@ -598,13 +601,13 @@ ul.nav.nav-second-level.collapse.in {
 
 .navbar-side {
     border: none;
-    background: #32C2CD url(../images/bg-img.jpg) !important;
+    background: #14467E !important;
 }
 
 .top-navbar {
     background: #4A4A4A;
     border-bottom: none;
-}
+}d
 
 .top-navbar .nav > li > a > i {
     margin-right: 2px;
@@ -695,7 +698,7 @@ ul.dropdown-menu.dropdown-messages li a div {
         margin: 0 0 0 260px;
         padding: 15px 30px;
 
-        min-height: 1200px;
+        /*min-height: 1200px;*/
 
     }
 

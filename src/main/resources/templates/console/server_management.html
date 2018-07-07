@@ -21,9 +21,24 @@
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
-    <!-- it's about file upload box -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+    <script src="/javascript/jquery-ui.js"></script>
+
+    <script src="/javascript/bootstrap.min.js"></script>
+
+    <script src="/assets/js/jquery.backstretch.min.js"></script>
+
+    <!-- Metis Menu Js -->
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="/javascript/jquery.dataTables.js"></script>
+    <script src="/javascript/dataTables.bootstrap.js"></script>
+
+    <script src="/javascript/custom-scripts.js"></script>
+
+    <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+    <script src="/javascript/bootstrap-table.min.js"></script>
 
     <style>
         .center-vertical {
@@ -63,13 +78,15 @@
                 <li>
                     <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
 
-                        <div>
-                            <label id="adminName"></label>
-                        </div>
+                        <img src="/style/images/avtar.png">
 
-                        <div>
-                            <label id="adminEmail"></label>
-                        </div>
+                        <!--<div>-->
+                        <!--<label id="adminName" style="alignment: center"></label>-->
+                        <!--</div>-->
+
+                        <!--<div>-->
+                        <!--<label id="adminEmail" style="alignment: center"></label>-->
+                        <!--</div>-->
                     </div>
                     <br>
                 </li>
@@ -101,7 +118,7 @@
                     <ul class="nav ">
                         <!--员工管理-->
                         <li>
-                            <a href="/console/user_management">员工管理</a>
+                            <a href="/console/employee_management">员工管理</a>
                         </li>
 
                         <!--访客管理-->
@@ -157,7 +174,7 @@
         <div id="page-inner">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="page-header">
+                    <h1 class="page-header" style="color: #FFFFFF;">
                         服务器管理
                     </h1>
                 </div>
@@ -169,7 +186,7 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="height: 48em; overflow:scroll;">
 
                                 <table id="_table_user_search" class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -182,13 +199,13 @@
                                     </tr>
                                     </thead>
                                 </table>
-
-                                <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增
-                                </button>
-                                <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改
-                                </button>
-                                <button class="btn btn-danger delete-employee-dialog">删除</button>
                             </div>
+
+                            <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增
+                            </button>
+                            <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改
+                            </button>
+                            <button class="btn btn-danger delete-employee-dialog">删除</button>
 
                         </div>
                     </div>
@@ -279,22 +296,6 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script src="/assets/js/jquery-1.11.1.min.js"></script>
-<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="/assets/js/jquery.backstretch.min.js"></script>
-<script src="/assets/js/scripts.js"></script>
-
-<!-- jQuery Js -->
-<!-- <script src="javascript/jquery-1.10.2.js"></script>
-<!-- Bootstrap Js -->
-<script src="/javascript/bootstrap.min.js"></script>
-<!-- Metis Menu Js -->
-<script src="/javascript/jquery.metisMenu.js"></script>
-
-<!-- DATA TABLE SCRIPTS -->
-<script src="/javascript/jquery.dataTables.js"></script>
-<script src="/javascript/dataTables.bootstrap.js"></script>
-
 <!-- Custom Js -->
 <script>
     $(document).ready(function() {
@@ -315,6 +316,12 @@
             showColumns: true,
             showRefresh: true,
             sidePagination: "server", //服务端请求
+            showHeader : true,
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
             queryParams: function(params) {
                 return {
                     limit: params.limit,
@@ -360,11 +367,6 @@
     });
 </script>
 <!-- Custom Js -->
-
-<script src="/javascript/custom-scripts.js"></script>
-
-<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-<script src="/javascript/bootstrap-table.min.js"></script>
 
 <script>
     !function ($) {
@@ -596,12 +598,12 @@
         if (id != undefined) {
             // 读取Project选中的用户信息
             $.get("/console/server_management/get/" + id, null, function(r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除：  " + r.serverName + "?");
+                $(".bs-example-modal-sm").find(".modal-body").html("是否删除服务器：  " + r.serverName + "?");
                 $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("You did not select the user.");
+            $("#dialog-return").find(".modal-body").html("请选择服务器");
             $("#dialog-return").modal("show");
         }
 

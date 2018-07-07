@@ -20,20 +20,16 @@ public class ServerInfoController {
 
     @RequestMapping("/getStatus")
     private Map<String, Object> getStatus(@RequestParam("serverId") int id){
-        JSONObject object = new JSONObject();
         Map<String, Object> map = new HashMap<>();
 
         String info = serverService.getServerById(id);
         JSONObject object_info = JSONObject.fromObject(info);
 
-        object.put("serverName",object_info.getString("serverName"));
-
-        String status  = serverService.getServerInfoById(id);
+        String status  = serverService.getServerInfoById(id,object_info.getString("serverIP"));
         JSONArray array = JSONArray.fromObject(status);
 
-        object.put("status", array);
-
-        map.put("serverStatus",object);
+        map.put("serverInfo",object_info);
+        map.put("status",array);
 
         return map;
     }
