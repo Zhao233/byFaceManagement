@@ -48,6 +48,9 @@ public class CameraManagementController {
 
         String result = cameraService.searchCamera(search,String.valueOf(offset),String.valueOf(limit));
 
+        System.out.println("search camera succeed : "+result);
+
+
         try {
             JSONObject object = JSONObject.fromObject(result);
             r.put("total", object.getInt("total"));
@@ -105,6 +108,7 @@ public class CameraManagementController {
 
         String result = cameraService.get(id);
 
+        System.out.println("get camera succeed : "+result);
 
         if(JSONHandler.isSuccess(result)){
             JSONObject object = JSONObject.fromObject(result);

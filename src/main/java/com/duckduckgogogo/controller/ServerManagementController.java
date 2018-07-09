@@ -32,7 +32,8 @@ public class ServerManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = serverService.searchServers(search, String.valueOf(offset), String.valueOf(limit));
-        System.out.println(response);
+
+        System.out.println("search server succeed : "+response);
 
         JSONObject object = JSONObject.fromObject(response);
 
@@ -110,7 +111,9 @@ public class ServerManagementController {
         Map<String,Object> map = new HashMap<>();
 
         String response = serverService.getServerById(id);
-        System.out.println(response);
+
+        System.out.println("get server succeed : "+response);
+
 
         try {
             if(JSONHandler.isSuccess(response)) {

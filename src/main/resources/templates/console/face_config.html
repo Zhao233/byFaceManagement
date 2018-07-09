@@ -215,7 +215,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header" style="color: #FFFFFF;">
-                        服务器配置
+                        参数设置
                     </h1>
                 </div>
             </div>
@@ -404,96 +404,218 @@
 
     //点击修改
     $(".btn.btn-primary.form-profile-save").click(function() {
-        _reset_input($(".form-horizontal.form-profile-save").find("input"));
-
         var flag = false;
 
         var ipAndPort = $("#serverIPandPort").val();
 
-        $.ajax({
-            url: ipAndPort+"/console/faceconfig_management/search",
-            type: "post",
-            data: {
-                ipAndPort : ipAndPort
-            },
-            success: function (r) {
-                switch (r.status) {
-                    case "SUCCEED" :
-                        flag = true;
+        var isComplete = true;
+        var isFormatted = true;
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
-                        // $("#dialog-user-management-update").modal("show");
-                        //
-                        // $(".panel.panel-default").find("button[name='refresh']").click();
+        //check input
+        if($("input[id='personNumber']").val() == ""){
+            _set($("input[id='personNumber']"), "请输入图片库名称");
+            isComplete = false;
+        }
+        if($("input[id='userquality']").val() == ""){
+            _set($("input[id='userquality']"), "请输入用户照片质量分值下限");
+            isComplete = false;
+        }
+        if($("input[id='visitorquality']").val() == ""){
+            _set($("input[id='visitorquality']"), "请输入陌生人照片质量分值下限");
+            isComplete = false;
+        }
+        if($("input[id='similarscore']").val() ==""){
+            _set($("input[id='similarscore']"), "人脸比对相似度分值下限");
+            isComplete = false;
+        }
+        if($("input[id='warningscore']").val() ==""){
+            _set($("input[id='warningscore']"), "请输入目标告警阈值");
+            isComplete = false;
+        }
+        if($("input[id='time1']").val() ==""){
+            _set($("input[id='time1']"), "请输入门禁开门时间间隔");
+            isComplete = false;
+        }
+        if($("input[id='time2']").val() ==""){
+            _set($("input[id='time2']"), "请输入同一用户检测时间间隔");
+            isComplete = false;
+        }
+        if($("input[id='time3']").val() ==""){
+            _set($("input[id='time3']"), "请输入识别弹出框显示时间");
+            isComplete = false;
+        }
+        if($("input[id='receiveURL']").val() ==""){
+            _set($("input[id='receiveURL']"), "请输入识别结果接收地址");
+            isComplete = false;
+        }
+        if($("input[id='serverIPandPort']").val() ==""){
+            _set($("input[id='serverIPandPort']"), "请输入API服务器地址");
+            isComplete = false;
+        }
 
-                        break
+        if(isComplete) {
+            _reset_input($(".form-horizontal.form-profile-save").find(".form-group").find("input"));
 
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
-                        $("#dialog-user-management-update").modal("show");
+            //check input format
+            if (!isName( $("input[id='imageDBName']").val() ) ) {
+                isFormatted = false;
 
-                        break
-                }
-            },
-
-            error: function (r) {
-                $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
-                $("#dialog-user-management-update").modal("show");
+                _set($("input[id='imageDBName']"), "请输入包括中文,英文,数字或-的名称");
             }
-        });
+
+            if (!isNumberBetween($("input[id='userquality']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='userquality']"), "请输入0到100的数字");
+            }
+
+            if (!isNumberBetween($("input[id='visitorquality']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='visitorquality']"), "请输入0到100的数字");
+            }
+
+            if (!isNumberBetween($("input[id='warningscore']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='warningscore']"), "请输入0到100的数字");
+            }
+
+            if (!isNumberBetween($("input[id='time1']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='time1']"), "请输入0到100的数字");
+            }
+
+            if (!isNumberBetween($("input[id='time2']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='time2']"), "请输入0到100的数字");
+            }
+
+            if (!isNumberBetween($("input[id='time3']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='time3']"), "请输入0到100的数字");
+            }
+
+            if (!isUrl($("input[id='receiveURL']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='receiveURL']"), "请输入合法URL");
+            }
+
+            if (!isIPAddandPort($("input[id='serverIPandPort']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='serverIPandPort']"), "请输入0到100的数字");
+            }
+
+            // $.ajax({
+            //     url: ipAndPort+"/console/faceconfig_management/search",
+            //     type: "post",
+            //     data: {
+            //         ipAndPort : ipAndPort
+            //     },
+            //     success: function (r) {
+            //         switch (r.status) {
+            //             case "SUCCEED" :
+            //                 flag = true;
+            //
+            //                 // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
+            //                 // $("#dialog-user-management-update").modal("show");
+            //                 //
+            //                 // $(".panel.panel-default").find("button[name='refresh']").click();
+            //
+            //                 break
+            //
+            //             case "FAILED" :
+            //                 $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
+            //                 $("#dialog-user-management-update").modal("show");
+            //
+            //                 break
+            //         }
+            //     },
+            //
+            //     error: function (r) {
+            //         $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
+            //         $("#dialog-user-management-update").modal("show");
+            //     }
+            // });
+
+            flag = true;//test after checked the iPandPort
 
 
-        flag = true;//test after checked the iPandPort
+            if (flag && isComplete && isFormatted) {
+                $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
+                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+                $(".bs-example-modal-sm").modal("show");
 
-
-        if(flag) {
-            $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
-            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-            $(".bs-example-modal-sm").modal("show");
-
+            }
         }
     });
 
     $(".btn-task-delete-confirm").click(function () {
+
         var data = $(".form-horizontal.form-profile-save").serializeArray();
         $.post("/console/faceconfig_management/save", data, function (r, status) {
-            switch (r.status){
-                case "SUCCEED" :
-                    $("#dialog-return").find(".modal-body").html("保存修改成功");
-                    $("#dialog-return").modal("show");
+                    switch (r.status) {
+                        case "SUCCEED" :
+                            $("#dialog-return").find(".modal-body").html("保存修改成功");
+                            $("#dialog-return").modal("show");
 
-                    break;
-                case "FAILED" :
-                    var message = "保存修改失败";
+                            break;
+                        case "FAILED" :
+                            var message = "保存修改失败";
 
 
-                    if(r.message != undefined){
-                        message = message + "\n原因："+r.message;
+                            if (r.message != undefined) {
+                                message = message + "\n原因：" + r.message;
+                            }
+
+                            $("#dialog-return").find(".modal-body").html(message);
+                            $("#dialog-return").modal("show");
+
+                            break
                     }
 
-                    $("#dialog-return").find(".modal-body").html(message);
-                    $("#dialog-return").modal("show");
+                    if (r.status == "SUCCEED") {
 
-                    break
-            }
+                        $('#dialog-return').on('hidden.bs.modal', function (e) {
+                            location.reload();
+                        });
+                    } else {
+                        if (r.message.username) {
+                            _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
+                        }
 
-            if (r.status == "SUCCEED") {
-
-                $('#dialog-return').on('hidden.bs.modal', function (e) {
-                    location.reload();
+                        if (r.message.WARNING) {
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
+                        }
+                    }
                 });
-            } else {
-                if (r.message.username) {
-                    _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
-                }
 
-                if (r.message.WARNING) {
-                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-                    $(".bs-example-modal-sm").modal("show");
-                }
-            }
-        });
-    })
+
+    });
+
+    function isName(val){//包括中文和英文数字-
+        var reg = /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_-]){1,20}$/;
+
+        return reg.test(val);
+    }
+    function isNumberBetween(val) {
+        var reg = /^100$|^(\d|[1-9]\d)$/;
+
+        return reg.test(val);
+    }
+    function isIPAddandPort(val) {
+
+        return true;
+    }
+    function isUrl(val){
+        return true;
+    }
 </script>
 
 </body>

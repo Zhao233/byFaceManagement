@@ -40,7 +40,8 @@ public class VisitorManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = visitorService.searchVisitor(search, offset, limit,"visitor");
-        System.out.println(response);
+
+        System.out.println("search visitor succeed : "+response);
 
         JSONObject object = JSONObject.fromObject(response);
 
@@ -176,7 +177,8 @@ public class VisitorManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = visitorService.getVisitorById(personID);
-        System.out.println(response);
+
+        System.out.println("get visitor succeed : "+response);
 
         if(JSONHandler.isSuccess(response)){
             JSONObject object = JSONObject.fromObject(response);

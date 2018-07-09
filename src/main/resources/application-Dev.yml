@@ -6,11 +6,15 @@ server:
   session:
     timeout: 9000 # 30'
 
+server.tomcat.basedir: /data/apps/temp
+
 spring:
   http:
     multipart:
       max-file-size: 100MB
       max-request-size: 1000MB
+
+
   #
   thymeleaf:
     prefix: classpath:/templates/
@@ -54,3 +58,4 @@ logging:
       springframework: WARN
       hibernate: DEBUG
     com.duckduckgogogo: DEBUG # 应用日志级别为DEBUG
+

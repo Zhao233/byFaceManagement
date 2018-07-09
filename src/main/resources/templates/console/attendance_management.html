@@ -43,7 +43,6 @@
     <script src="/javascript/tableExport.js"></script>
     <script src="/javascript/bootstrap-table-export.js"></script>
 
-
     <style>
         .search{
             height: 2em;
@@ -187,7 +186,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header"style="color: #FFFFFF;">
-                        考勤管理
+                        考勤信息
                     </h1>
                 </div>
             </div>
@@ -205,13 +204,13 @@
                                 <label  for="datepicker_end">结束时间</label>
                                 <input  type="text" id="datepicker_end">
                                 <button class="btn btn-primary searchData">Search</button>
-                                <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$('#_table_user_search').tableExport({ type: 'excel', escape: 'false' })">数据导出</button>
+                                <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" >数据导出</button>
                             </div>
                         </div>
 
                         <!--<button class="btn btn-primary searchData">Search</button>-->
 
-                        <div class="table-responsive" style="height: 35em; overflow:scroll;">
+                        <div class="table-responsive" style="height: 45em; overflow:scroll;">
 
                             <table id="_table_user_search" class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -335,6 +334,13 @@
             }
         });
     });
+
+    $("#btn_download").click(function () {
+
+
+        $('#_table_user_search').tableExport({ type: 'excel', escape: 'false' ,fileName: '用户列表',worksheetName: 'sheet1',tableName: '用户列表',
+            onMsoNumberFormat: doOnMsoNumberFormat,onCellHtmlData: DoOnCellHtmlData
+    })
 </script>
 
 <script type="text/javascript">
@@ -349,9 +355,11 @@
         console.log('start date: ' + date_month_end);
         $("#datepicker_start").val(date_month_start);
         $("#datepicker_end").val(date_month_end);
+
         window.limit;
         window.offset;
         window.search;
+
         $('#_table_user_search').bootstrapTable({
             method: 'get',
             url: "/console/attendance_management/search",
@@ -367,18 +375,29 @@
             showColumns: true,
             showRefresh: true,
             sidePagination: "server", //服务端请求
+
             showExport: true,                     //是否显示导出
             exportDataType: "all",              //basic', 'all', 'selected'.
+
             showHeader : true,
             //sidePagination : 'server',//服务器端分页
             pageNumber : 1,
             pageList: [5, 10, 20, 50],//分页步进值
             search: true,//显示搜索框
             clickToSelect: false,
+            exportOptions:{
+                fileName: '用户列表',  //文件名称设置
+                worksheetName: 'sheet1',  //表格工作区名称
+                tableName: '用户列表',
+                onMsoNumberFormat: doOnMsoNumberFormat,//大概是处理数字的方法
+                onCellHtmlData: DoOnCellHtmlData,//这个属性方法可以重新修改每一个单元格的值
+            },
+
             queryParams: function(params) {
                 window.limit = params.limit;
                 window.offset = params.offset / params.limit;
                 window.search = $(".search").find("input").val();
+
                 return {
                     limit: params.limit,
                     offset: params.offset / params.limit,
@@ -395,6 +414,7 @@
                 };
             }
         });
+
         //初始化日历
         $( "#datepicker_start" ).datepicker({
             dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
@@ -409,7 +429,7 @@
             yearSuffix : "年",
             /* 格式化中文日期
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-mm-dd"
+            dateFormat : "yy-m-d"
         });
         $( "#datepicker_end" ).datepicker({
             dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
@@ -424,7 +444,7 @@
             yearSuffix : "年",
             /* 格式化中文日期
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-mm-dd"
+            dateFormat : "yy-m-d"
         });
 
         $.ajax({
@@ -465,6 +485,33 @@
         }
         var new_date = new Date(new_year,new_month,1);                //取当年当月中的第一天
         return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期
+    }
+
+    function doOnMsoNumberFormat(cell, row, col){
+        var result = "";
+        if (row > 0 && col == 0){
+            result = "\\@";
+        }
+        return result;
+    }
+
+    //处理导出内容,这个方法可以自定义某一行、某一列、甚至某个单元格的内容,也就是将其值设置为自己想要的内容
+    function DoOnCellHtmlData(cell, row, col, data){
+        if(row == 0){
+            return data;
+        }
+
+        //由于备注列超过6个字的话,通过span标签处理只显示前面6个字,如果直接导出的话会导致内容不完整,因此要将携带完整内容的span标签中title属性的值替换
+        if(col == 4 || col ==11 || col == 7){
+            var spanObj = $(data);//将带 <span title="val"></span> 标签的字符串转换为jQuery对象
+            var title = spanObj.attr("title");//读取<span title="val"></span>中title属性的值
+            //var span = cell[0].firstElementChild;//读取cell数组中的第一个值下的第一个元素
+            if(typeof(title) != 'undefined'){
+                return title;
+            }
+        }
+
+        return data;
     }
 </script>
 

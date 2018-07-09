@@ -197,7 +197,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header" style="color: #FFFFFF;">
-                        摄像头信息
+                        轨迹统计图表
                     </h1>
                 </div>
             </div>
@@ -211,29 +211,27 @@
                         <div class="panel-body">
                             <div  class="panel-heading">
                                 <h3>
-                                    <lable id="panel-head">日期：</lable>
-                                    <input type="text" id="datepicker">
+                                    <lable for="cameraName">摄像头名称：</lable>
+                                    <input type="text" id="cameraName">
+
+                                    <lable for="datepicker" >日期：</lable>
+                                    <input type="text" id="datepicker" readonly>
 
                                     <button class="btn btn-primary searchData">查找</button>
                                 </h3>
 
                             </div>
-                            <div class="panel-body">
                                 <div class="canvas-wrapper">
-                                    <div class="form-group">
-                                    <canvas class="main-chart col-sm-12 col-md-12 col-xs-12" id="line-chart" style="display: inline-table;"></canvas>
-                                </div>
-
-                                <br>
-
-                                <div>
-                                    <h3>
-                                        详情：
-                                    </h3>
-
+                                    <div class="row">
+                                        <canvas class="col-sm-12 col-xs-12" id="line-chart" height="80em"></canvas>
+                                    </div>
                                     <br>
 
                                     <div class="row">
+                                        <h3>
+                                            详情：
+                                        </h3>
+
                                         <div class="col-md-2 col-sm-0"></div>
                                         <div class="col-md-8 col-sm-12" id="personInfo"></div>
                                         <div class="col-md-2 col-sm-0"></div>
@@ -241,8 +239,6 @@
                                 </div>
 
                                 </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -281,8 +277,7 @@
                                                 <th data-field="taskId" data-sortable="true" class="W30" style="border:none;" align="center">任务ID</th>
                                                 <th data-field="server.serverName" data-sortable="true" class="W100" style="border:none;" align="center">服务器名称</th>
                                                 <th data-field="entranceGuardNO" data-sortable="true" class="W100" style="border:none;" align="center">门禁编号</th>
-                                                <th data-field="entranceGuard" data-sortable="true" class="W100" style="border:none;" align="center">是否门禁摄像头</th>
-                                                <th data-field="enabled" data-sortable="true" class="W100" style="border:none;" align="center">是否启用</th>
+                                                <th data-field="entranceGuard" data-sortable="true" class="W100" data-formatter="_formatted_select" style="border:none;" align="center">是否门禁摄像头</th>
                                             </tr>
                                             </thead>
                                         </table>
@@ -365,51 +360,50 @@
             dateFormat : "yy-mm-dd"
         });
 
+        $('#cameraList').bootstrapTable({
+            method: 'get',
+            url: "/console/camera_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+
+            showHeader : true,
+            //sidePagination : 'server',//服务器端分页
+            pageNumber : 1,
+            pageList: [5, 10, 20, 50],//分页步进值
+            search: true,//显示搜索框
+            clickToSelect: false,
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function(res) {
+                console.log(res);
+
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+
+        });
+
         var name="";
 
         if(id==undefined){
             ischoosedCamera = false;
-
-            $('#cameraList').bootstrapTable({
-                method: 'get',
-                url: "/console/camera_management/search",
-                striped: true,
-                dataType: "json",
-                pagination: true,
-                queryParamsType: "limit",
-                singleSelect: true,
-                contentType: "application/x-www-form-urlencoded",
-                pageSize: 10,
-                pageNumber:1,
-                search: true,
-                showColumns: true,
-                showRefresh: true,
-                sidePagination: "server", //服务端请求
-
-                showHeader : true,
-                //sidePagination : 'server',//服务器端分页
-                pageNumber : 1,
-                pageList: [5, 10, 20, 50],//分页步进值
-                search: true,//显示搜索框
-                clickToSelect: false,
-                queryParams: function(params) {
-                    return {
-                        limit: params.limit,
-                        offset: params.offset / params.limit,
-                        search: $(".search").find("input").val()
-                    };
-                },
-                responseHandler: function(res) {
-                    console.log(res);
-
-                    return {
-                        "rows": res.rows,
-                        "total": res.total
-                    };
-                }
-
-            });
-
             $("#dialog-user-management-update").modal("show");
         } else {
             ischoosedCamera = true;
@@ -421,6 +415,8 @@
                 "cameraID": id,
                 "date": date
             }
+
+            getCameraNameById(id);
 
             $("#datepicker").val(date);
 
@@ -456,6 +452,36 @@
         }
     });
 
+    function getCameraNameById(id){
+        $.ajax({
+            url: "/console/camera_management/get/" + id,
+            type: "get",
+            processData: false,
+            contentType: false,
+            success: function (r) {
+                switch (r.status) {
+                    case "SUCCEED" :
+                        $("#cameraName").val(r.cameraName);
+
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取摄像头名称失败");
+
+                        $("#dialog-return").modal("show");
+
+                        break
+                }
+            },
+            error: function (r) {
+
+                $("#dialog-return").find(".modal-body").html("网络错误");
+                $("#dialog-return").modal("show");
+            }
+
+        });
+    }
+
     function refreshChartAndTable(data){
         $.ajaxSettings.async = false;
 
@@ -469,9 +495,8 @@
             data_chart.datasets[0].data = chart_data;
 
             //设置标题信息
-            $("#panel-head").empty();
 
-            $("#panel-head").append(r.data.cameraName+": ");
+            $("#cameraName").val(r.data.cameraName+": ");
             $("#datepicker").val(data.date);
 
             $("#personInfo").empty();
@@ -531,12 +556,18 @@
 
     function displayLineChart() {
         var ctx = document.getElementById("line-chart").getContext("2d");
-        var options = {};
+        var options = {
+            response:true
+        };
         var lineChart = new Chart(ctx).Line(data_chart, options);
     }
 
     function _formatte_camera_id(value, row, index) {
         return '<input id="cameraID" name="cameraId" type="radio" value="' + value + '" />';
+    }
+
+    function _formatted_select(value, row, index) {
+        return value='true' ? "是":"否" ;
     }
 
     $(".searchData").click(function () {
@@ -591,6 +622,8 @@
         }
         id = id_;
 
+        getCameraNameById(id_);
+
         $(".add-new-user-close").click();
 
         var data = {
@@ -602,6 +635,10 @@
 
         refreshChartAndTable(data);
 
+    })
+
+    $("#cameraName").focus(function () {
+        $("#dialog-user-management-update").modal("show");
     })
 </script>
 

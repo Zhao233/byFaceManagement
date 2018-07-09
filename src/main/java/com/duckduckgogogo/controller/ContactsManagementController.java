@@ -28,7 +28,7 @@ public class ContactsManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = contactsService.searchContactsInfo(search, offset, limit);
-        System.out.println(response);
+        System.out.println("search contacts succeed : "+response);
 
         JSONObject object = JSONObject.fromObject(response);
 

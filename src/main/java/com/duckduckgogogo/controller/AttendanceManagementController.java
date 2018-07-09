@@ -30,8 +30,7 @@ public class AttendanceManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String result = attendanceService.searchServers(search,offset,limit,startDate,endDate);
-
-        System.out.println(result);
+        System.out.println("search attendance succeed : "+result);
 
         JSONObject object = JSONObject.fromObject(result);
 

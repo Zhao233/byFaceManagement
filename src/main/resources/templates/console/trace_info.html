@@ -167,7 +167,7 @@
         <div id="page-inner">
             <div class="row">
                     <h1 class="page-header" style="color: #FFFFFF;">
-                        轨迹信息
+                        轨迹图
                     </h1>
             </div>
             <!-- /. ROW  -->
@@ -465,6 +465,16 @@
                                 // drawMessage(cameraList_enable,context)
 
                                 if(personId != undefined){
+                                    getPersonNameAndShow(personId,personType);
+
+                                    var date = new Date();
+
+                                    var toDayTime = date.getFullYear()+"-"+( parseInt(date.getMonth())+1 )+"-"+date.getDay();
+
+                                    $("#datepicker_start").val(toDayTime);
+                                    $("#datepicker_end").val(toDayTime);
+
+                                    start_draw(personId,toDayTime, toDayTime);
 
                                 }
                                 
@@ -700,15 +710,53 @@
     })
 
     $(".searchTrace").click(function () {
-        var id = $("input[name='id']:checked").val();
+        var id;
+
+        if(personId != undefined){
+            id = personId;
+        } else {
+            id = $("input[name='id']:checked").val();
+
+            if(id == undefined){
+                if($("#searchType").val() == "employee"){
+                    $("#dialog-return").find(".modal-body").html("请选择员工");
+
+                } else {
+                    $("#dialog-return").find(".modal-body").html("请选择访客");
+                }
+
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
+        }
+
         var startTime = $("#datepicker_start").val();
+        if(startTime == ""){
+            $("#dialog-return").find(".modal-body").html("请选择开始时间");
+            $("#dialog-return").modal("show");
+
+            return ;
+        }
+
         var endTime = $("#datepicker_end").val();
+        if(endTime == ""){
+            $("#dialog-return").find(".modal-body").html("请选择结束时间");
+            $("#dialog-return").modal("show");
+
+            return ;
+        }
 
         start_draw(id,startTime,endTime);
     })
 
     function _formatte_person_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _formatte_locale_image(value, row, index) {
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
+        return s;
     }
 
 </script>

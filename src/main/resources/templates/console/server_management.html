@@ -194,7 +194,7 @@
                                         <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
                                         <th data-field="serverName" data-formatter="_formatte_name">服务器名称</th>
                                         <th data-field="serverIP">IP地址</th>
-                                        <th data-field="mainServer">是否为主服务器</th>
+                                        <th data-field="mainServer" data-formatter="_formatted_select">是否为主服务器</th>
                                         <th     data-field="updateDateString">修改时间</th>
                                     </tr>
                                     </thead>
@@ -219,12 +219,12 @@
 </div>
 
 <!--//弹出框-->
-<div id="dialog-user-management-update" class="modal fade" tabindex="-1" role="dialog">
+<div id="dialog-server-management-update" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">服务器管理  | <span id="dialog-user-management-update-title"></span></h4>
+                <h4 class="modal-title">服务器管理  | <span id="dialog-server-management-update-title"></span></h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal add-new-user" method="POST">
@@ -251,8 +251,8 @@
                         <label for="isMainServer" class="col-sm-4 control-label">是否为主服务器</label>
                         <div class="col-sm-7">
                             <select id="isMainServer" name="isMainServer" class="form-control" required="required">
-                                <option value="True">True</option>
-                                <option value="False">False</option>
+                                <option value="False">否</option>
+                                <option value="True">是</option>
                             </select>
                         </div>
                         <div class="col-sm-1"></div>
@@ -289,8 +289,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -391,6 +391,10 @@
         }
     }
 
+    function _formatted_select(value, row, index) {
+        return value='true' ? "是":"否" ;
+    }
+
     function _reset(from) {
         from[0].reset();
         _reset_input(from.find("input"));
@@ -412,8 +416,8 @@
         var flag_ = window.flag;
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("新增服务器");
-        $("#dialog-user-management-update").modal("show");
+        $("#dialog-server-management-update-title").html("新增服务器");
+        $("#dialog-server-management-update").modal("show");
     });
 
     //update method
@@ -428,15 +432,15 @@
             $.get("/console/server_management/get/" + id, null, function(r, status) {
                 console.log("data: "+r.version);
 
-                $("#dialog-user-management-update").find("input[id='serverName']").val(r.serverName);
-                $("#dialog-user-management-update").find("input[id='serverIP']").val(r.serverIP);
-                $("#dialog-user-management-update").find("select[id='isMainServer']").val(r.isMainServer ? "True" : "False");
+                $("#dialog-server-management-update").find("input[id='serverName']").val(r.serverName);
+                $("#dialog-server-management-update").find("input[id='serverIP']").val(r.serverIP);
+                $("#dialog-server-management-update").find("select[id='isMainServer']").val(r.isMainServer ? "True" : "False");
                 window.version = r.version;
 
                 console.log("version:" + window.version);
 
-                $("#dialog-user-management-update-title").html("修改服务器");
-                $("#dialog-user-management-update").modal("show");
+                $("#dialog-server-management-update-title").html("修改服务器");
+                $("#dialog-server-management-update").modal("show");
             });
         } else {
             $(".bs-example-modal-sm").find(".modal-body").html("请选择服务器");
@@ -446,6 +450,7 @@
 
     $(".btn.btn-primary.add-new-user").click(function() {
         var isComplete = true;
+        var isFormatted = true;
 
         //check input
         if($("input[id='serverName']").val() == ""){
@@ -458,83 +463,100 @@
         }
 
         if(isComplete) {
+            _reset_input( $("#dialog-server-management-update").find(".form-group").find("input") );
 
-            var flag_ = window.flag;
+            if( !isName( $("input[id='serverName']").val() ) ){
+                isFormatted = false;
 
-            _reset_input($(".form-horizontal.add-new-user").find("input"));
-
-            if (window.flag == 'update') {
-                var dataSource = new FormData();
-
-                dataSource.append("id", window.id);
-                dataSource.append("version", window.version);
-
-                console.log('version:' + $("input[id='version']").val());
-                console.log('id: ' + window.id);
-
-                dataSource.append("serverName", $("input[id='serverName']").val());
-                dataSource.append("serverIP", $("input[id='serverIP']").val());
-                dataSource.append("isMainServer", $("#isMainServer").val());
-
-                console.log("isMainServer:" + $("#isMainServer").val())
-            } else {
-                var dataSource = new FormData();
-
-                dataSource.append("serverName", $("input[id='serverName']").val());
-                dataSource.append("serverIP", $("input[id='serverIP']").val());
-                dataSource.append("isMainServer", $("#isMainServer").val());
-
-                console.log(dataSource);
-                console.log('flag:' + flag);
+                _set($("input[id='serverName']"), "请输入包含中文，英文，数字和-的名字");
             }
 
-            $.ajax({
-                url: "/console/server_management/" + window.flag,
-                type: "post",
-                data: dataSource,
-                processData: false,
-                contentType: false,
-                success: function (r) {
-                    switch (r.status) {
-                        case "SUCCEED" :
+            if( !isIPAdd( $("input[id='serverIP']").val() ) ){
+                isFormatted = false;
 
-                            if (flag_ == 'add') {
-                                $("#dialog-return").find(".modal-body").html("新增成功");
-                            } else {
-                                $("#dialog-return").find(".modal-body").html("修改成功");
-                            }
+                _set($("input[id='serverIP']"), "请输入合法IP地址");
+            }
 
-                            $("#dialog-return").modal("show");
+            if (isFormatted) {
 
-                            $(".btn.btn-default.add-new-user-close").click();
-                            $(".panel.panel-default").find("button[name='refresh']").click();
+                var flag_ = window.flag;
 
-                            // $("#dialog-user-management-update").find(".modal-body").html("新增成功");
-                            // $("#dialog-user-management-update").modal("show");
-                            //
-                            // $(".panel.panel-default").find("button[name='refresh']").click();
 
-                            break
+                if (window.flag == 'update') {
+                    var dataSource = new FormData();
 
-                        case "FAILED" :
-                            if (flag_ == 'add') {
-                                $("#dialog-return").find(".modal-body").html("新增失败");
-                            } else {
-                                $("#dialog-return").find(".modal-body").html("修改失败");
-                            }
+                    dataSource.append("id", window.id);
+                    dataSource.append("version", window.version);
 
-                            $("#dialog-return").modal("show");
+                    console.log('version:' + $("input[id='version']").val());
+                    console.log('id: ' + window.id);
 
-                            break
-                    }
-                },
-                error: function (r) {
-                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                    $("#dialog-return").modal("show");
+                    dataSource.append("serverName", $("input[id='serverName']").val());
+                    dataSource.append("serverIP", $("input[id='serverIP']").val());
+                    dataSource.append("isMainServer", $("#isMainServer").val());
+
+                    console.log("isMainServer:" + $("#isMainServer").val())
+                } else {
+                    var dataSource = new FormData();
+
+                    dataSource.append("serverName", $("input[id='serverName']").val());
+                    dataSource.append("serverIP", $("input[id='serverIP']").val());
+                    dataSource.append("isMainServer", $("#isMainServer").val());
+
+                    console.log(dataSource);
+                    console.log('flag:' + flag);
                 }
-            });
 
-            window.flag = '';
+                $.ajax({
+                    url: "/console/server_management/" + window.flag,
+                    type: "post",
+                    data: dataSource,
+                    processData: false,
+                    contentType: false,
+                    success: function (r) {
+                        switch (r.status) {
+                            case "SUCCEED" :
+
+                                if (flag_ == 'add') {
+                                    $("#dialog-return").find(".modal-body").html("新增成功");
+                                } else {
+                                    $("#dialog-return").find(".modal-body").html("修改成功");
+                                }
+
+                                $("#dialog-return").modal("show");
+
+                                $(".btn.btn-default.add-new-user-close").click();
+                                $(".panel.panel-default").find("button[name='refresh']").click();
+
+                                // $("#dialog-server-management-update").find(".modal-body").html("新增成功");
+                                // $("#dialog-server-management-update").modal("show");
+                                //
+                                // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                                break
+
+                            case "FAILED" :
+                                if (flag_ == 'add') {
+                                    $("#dialog-return").find(".modal-body").html("新增失败");
+                                } else {
+                                    $("#dialog-return").find(".modal-body").html("修改失败");
+                                }
+
+                                $(".btn.btn-default.add-new-user-close").click();
+
+                                $("#dialog-return").modal("show");
+
+                                break
+                        }
+                    },
+                    error: function (r) {
+                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").modal("show");
+                    }
+                });
+
+                window.flag = '';
+            }
         }
 
     });
@@ -570,8 +592,8 @@
                         $(".btn.btn-default.add-new-user-close").click();
                         $(".panel.panel-default").find("button[name='refresh']").click();
 
-                        // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-                        // $("#dialog-user-management-update").modal("show");
+                        // $("#dialog-server-management-update").find(".modal-body").html("删除成功");
+                        // $("#dialog-server-management-update").modal("show");
                         //
                         // $(".panel.panel-default").find("button[name='refresh']").click();
                         break
@@ -590,7 +612,20 @@
             }
 
         });
-    })
+    });
+
+    function isName(val){//包括中文和英文数字-
+        var reg = /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_-]){1,20}$/;
+
+        return reg.test(val);
+    }
+
+
+    function isIPAdd(val){
+        var IP = /([0-9]{1,3}\.{1}){3}[0-9]{1,3}/;
+
+        return IP.test(val);
+    }
 
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
 
@@ -639,8 +674,8 @@
         //             $(".panel.panel-default").find("button[name='refresh']").click();
         //
         //
-        //                 // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-        //                 // $("#dialog-user-management-update").modal("show");
+        //                 // $("#dialog-server-management-update").find(".modal-body").html("删除成功");
+        //                 // $("#dialog-server-management-update").modal("show");
         //                 //
         //                 // $(".panel.panel-default").find("button[name='refresh']").click();
         //                 break
@@ -660,56 +695,6 @@
         //
         // });
     })
-
-    // $(".btn.btn-danger.delete-employee-dialog").click(function (){
-    //     console.log('clicked the delete');
-    //
-    //     var id = $("input[type='radio']:checked").val();
-    //
-    //     var list_id = new Array();
-    //
-    //     list_id[0] = (id);
-    //
-    //     console.log(list_id);
-    //
-    //     var form = new FormData();
-    //
-    //     form.append("list_ID", list_id);
-    //
-    //     $.ajax({
-    //         url: "/console/server_management/delete",
-    //         type: "post",
-    //         data: form,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (r) {
-    //             switch (r.status) {
-    //                 case "SUCCEED" :
-    //                     $("#dialog-return").find(".modal-body").html("删除成功");
-    //                     $("#dialog-return").modal("show");
-    //                     $(".btn.btn-default.add-new-user-close").click();
-    //                     $(".panel.panel-default").find("button[name='refresh']").click();
-    //
-    //                     // $("#dialog-user-management-update").find(".modal-body").html("删除成功");
-    //                     // $("#dialog-user-management-update").modal("show");
-    //                     //
-    //                     // $(".panel.panel-default").find("button[name='refresh']").click();
-    //                     break
-    //
-    //                 case "FAILED" :
-    //                     $("#dialog-return").find(".modal-body").html("删除失败");
-    //                     $("#dialog-return").modal("show");
-    //                     break
-    //             }
-    //         },
-    //         error: function (r) {
-    //
-    //             $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-    //             $("#dialog-return").modal("show");
-    //         }
-    //
-    //     });
-    // })
 </script>
 
 

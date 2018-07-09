@@ -39,7 +39,7 @@ public class EmployeeManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = employeeService.searchEmployee(search, offset, limit,"staff");
-        System.out.println(response);
+        System.out.println("search employee succeed : "+response);
 
         JSONObject object = JSONObject.fromObject(response);
 
@@ -179,7 +179,7 @@ public class EmployeeManagementController {
         Map<String, Object> r = new HashMap<>();
 
         String response = employeeService.getEmployeeById(personID);
-        System.out.println(response);
+        System.out.println("get employee succeed : "+response);
 
         if(JSONHandler.isSuccess(response)){
             JSONObject object = JSONObject.fromObject(response);

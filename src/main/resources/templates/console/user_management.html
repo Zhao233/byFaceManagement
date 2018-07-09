@@ -200,7 +200,7 @@
                                         <th data-field="lastName">名</th>
                                         <th data-field="email">邮箱地址</th>
                                         <th data-field="role">级别</th>
-                                        <th data-field="enabled">是否启用</th>
+                                        <th data-field="enabled" data-formatter="_formatted_select">是否启用</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -234,49 +234,49 @@
                     <input type="text" style="display:none;" id="id" name="id" />
                     <input type="text" style="display:none;" id="version" name="version" />
                     <div class="form-group">
-                        <label for="username" class="col-sm-4 control-label">Username</label>
+                        <label for="username" class="col-sm-4 control-label">用户名</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="username" name="username" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="firstName" class="col-sm-4 control-label">First Name</label>
+                        <label for="firstName" class="col-sm-4 control-label">姓</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="firstName" name="firstName" maxlength="30" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="lastName" class="col-sm-4 control-label">Last Name</label>
+                        <label for="lastName" class="col-sm-4 control-label">名</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="lastName" name="lastName" maxlength="30" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-sm-4 control-label">Email</label>
+                        <label for="email" class="col-sm-4 control-label">邮箱地址</label>
                         <div class="col-sm-7">
                             <input type="email" class="form-control" id="email" name="email" data-toggle="tooltip" data-placement="top" maxlength="200" placeholder="e.g john@example.com" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="col-sm-4 control-label">Password</label>
+                        <label for="password" class="col-sm-4 control-label">密码</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="password" name="password" data-toggle="tooltip" maxlength="20" data-placement="bottom" required="required" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="confirmPassword" class="col-sm-4 control-label">Confirm Password</label>
+                        <label for="confirmPassword" class="col-sm-4 control-label">确认密码</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" required="required" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="role" class="col-sm-4 control-label">Role</label>
+                        <label for="role" class="col-sm-4 control-label">级别</label>
                         <div class="col-sm-7">
                             <select id="role" name="role" class="form-control" required="required">
                                 <option value="S">S - Supplier</option>
@@ -288,11 +288,11 @@
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
-                        <label for="enabled" class="col-sm-4 control-label">Enabled</label>
+                        <label for="enabled" class="col-sm-4 control-label" data-formatter="_formatted_select">是否启用</label>
                         <div class="col-sm-7">
                             <select id="enabled" name="enabled" class="form-control" required="required">
-                                <option value="True">True</option>
-                                <option value="False">False</option>
+                                <option value="True">是</option>
+                                <option value="False">否</option>
                             </select>
                         </div>
                         <div class="col-sm-1"></div>
@@ -300,10 +300,36 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                             <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
-                            <button type="button" class="btn btn-primary add-new-user">保存修改</button>
+                            <button type="button" class="btn btn-primary add-new-user">保存</button>
                         </div>
                     </div>
                 </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel0">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -420,6 +446,10 @@
         return '<input name="id" type="radio" value="' + value + '" />';
     }
 
+    function _formatted_select(value, row, index) {
+        return value='true' ? "是":"否" ;
+    }
+
     function _reset(from) {
         from[0].reset();
         _reset_input(from.find("input"));
@@ -438,7 +468,7 @@
 
     $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("Add new user");
+        $("#dialog-user-management-update-title").html("增加用户");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -457,7 +487,7 @@
                 $("#dialog-user-management-update").find("select[id='role']").val(r.role);
                 $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
 
-                $("#dialog-user-management-update-title").html("Update user");
+                $("#dialog-user-management-update-title").html("修改用户");
                 $("#dialog-user-management-update").modal("show");
             });
         } else {
@@ -467,68 +497,250 @@
     });
 
     $(".btn.btn-primary.add-new-user").click(function() {
-        _reset_input($(".form-horizontal.add-new-user").find("input"));
+        var isComplete = true;
+        var isFormatted = true;
 
-        var data = $(".form-horizontal.add-new-user").serializeArray();
-        $.post("/console/user_management/save", data, function(r, status) {
-            switch (r.status) {
-                case "SUCCEED" :
-                    $(".bs-example-modal-sm").find(".modal-body").html(
-                        $("#dialog-user-management-update-title").html() + " succeeded."
-                    );
-                    $(".bs-example-modal-sm").modal("show");
-                    $(".btn.btn-default.add-new-user-close").click();
-                    $(".panel.panel-default").find("button[name='refresh']").click();
+        //check input
+        if($("input[id='username']").val() == ""){
+            _set($("input[id='username']"), "请输入用户名");
+            isComplete = false;
+        }
+        if($("input[id='firstName']").val() == ""){
+            _set($("input[id='firstName']"), "请输入姓");
+            isComplete = false;
+        }
+        if($("input[id='lastName']").val() == ""){
+            _set($("input[id='lastName']"), "请输入名");
+            isComplete = false;
+        }
+        if($("input[id='email']").val() ==""){
+            _set($("input[id='email']"), "请输入邮箱地址");
+            isComplete = false;
+        }
 
+        if($("input[id='password']").val() ==""){
+            _set($("input[id='password']"), "请输入密码");
+            isComplete = false;
+        }
+        if($("input[id='confirmPassword']").val() ==""){
+            _set($("input[id='confirmPassword']"), "请确认密码");
+            isComplete = false;
+        }
 
-                    // $("#dialog-user-management-update").find(".modal-body").html("新增成功");
-                    // $("#dialog-user-management-update").modal("show");
-                    //
-                    // $(".panel.panel-default").find("button[name='refresh']").click();
+        if(isComplete) {
+            _reset_input($("#dialog-user-management-update").find(".form-group").find("input"));
 
-                    break
+            if (!isName($("input[id='username']").val())) {
+                isFormatted = false;
 
-                case "FAILED" :
-                    $("#dialog-user-management-update").find(".modal-body").html("新增失败:"+r.message);
-                    $("#dialog-user-management-update").modal("show");
-
-                    break
+                _set($("input[id='username']"), "请输入包含中文，英文，数字和-的名字");
             }
 
+            if (!isName($("input[id='firstName']").val())) {
+                isFormatted = false;
 
-            // if (r.status == "SUCCEED") {
-            //     $(".bs-example-modal-sm").find(".modal-body").html(
-            //         $("#dialog-user-management-update-title").html() + " succeeded."
-            //     );
-            //     $(".bs-example-modal-sm").modal("show");
-            //     $(".btn.btn-default.add-new-user-close").click();
-            //     $(".panel.panel-default").find("button[name='refresh']").click();
-            //     // location.reload();
-            // } else {
-            //     if (r.message.username) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
-            //     }
-            //     if (r.message.email) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
-            //     }
-            //     if (r.message.password) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
-            //     }
-            //     if (r.message.firstName) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
-            //     }
-            //     if (r.message.lastName) {
-            //         _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
-            //     }
-            //     if (r.message.WARNING) {
-            //         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-            //         $(".bs-example-modal-sm").modal("show");
-            //     }
-            // }
-        });
+                _set($("input[id='firstName']"), "请输入包含中文，英文，数字和-的名字");
+            }
+
+            if (!isName($("input[id='lastName']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='lastName']"), "请输入包含中文，英文，数字和-的名字");
+            }
+
+            if (!isEmail($("input[id='email']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='email']"), "请输入合法邮箱");
+            }
+
+            var pass = $("input[id='password']").val();
+            var pass_confirm = $("input[id='confirmPassword']").val()
+            if (pass != pass_confirm) {
+                _set($("input[id='password']"), "两次密码输入不一致");
+                _set($("input[id='confirmPassword']"), "两次密码输入不一致");
+            }//确认密码一致
+
+            if (isFormatted) {
+
+
+                var data = $(".form-horizontal.add-new-user").serializeArray();
+                $.post("/console/user_management/save", data, function (r, status) {
+                    switch (r.status) {
+                        case "SUCCEED" :
+                            $(".bs-example-modal-sm").find(".modal-body").html(
+                                $("#dialog-user-management-update-title").html() + " succeeded."
+                            );
+                            $(".bs-example-modal-sm").modal("show");
+                            $(".btn.btn-default.add-new-user-close").click();
+                            $(".panel.panel-default").find("button[name='refresh']").click();
+
+
+                            // $("#dialog-user-management-update").find(".modal-body").html("新增成功");
+                            // $("#dialog-user-management-update").modal("show");
+                            //
+                            // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                            break
+
+                        case "FAILED" :
+                            var inputError = false;
+
+                            if (r.message.username) {
+                                var message = r.message.username;
+
+                                if(message == "Oh snap! Already existed."){
+                                    message = "用户名已存在,请重新输入";
+                                }
+
+                                _set($(".form-horizontal.add-new-user").find("input[id='username']"), message);
+
+                                inputError = true;
+                            }
+                            if (r.message.email) {
+                                _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
+
+                                inputError = true;
+                            }
+                            if (r.message.password) {
+                                _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
+
+                                inputError = true;
+                            }
+                            if (r.message.firstName) {
+                                _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
+
+                                inputError = true;
+                            }
+                            if (r.message.lastName) {
+                                _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
+
+                                inputError = true;
+                            }
+                            if (r.message.WARNING) {
+                                $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                                $(".bs-example-modal-sm").modal("show");
+                            }
+
+                            if(!inputError) {
+                                $("#dialog-user-management-update").find(".modal-body").html("新增失败");
+                                $("#dialog-user-management-update").modal("show");
+                            }
+
+                            break
+                    }
+
+
+                    // if (r.status == "SUCCEED") {
+                    //     $(".bs-example-modal-sm").find(".modal-body").html(
+                    //         $("#dialog-user-management-update-title").html() + " succeeded."
+                    //     );
+                    //     $(".bs-example-modal-sm").modal("show");
+                    //     $(".btn.btn-default.add-new-user-close").click();
+                    //     $(".panel.panel-default").find("button[name='refresh']").click();
+                    //     // location.reload();
+                    // } else {
+                    //     if (r.message.username) {
+                    //         _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
+                    //     }
+                    //     if (r.message.email) {
+                    //         _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
+                    //     }
+                    //     if (r.message.password) {
+                    //         _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
+                    //     }
+                    //     if (r.message.firstName) {
+                    //         _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
+                    //     }
+                    //     if (r.message.lastName) {
+                    //         _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
+                    //     }
+                    //     if (r.message.WARNING) {
+                    //         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                    //         $(".bs-example-modal-sm").modal("show");
+                    //     }
+                    // }
+
+                });
+            }
+        }
     });
 
+    function isName(val){//包括中文和英文数字-
+        var reg = /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_-]){1,20}$/;
+
+        return reg.test(val);
+    }
+
+    function isEmail(val){
+        var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        return myreg.test(val);
+    }
+
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
+
+        var id = $("input[type='radio']:checked").val();
+        if (id != undefined) {
+            // 读取Project选中的用户信息
+            $.get("/console/user_management/get/" + id, null, function (r, status) {
+                $(".bs-example-modal-sm").find(".modal-body").html("是否删除用户：  " + r.username  + "?");
+                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+                $(".bs-example-modal-sm").modal("show");
+            });
+        } else {
+            $("#dialog-return").find(".modal-body").html("请选中后操作");
+            $("#dialog-return").modal("show");
+        }
+        //
+        // console.log('clicked the delete');
+        //
+        // var id = $("input[type='radio']:checked").val();
+        //
+        // var list_id = new Array();
+        //
+        // list_id[0] = (id);
+        //
+        // console.log(list_id);
+        //
+        // var form = new FormData();
+        //
+        // form.append("list_ID", list_id);
+        //
+        // $.ajax({
+        //     url: "/console/user_management/delete",
+        //     type: "post",
+        //     data: form,
+        //     processData: false,
+        //     contentType: false,
+        //     success: function (r) {
+        //         switch (r.status){
+        //             case "SUCCEED" :
+        //                 $(".bs-example-modal-sm").find(".modal-body").html(
+        //                     $("#dialog-user-management-update-title").html() + " succeeded."
+        //                 );
+        //                 $(".bs-example-modal-sm").modal("show");
+        //                 $(".btn.btn-default.add-new-user-close").click();
+        //                 $(".panel.panel-default").find("button[name='refresh']").click();
+        //
+        //                 break
+        //
+        //             case "FAILED" :
+        //                 $("#dialog-user-management-update").find(".modal-body").html("删除失败");
+        //                 $("#dialog-user-management-update").modal("show");
+        //
+        //                 break
+        //         }
+        //     },
+        //     error: function (r) {
+        //
+        //         $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+        //         $("#dialog-return").modal("show");
+        //     }
+        //
+        // });
+    })
+
+    $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
         var id = $("input[type='radio']:checked").val();
@@ -544,38 +756,39 @@
         form.append("list_ID", list_id);
 
         $.ajax({
-            url: "/console/user_management/delete",
-            type: "post",
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function (r) {
-                switch (r.status){
-                    case "SUCCEED" :
-                        $(".bs-example-modal-sm").find(".modal-body").html(
-                            $("#dialog-user-management-update-title").html() + " succeeded."
-                        );
-                        $(".bs-example-modal-sm").modal("show");
-                        $(".btn.btn-default.add-new-user-close").click();
-                        $(".panel.panel-default").find("button[name='refresh']").click();
+                url: "/console/user_management/delete",
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (r) {
+                    switch (r.status){
+                        case "SUCCEED" :
+                            $("#dialog-return").find(".modal-body").html("删除成功");
+                            $("#dialog-return").modal("show");
 
-                        break
+                            $(".btn.btn-default.add-new-user-close").click();
+                            $(".panel.panel-default").find("button[name='refresh']").click();
 
-                    case "FAILED" :
-                        $("#dialog-user-management-update").find(".modal-body").html("删除失败");
-                        $("#dialog-user-management-update").modal("show");
+                            break
 
-                        break
+                        case "FAILED" :
+                            $("#dialog-user-management-update").find(".modal-body").html("删除失败");
+                            $("#dialog-user-management-update").modal("show");
+
+                            $(".btn.btn-default.add-new-user-close").click();
+
+                            break
+                    }
+                },
+                error: function (r) {
+
+                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                    $("#dialog-return").modal("show");
                 }
-            },
-            error: function (r) {
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                $("#dialog-return").modal("show");
-            }
-
-        });
-    })
+            });
+    });
 
 
 </script>
