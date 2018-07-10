@@ -26,6 +26,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
 
     <style>
+        .navbar-brand-right_{
+            float:right;
+        }
         .center-vertical {
             position: relative;
             top: 50%;
@@ -46,26 +49,67 @@
     $(document).ready(function() {
         console.log('Ready function');
 
-        $.get("/console/faceconfig_management/search", null, function(r, status) {
-            $("#config-info").find("input[id='id']").val(r.id);
-            $("#config-info").find("input[id='version']").val(r.version);
-            // $("#config-info").find("input[id='serverIP']").val(r.serverIP);
-            $("#config-info").find("input[id='imageDBName']").val(r.imageDBName);
-            $("#config-info").find("input[id='userquality']").val(r.userquality);
-            $("#config-info").find("input[id='visitorquality']").val(r.visitorquality);
-            $("#config-info").find("input[id='similarscore']").val(r.similarscore);
-            $("#config-info").find("input[id='time1']").val(r.time1);
-            $("#config-info").find("input[id='time2']").val(r.time2);
-            $("#config-info").find("input[id='time3']").val(r.time3);
-            $("#config-info").find("input[id='receiveURL']").val(r.receiveURL);
-            $("#config-info").find("input[id='warningscore']").val(r.warningscore);
-            $("#config-info").find("input[id='serverIPandPort']").val(r.serverIPandPort);
-            $("#config-info").find("input[id='updateDateString']").val(r.updateDateString);
-            $("#config-info").find("input[id='version']").val(r.version);
+        $.ajax({
+            type: "get",
+            url: "/console/faceconfig_management/search",
+            dataType:"json",
+            success : function(r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $("#config-info").find("input[id='id']").val(r.id);
+                        $("#config-info").find("input[id='version']").val(r.version);
+                        // $("#config-info").find("input[id='serverIP']").val(r.serverIP);
+                        $("#config-info").find("input[id='imageDBName']").val(r.imageDBName);
+                        $("#config-info").find("input[id='userquality']").val(r.userquality);
+                        $("#config-info").find("input[id='visitorquality']").val(r.visitorquality);
+                        $("#config-info").find("input[id='similarscore']").val(r.similarscore);
+                        $("#config-info").find("input[id='time1']").val(r.time1);
+                        $("#config-info").find("input[id='time2']").val(r.time2);
+                        $("#config-info").find("input[id='time3']").val(r.time3);
+                        $("#config-info").find("input[id='receiveURL']").val(r.receiveURL);
+                        $("#config-info").find("input[id='warningscore']").val(r.warningscore);
+                        $("#config-info").find("input[id='serverIPandPort']").val(r.serverIPandPort);
+                        $("#config-info").find("input[id='updateDateString']").val(r.updateDateString);
+                        $("#config-info").find("input[id='version']").val(r.version);
 
-            console.log('get message : '+ r.id);
+                        console.log('get message : '+ r.id);
 
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取配置信息失败");
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+
+
+            },
+            error : function () {
+                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").modal("show");
+            }
         });
+
+        // $.get("/console/faceconfig_management/search", null, function(r, status) {
+        //     $("#config-info").find("input[id='id']").val(r.id);
+        //     $("#config-info").find("input[id='version']").val(r.version);
+        //     // $("#config-info").find("input[id='serverIP']").val(r.serverIP);
+        //     $("#config-info").find("input[id='imageDBName']").val(r.imageDBName);
+        //     $("#config-info").find("input[id='userquality']").val(r.userquality);
+        //     $("#config-info").find("input[id='visitorquality']").val(r.visitorquality);
+        //     $("#config-info").find("input[id='similarscore']").val(r.similarscore);
+        //     $("#config-info").find("input[id='time1']").val(r.time1);
+        //     $("#config-info").find("input[id='time2']").val(r.time2);
+        //     $("#config-info").find("input[id='time3']").val(r.time3);
+        //     $("#config-info").find("input[id='receiveURL']").val(r.receiveURL);
+        //     $("#config-info").find("input[id='warningscore']").val(r.warningscore);
+        //     $("#config-info").find("input[id='serverIPandPort']").val(r.serverIPandPort);
+        //     $("#config-info").find("input[id='updateDateString']").val(r.updateDateString);
+        //     $("#config-info").find("input[id='version']").val(r.version);
+        //
+        //     console.log('get message : '+ r.id);
+        //
+        // });
 
         $.ajax({
             type: "get",
@@ -106,8 +150,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+            <a class="navbar-brand"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
+
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -352,8 +400,6 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
 <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.backstretch.min.js"></script>
@@ -508,49 +554,31 @@
             if (!isIPAddandPort($("input[id='serverIPandPort']").val())) {
                 isFormatted = false;
 
-                _set($("input[id='serverIPandPort']"), "请输入0到100的数字");
+                _set($("input[id='serverIPandPort']"), "请输入合法的IP地址");
             }
 
-            // $.ajax({
-            //     url: ipAndPort+"/console/faceconfig_management/search",
-            //     type: "post",
-            //     data: {
-            //         ipAndPort : ipAndPort
-            //     },
-            //     success: function (r) {
-            //         switch (r.status) {
-            //             case "SUCCEED" :
-            //                 flag = true;
-            //
-            //                 // $("#dialog-user-management-update").find(".modal-body").html("增加成功");
-            //                 // $("#dialog-user-management-update").modal("show");
-            //                 //
-            //                 // $(".panel.panel-default").find("button[name='refresh']").click();
-            //
-            //                 break
-            //
-            //             case "FAILED" :
-            //                 $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
-            //                 $("#dialog-user-management-update").modal("show");
-            //
-            //                 break
-            //         }
-            //     },
-            //
-            //     error: function (r) {
-            //         $("#dialog-return").find(".modal-body").html("服务器IP端口填写有误，请重新填写");
-            //         $("#dialog-user-management-update").modal("show");
-            //     }
-            // });
+            $.ajax({
+                async : false ,
+                url : "http://"+$("input[id='serverIPandPort']").val() + "/api/config/query",
+                timeout : 100,
+                dataType : "jsonp",
+                jsonp : 'callback',
+                success : function () {
+                },
+                error : function() {
+
+                    _set($("input[id='serverIPandPort']"), "请输入有效的IP地址");
+
+                    isFormatted = false;
+                }
+            })
 
             flag = true;//test after checked the iPandPort
-
 
             if (flag && isComplete && isFormatted) {
                 $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
                 $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
                 $(".bs-example-modal-sm").modal("show");
-
             }
         }
     });

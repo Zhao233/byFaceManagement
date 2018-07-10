@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ public class IndexController {
     @RequestMapping(value = {"/", "/login"})
     public ModelAndView toHome(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
-            return new ModelAndView("redirect:/console/user_management");
+            return new ModelAndView("redirect:/console");
         }
 
         return new ModelAndView("login");
@@ -27,26 +26,12 @@ public class IndexController {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (user != null) { //将账户密码置空
+        if (user != null) {
             user.setPassword(null);
             request.getSession().setAttribute("user", user);
         }
 
-        switch (user.getRole()) {
-            case "PM":
-                return "redirect:/console/task_allocation";
-            case "S":
-                return "redirect:/console/task_management";
-            case "C":
-                return "redirect:/console/task_schedule_tracking";
-            case "A":
-                return "redirect:/console/user_management";
-
-            default:
-                return "redirect:/console";
-        }
-
-        /*if(user.getRole().equals("PM"))
+        if(user.getRole().equals("PM"))
         {
         	return "redirect:/console/task_allocation";
         }else if(user.getRole().equals("S")){
@@ -54,10 +39,10 @@ public class IndexController {
         }else if(user.getRole().equals("C")){
         	return "redirect:/console/task_schedule_tracking";
         }else if(user.getRole().equals("A")){
-
+        	return "redirect:/console/user_management";
         }else {
         	return "redirect:/console";
-        }*/
-
+        }
+        	
     }
 }

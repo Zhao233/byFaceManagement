@@ -20,7 +20,7 @@ public class ConsoleController {
 
     @RequestMapping
     public ModelAndView toIndex() {
-        return new ModelAndView("console/index");
+        return new ModelAndView("console/user_management");
     }
 
     @RequestMapping("/profile")
@@ -115,6 +115,10 @@ public class ConsoleController {
         return new ModelAndView("console/contacts_management");
     }
 
+    @RequestMapping("/camera_location")
+    public ModelAndView toCameraLocation() {
+        return new ModelAndView("console/camera_location");
+    }
 
     /**
      * CUSTOMER

@@ -25,7 +25,7 @@ public class ServerInfoController {
         String info = serverService.getServerById(id);
         JSONObject object_info = JSONObject.fromObject(info);
 
-        String status  = serverService.getServerInfoById(id,object_info.getString("serverIP"));
+        String status  = serverService.getServerInfoById(id);
         JSONArray array = JSONArray.fromObject(status);
 
         map.put("serverInfo",object_info);

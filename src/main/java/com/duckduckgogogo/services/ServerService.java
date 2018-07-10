@@ -14,5 +14,5 @@ public interface ServerService {
     String getServerById(int id);
 
     //获取状态信息
-    String getServerInfoById(int id, String serverIP);
+    String getServerInfoById(int id);
 }

@@ -159,8 +159,8 @@ public class ServerServiceImp extends Info implements ServerService {
     }
 
     @Override
-    public String getServerInfoById(int id, String serverIP) {
-        String url_status = "http://"+serverIP+"/api/system/resource/" + id;
+    public String getServerInfoById(int id) {
+        String url_status = "http://"+Info.serverIP+"/api/system/resource/" + id;
 
         RestTemplate rest = new RestTemplate();
         rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));

@@ -42,6 +42,9 @@
 
 
     <style>
+        .navbar-brand-right_{
+            float:right;
+        }
         .kv-avatar .krajee-default.file-preview-frame, .kv-avatar .krajee-default.file-preview-frame:hover {
             margin: 0;
             padding: 0;
@@ -83,8 +86,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+            <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
+
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -294,7 +301,7 @@
                                             <th data-field="id" data-formatter="_formatte_server_id" data-align="center"></th>
                                             <th data-field="serverName" class="W30" style="border:none;">服务器名</th>
                                             <th data-field="serverIP" class="W30" style="border:none;">IP地址</th>
-                                            <th data-field="mainServer" class="W30" style="border:none;">是否为主服务器</th>
+                                            <th data-field="mainServer" data-formatter="_formatted_select" class="W30" style="border:none;">是否为主服务器</th>
                                             <th data-field="updateDateString" class="W30" style="border:none;">修改时间</th>
                                         </tr>
                                         </thead>
@@ -405,19 +412,30 @@
             type:'get',
             url:'/console/server_info/getStatus',
             data: data,
-            success:function(response,status,xhr){
-                console.log("received data : "+r.serverStatus);
+            success:function(r,status,xhr){
+                switch (r.status) {
 
-                $("#ipAddress").val(r.serverInfo.serverIP);
-                $("#cpuUsage").val(r.status.cpu.percent+"%");
-                $("#memoUsage").val(r.status.memory.percent+"%");
-                $("#diskUsage").val(r.status.disk.percent+"%");
-                $("#gpuUsage").val(r.status.gpu.slice.percent+"%");
+                    case "SUCCEED" :
+                        log("received data : " + r.serverStatus);
 
-                $("#serverName_show").val(r.serverInfo.serverName);
+                        $("#ipAddress").val(r.serverInfo.serverIP);
+                        $("#cpuUsage").val(r.status.cpu.percent + "%");
+                        $("#memoUsage").val(r.status.memory.percent + "%");
+                        $("#diskUsage").val(r.status.disk.percent + "%");
+                        $("#gpuUsage").val(r.status.gpu.slice.percent + "%");
 
-                console.log("选中的服务器："+r.serverInfo.serverName);
-                console.log("选中的服务器ID："+id);
+                        $("#serverName_show").val(r.serverInfo.serverName);
+
+                        console.log("选中的服务器：" + r.serverInfo.serverName);
+                        console.log("选中的服务器ID：" + id);
+
+                        break;
+                    case "FAILED":
+
+                        $("#dialog-return").find(".modal-body").html("后台处理错误，请联系管理员");
+                        $("#dialog-return").modal("show");
+                        break;
+                }
             },
             error:function (response) {
                 $("#dialog-return").find(".modal-body").html("请求失败");
@@ -473,6 +491,9 @@
 
     function _formatte_server_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
+    }
+    function _formatted_select(value, row, index) {
+        return $.trim(value) ==$.trim('true') ? "是":"否" ;
     }
 
     $(".btn.btn-primary.add-new-user").click(function () {

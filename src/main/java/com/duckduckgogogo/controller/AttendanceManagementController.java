@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/console/attendance_management")
-public class AttendanceManagementController {
+public class AttendanceManagementController extends Logger_{
     @Autowired
     private AttendanceService attendanceService;
 
@@ -32,10 +32,13 @@ public class AttendanceManagementController {
         String result = attendanceService.searchServers(search,offset,limit,startDate,endDate);
         System.out.println("search attendance succeed : "+result);
 
+        super.logger.info("search attendance succeed : "+result);
+
         JSONObject object = JSONObject.fromObject(result);
 
         r.put("total",object.getInt("total"));
         r.put("rows", object.getJSONArray("rows"));
+
         return r;
     }
 }

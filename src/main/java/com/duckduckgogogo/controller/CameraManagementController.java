@@ -23,9 +23,9 @@ public class CameraManagementController {
     @ResponseBody
     private Map<String,Object> addCamera(@RequestParam("cameraName") String cameraName, @RequestParam("rtspUrl") String rtspUrl,
                                          @RequestParam("server") int server, @RequestParam("entranceGuard") String entranceGuard,
-                                         @RequestParam("entranceGuardNO") String entranceGuardNO, @RequestParam("cameraXY") String cameraXY){
+                                         @RequestParam("entranceGuardType") String entranceGuardType,@RequestParam("entranceGuardNO") String entranceGuardNO, @RequestParam("cameraXY") String cameraXY){
 
-        String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardNO, cameraXY);
+        String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardType, entranceGuardNO, cameraXY);
         Map<String, Object> r = null;
 
         if(JSONHandler.isSuccess(result)){
@@ -45,6 +45,7 @@ public class CameraManagementController {
                                                 @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                 @RequestParam(value = "limit", defaultValue = "10")  Integer limit){
         Map<String, Object> r = new HashMap<>();
+
 
         String result = cameraService.searchCamera(search,String.valueOf(offset),String.valueOf(limit));
 
@@ -67,12 +68,13 @@ public class CameraManagementController {
     @RequestMapping("/update")
     @ResponseBody
     private Map<String, Object> updateCamera(@RequestParam("server") int server, @RequestParam("entranceGuard") String entranceGuard,
+                                             @RequestParam("entranceGuardType") String entranceGuardType,
                                              @RequestParam("version") int version, @RequestParam("rtspUrl") String rtspUrl,
                                              @RequestParam("cameraXY") String cameraXY, @RequestParam("entranceGuardNO") String entranceGuardNO,
                                              @RequestParam("id") int id, @RequestParam("cameraName") String cameraName){
         Map<String, Object> r = new HashMap<>();
 
-        String result = cameraService.updateCamera(id, version, cameraName, rtspUrl, server, entranceGuard, entranceGuardNO, cameraXY);
+        String result = cameraService.updateCamera(id, version, cameraName, rtspUrl, server, entranceGuard,entranceGuardType, entranceGuardNO, cameraXY);
 
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");

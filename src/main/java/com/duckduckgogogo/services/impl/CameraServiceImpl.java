@@ -18,28 +18,19 @@ import java.util.Map;
 @Service("cameraService")
 public class CameraServiceImpl extends Info implements CameraService {
     @Override
-    public String addCamera(String cameraName, String rtspUrl, int server, String entranceGuard,
+    public String addCamera(String cameraName, String rtspUrl, int server, String entranceGuard,String entranceGuardType,
                             String entranceGuardNO, String cameraXY) {
         try {
             String url = "http://" + Info.serverIP + "/api/camera/add";
-            //String filePath = "D:\\人脸识别\\4b90f603738da977215057e4bb51f8198718e386.jpg";
 
             RestTemplate rest = new RestTemplate();
-            //FileSystemResource resource = new FileSystemResource(new File(filePath));
-
-//            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-//            param.add("cameraName", cameraName);
-//            param.add("rtspUrl", rtspUrl);
-//            param.add("server", server);
-//            param.add("entranceGuard", entranceGuard);
-//            param.add("entranceGuardNO", entranceGuardNO);
-//            param.add("cameraXY", cameraXY);
 
             JSONObject object = new JSONObject();
             object.put("cameraName",cameraName);
             object.put("rtspUrl",rtspUrl);
             object.put("server",server);
             object.put("entranceGuard",entranceGuard);
+            object.put("entranceGuardType",entranceGuardType);
             object.put("entranceGuardNO",entranceGuardNO);
             object.put("cameraXY",cameraXY);
 
@@ -76,7 +67,7 @@ public class CameraServiceImpl extends Info implements CameraService {
 
     @Override
     public String updateCamera(int id, int version, String cameraName, String rtspUrl, int server,
-                               String entranceGuard, String entranceGuardNO, String cameraXY) {
+                               String entranceGuard, String entranceGuardType, String entranceGuardNO, String cameraXY) {
         try{
             String url = "http://" + Info.serverIP + "/api/camera/update";
 

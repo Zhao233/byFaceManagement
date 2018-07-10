@@ -43,7 +43,9 @@
 
 
     <style>
-
+        .navbar-brand-right_{
+            float:right;
+        }
         .center-vertical {
             position: relative;
             top: 50%;
@@ -75,8 +77,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+            <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
+
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -202,6 +208,7 @@
                                         <th data-field="server.serverName" data-sortable="true" class="W100" style="border:none;" align="center">服务器名称</th>
                                         <th data-field="entranceGuardNO" data-sortable="true" class="W100" style="border:none;" align="center">门禁编号</th>
                                         <th data-field="entranceGuard" data-sortable="true" class="W100" style="border:none;" data-formatter="_formatted_select" align="center">是否门禁摄像头</th>
+                                        <th data-field="entranceGuardType" data-sortable="true" class="W100" style="border:none;" align="center">门禁类型</th>
                                         <th data-field="enabled" data-sortable="true" class="W100" style="border:none;" data-formatter="_formatted_select" align="center">是否启用</th>
                                         <th data-field="rtspUrl" data-sortable="true" class="W100" style="border:none;" align="center">rtspURL地址</th>
                                         <th data-field="cameraXY" data-sortable="true" class="W100" style="border:none;" align="center">地图坐标</th>
@@ -275,12 +282,25 @@
                         <label for="entranceGuard" class="col-sm-4 control-label">是否门禁摄像头</label>
                         <div class="col-sm-7">
                             <select id="entranceGuard" name="entranceGuard" class="form-control" required="required">
-                                <option value="True">是</option>
-                                <option value="False">否</option>
+                                <option value="true">是</option>
+                                <option value="false">否</option>
                             </select>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="entranceGuard" class="col-sm-4 control-label">摄像头类型</label>
+                        <div class="col-sm-7">
+                            <select id="entranceGuardType" name="entranceGuardType" class="form-control" required="required">
+                                <option value="in">入口</option>
+                                <option value="out">出口</option>
+                                <option value="">其他</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
 
                     <div class="form-group">
                         <div class="col-sm-22">
@@ -418,7 +438,19 @@
                 $("#dialog-return").modal("show");
             }
         });
+
     });
+
+    $(function () { $('#dialog-camera-management-update-title').on('show.bs.modal', function () {
+        if(window.flag == "update"){
+            $("#rtspUrl").attr("disabled",disabled = "diabled");
+        } else {
+            $("#rtspUrl").removeAttr("disabled");
+        }
+    })
+    });
+
+
 </script>
 
 
@@ -456,7 +488,7 @@
     }
 
     function _formatted_select(value, row, index) {
-        return value='true' ? "是":"否" ;
+        return $.trim(value) ==$.trim('true') ? "是":"否" ;
     }
 
     function _reset(from) {
@@ -510,6 +542,8 @@
             }
         });
 
+        $("#dialog-camera-management-update").find("input[id='rtspUrl']").removeAttr("readOnly");
+
         $("#dialog-camera-management-update-title").html("新增摄像头");
         $("#dialog-camera-management-update").modal("show");
     });
@@ -523,56 +557,68 @@
         if (id != undefined) {
             _reset($(".form-horizontal.add-new-user"));
 
-            $('#serverList').bootstrapTable({
-                method: 'get',
-                url: "/console/server_management/search",
-                striped: true,
-                dataType: "json",
-                pagination: true,
-                queryParamsType: "limit",
-                singleSelect: true,
-                contentType: "application/x-www-form-urlencoded",
-                pageSize: 10,
-                pageNumber:1,
-                search: true,
-                showColumns: true,
-                showRefresh: true,
-                sidePagination: "server", //服务端请求
-                queryParams: function(params) {
-                    return {
-                        limit: params.limit,
-                        offset: params.offset / params.limit,
-                        search: $(".search").find("input").val()
-                    };
-                },
-                responseHandler: function(res) {
-                    return {
-                        "rows": res.rows,
-                        "total": res.total
-                    };
-                }
-            });
+            // $('#serverList').bootstrapTable({
+            //     method: 'get',
+            //     url: "/console/server_management/search",
+            //     striped: true,
+            //     dataType: "json",
+            //     pagination: true,
+            //     queryParamsType: "limit",
+            //     singleSelect: true,
+            //     contentType: "application/x-www-form-urlencoded",
+            //     pageSize: 10,
+            //     pageNumber:1,
+            //     search: true,
+            //     showColumns: true,
+            //     showRefresh: true,
+            //     sidePagination: "server", //服务端请求
+            //     queryParams: function(params) {
+            //         return {
+            //             limit: params.limit,
+            //             offset: params.offset / params.limit,
+            //             search: $(".search").find("input").val()
+            //         };
+            //     },
+            //     responseHandler: function(res) {
+            //         return {
+            //             "rows": res.rows,
+            //             "total": res.total
+            //         };
+            //     }
+            // });
 
             $.get("/console/camera_management/get/" + id, null, function(r, status) {
                 window.version = r.version;
                 $("#dialog-camera-management-update").find("input[id='id']").val(r.id);
                 $("#dialog-camera-management-update").find("input[id='version']").val(r.version);
                 $("#dialog-camera-management-update").find("input[id='cameraName']").val(r.cameraName);
+
                 $("#dialog-camera-management-update").find("input[id='rtspUrl']").val(r.rtspUrl);
+                $("#dialog-camera-management-update").find("input[id='rtspUrl']").attr("readOnly","readOnly");
+
                 $("#dialog-camera-management-update").find("input[id='entranceGuardNO']").val(r.entranceGuardNO);
                 $("#dialog-camera-management-update").find("input[id='cameraXY']").val(r.cameraXY);
                 $("#dialog-camera-management-update").find("select[id='entranceGuard']").val(r.entranceGuard ? "True" : "False");
 
-                $("#dialog-camera-management-update-title").html("Update user");
+                var server_json = eval("(" + r.server + ")");
+
+                window.serverId = server_json.id;
+
+                //$("input[name='serverID']").find("input[value = serverID ]").attr("checked",true);
+
+                $("#dialog-camera-management-update-title").html("更新摄像头");
                 $("#dialog-camera-management-update").modal("show");
+
             });
         } else {
             $("#dialog-return").find(".modal-body").html("请选择需要修改的摄像头");
-            $("#dialog-return").modal("show");
-            // $(".bs-example-modal-sm").find(".modal-body").html("You did not select the camera.");
-            // $(".bs-example-modal-sm").modal("show");
+            $("#dialog-return").modal("show",function () {
+
+            });
         }
     });
+
+
 
     $(".btn.btn-primary.add-new-user").click(function() {
         var isComplete = true;
@@ -637,9 +683,14 @@
                     data.append("id", $("input[id='id']").val());
                     data.append("cameraName", $("input[id='cameraName']").val());
                     data.append("rtspUrl", $("input[id='rtspUrl']").val());
-                    data.append("server", $("input[name='serverID']:checked").val());
+                    if(window.flag == "update"){
+                        data.append("server", window.serverId);
+                    } else {
+                        data.append("server", $("input[name='serverID']:checked").val());
+                    }
                     data.append("entranceGuard", $("select[id='entranceGuard']").val());
                     data.append("entranceGuardNO", $("input[id='entranceGuardNO']").val());
+                    data.append("entranceGuardType", $("#entranceGuardType").val());
                     data.append("cameraXY", $("input[id='cameraXY']").val());
                     data.append("version", $("input[id='version']").val());
 
@@ -681,10 +732,6 @@
                                     }
 
                                     $("#dialog-return").modal("show");
-
-                                    $(".btn.btn-default.add-new-user-close").click();
-                                    $(".panel.panel-default").find("button[name='refresh']").click();
-
                                     break
                             }
                         },
@@ -704,10 +751,6 @@
         var reg = /[0-9]{0,1}[0-9]{0,1}[0-9]{0,1},[0-9]{0,1}[0-9]{0,1}[0-9]{0,1}/ ;
 
         return reg.test(val);
-    }
-
-    function _formatted_select(value, row, index) {
-        return value='true' ? "是":"否" ;
     }
 
     function isName(val){//包括中文和英文数字-
@@ -797,6 +840,8 @@
             $("#dialog-return").modal("show");
         }
     })
+
+
 </script>
 
 <script>
