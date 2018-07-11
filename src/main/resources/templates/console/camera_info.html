@@ -40,6 +40,26 @@
 
 
     <style>
+        table tbody {
+            display:block;
+            height:30em;
+            overflow-y:scroll;
+        }
+        table thead, tbody tr {
+            display:table;
+            width:100%;
+            table-layout:fixed;
+        }
+        table thead {
+            width: calc( 100% - 1em )
+        }
+        table thead th{
+            background:#275AB2;
+        }
+        thead{
+            color:#FFFFFF;
+        }
+
         .navbar-brand-right_{
             float:right;
         }
@@ -78,7 +98,8 @@
 
         .W180{width:180px;}
         .W150{width:150px;}
-        .W100 .th-inner{width:100px !important;}
+        .W100{width:100px;}
+        .W280{width:280px !important;}
         .W30 {width:30px !important;}
     </style>
 </head>
@@ -96,7 +117,7 @@
         </div>
 
         <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
         </ul>
     </nav>
     <!--/. NAV TOP  -->
@@ -123,7 +144,7 @@
                 <!--区域安全防范系统-->
                 <li>
                     <a class="active-menu"><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
-                    <ul class="nav ">
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">
                         <!--轨迹图-->
                         <li>
                             <a href="/console/trace_info">轨迹图</a>
@@ -131,7 +152,7 @@
 
                         <!--轨迹统计图表-->
                         <li>
-                            <a href="/console/camera_info" class="active-menu">轨迹统计图表</a>
+                            <a href="/console/camera_info" class="active-menu-item">轨迹统计图表</a>
                         </li>
 
                         <!--报警设置-->
@@ -279,9 +300,9 @@
                                         <table id="cameraList" class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th data-field="id" data-formatter="_formatte_camera_id" data-sortable="true"  style="border:none; " ></th>
+                                                <th data-field="id" data-formatter="_formatte_camera_id" class="W30" data-sortable="true"  style="border:none; " ></th>
                                                 <th data-field="cameraName" data-sortable="true" class="W100">摄像头名称</th>
-                                                <th data-field="taskId" data-sortable="true" class="W30" style="border:none;" align="center">任务ID</th>
+                                                <th data-field="taskId" data-sortable="true" class="W280" style="border:none;" align="center">任务ID</th>
                                                 <th data-field="server.serverName" data-sortable="true" class="W100" style="border:none;" align="center">服务器名称</th>
                                                 <th data-field="entranceGuardNO" data-sortable="true" class="W100" style="border:none;" align="center">门禁编号</th>
                                                 <th data-field="entranceGuard" data-sortable="true" class="W100" data-formatter="_formatted_select" style="border:none;" align="center">是否门禁摄像头</th>
@@ -313,6 +334,21 @@
                 <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
             </div>
             <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -576,6 +612,16 @@
     function _formatted_select(value, row, index) {
         return value='true' ? "是":"否" ;
     }
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
 
     $(".searchData").click(function () {
         var date = $( "#datepicker" ).val();

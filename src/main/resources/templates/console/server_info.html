@@ -90,7 +90,7 @@
         </div>
 
         <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
         </ul>
     </nav>
     <!--/. NAV TOP  -->
@@ -159,15 +159,14 @@
                 <!--系统管理-->
                 <li>
                     <a class="active-menu"><i class="fa fa-sitemap"></i> 系统管理<span class="fa arrow"></span></a>
-                    <ul class="nav ">
-                        <!--服务器管理-->
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">                        <!--服务器管理-->
                         <li>
                             <a href="/console/server_management">服务器管理</a>
                         </li>
 
                         <!--服务器信息-->
                         <li>
-                            <a href="/console/server_info" class="active-menu">服务器信息</a>
+                            <a href="/console/server_info" class="active-menu-item">服务器信息</a>
                         </li>
 
                         <!--摄像头管理-->
@@ -333,6 +332,22 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <script>
     var id = getUrlParam("id");
@@ -454,7 +469,17 @@
 
 
     $("#serverName_show").focus( serverName_show );
-    
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
+
     function serverName_show() {
         $('#serverList').bootstrapTable({
             method: 'get',

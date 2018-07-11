@@ -41,6 +41,27 @@
             background-position: center;
             background-size: 100% 100%;
         }
+
+        table tbody {
+            display:block;
+            height:30em;
+            overflow-y:scroll;
+        }
+        table thead, tbody tr {
+            display:table;
+            width:100%;
+            table-layout:fixed;
+        }
+        table thead {
+            width: calc( 100% - 1em )
+        }
+        table thead th{
+            background:#275AB2;
+        }
+        thead{
+            color:#FFFFFF;
+        }
+
         .navbar-brand-right_{
             float:right;
         }
@@ -48,6 +69,16 @@
         .table th, .table td {
             text-align: center;
             vertical-align: middle !important;
+        }
+
+        W30{
+            width: 30px !important;
+        }
+        W250{
+            width: 250px !important;
+        }
+        W100{
+            width: 100px !important;
         }
     </style>
 
@@ -66,7 +97,7 @@
         </div>
 
         <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
         </ul>
     </nav>
     <!--/. NAV TOP  -->
@@ -93,10 +124,9 @@
                 <!--区域安全防范系统-->
                 <li>
                     <a  class="active-menu"><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
-                    <ul class="nav ">
-                        <!--轨迹图-->
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">                        <!--轨迹图-->
                         <li>
-                            <a href="/console/trace_info" class="active-menu">轨迹图</a>
+                            <a href="/console/trace_info" class="active-menu-item">轨迹图</a>
                         </li>
 
                         <!--轨迹统计图表-->
@@ -214,8 +244,8 @@
                                     height : 20
                                 }
                                 var offset_camera = {
-                                    x: 0,
-                                    y : 0
+                                    x: -10,
+                                    y : -10
                                 }
                                 var offset_trace = {
                                     x: 10,
@@ -288,7 +318,7 @@
                                     location = cameraList_[length-1].cameraXY.split(",");//0: x, 1: y
 
                                     console.log("trace_start: "+(parseInt(location[0])+ offset_trace.x) + ", "+ (parseInt(location[1])+ offset_trace.y));
-                                    context.moveTo(parseInt(location[0])+ offset_trace.x,parseInt(location[1])+ offset_trace.y);
+                                    context.moveTo( parseInt(location[0])+ offset_trace.x - 10, parseInt(location[1])+ offset_trace.y - 10 );
 
                                     for(var i = length -2; i >= 0; i--){
                                         var trace;
@@ -328,7 +358,7 @@
                                             location = temp_camera.camereXY.split(",");//0: x, 1: y
                                         }
 
-                                        context.lineTo(parseInt(location[0]) + offset_trace.x,parseInt(location[1]) + offset_trace.y);
+                                        context.lineTo( parseInt(location[0]) + offset_trace.x - 10, parseInt(location[1]) + offset_trace.y - 10);
 
                                         console.log("trace: "+(parseInt(location[0]) + offset_trace.x) + ", "+ (parseInt(location[1])+ offset_trace.y));
 
@@ -363,7 +393,7 @@
                                             location = temp_camera.cameraXY.split(",");//0: x, 1: y
 
 
-                                            console.log("camera location: "+(parseInt(location[0]) + offset_camera.x)+","+(parseInt(location[1]) + offset_camera.y));
+                                            console.log("camera location: "+(parseInt(location[0]) + offset_camera.x )+","+(parseInt(location[1]) + offset_camera.y));
 
                                             context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
                                         }
@@ -476,7 +506,7 @@
 
                                     var date = new Date();
 
-                                    var toDayTime = date.getFullYear()+"-"+( parseInt(date.getMonth())+1 )+"-"+date.getDay();
+                                    var toDayTime = date.getFullYear()+"-"+( parseInt(date.getMonth())+1 )+"-"+date.getDate();
 
                                     $("#datepicker_start").val(toDayTime);
                                     $("#datepicker_end").val(toDayTime);
@@ -527,16 +557,16 @@
                         <div class="col-sm-22">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <div class="table-responsive" style="height: 48em; overflow:scroll;">
+                                    <div class="table-responsive" >
 
                                         <table id="personList" class="table table-striped table-bordered table-hover table-condensed">
                                         <thead>
                                         <tr>
                                             <th data-field="userid" data-formatter="_formatte_person_id" data-align="center"></th>
-                                            <th id="person_name" data-field="name" class="W30" style="border:none;">姓名</th>
-                                            <th data-field="IDNumber" class="W30" style="border:none;">身份证号码</th>
-                                            <th data-field="phoneNumber" class="W30" style="border:none;">电话</th>
-                                            <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息
+                                            <th id="person_name" data-field="name" style="border:none;">姓名</th>
+                                            <th data-field="IDNumber" style="border:none;">身份证号码</th>
+                                            <th data-field="phoneNumber" style="border:none;">电话</th>
+                                            <th data-field="feature" data-formatter="_formatte_locale_image" style="border:none;">图像信息
                                             </th>
                                         </tr>
                                         </thead>
@@ -584,6 +614,21 @@
                 <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
             </div>
             <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -703,6 +748,16 @@
             }
         });
 
+    })
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
     })
 
     $(".btn.btn-primary.savePerson").click(function () {

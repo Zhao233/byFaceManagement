@@ -43,6 +43,26 @@
     <script src="/javascript/bootstrap-table-export.js"></script>
 
     <style>
+        table tbody {
+            display:block;
+            height:30em;
+            overflow-y:scroll;
+        }
+        table thead, tbody tr {
+            display:table;
+            width:100%;
+            table-layout:fixed;
+        }
+        table thead {
+            width: calc( 100% - 1em )
+        }
+        table thead th{
+            background:#275AB2;
+        }
+        thead{
+            color:#FFFFFF;
+        }
+
         .navbar-brand-right_{
             float:right;
         }
@@ -84,7 +104,7 @@
         </div>
 
         <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
         </ul>
 
     </nav>
@@ -133,7 +153,7 @@
                 <!--内部人员管理-->
                 <li>
                     <a class="active-menu"><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
-                    <ul class="nav">
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">
                         <!--员工管理-->
                         <li>
                             <a href="/console/employee_management">员工管理</a>
@@ -146,7 +166,7 @@
 
                         <!--考勤信息-->
                         <li>
-                            <a href="/console/attendance_management" class="active-menu">考勤信息</a>
+                            <a href="/console/attendance_management" class="active-menu-item">考勤信息</a>
                         </li>
                     </ul>
                 </li>
@@ -210,13 +230,15 @@
                                 <label  for="datepicker_end">结束时间</label>
                                 <input  type="text" id="datepicker_end">
                                 <button class="btn btn-primary searchData">Search</button>
-                                <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" >数据导出</button>
+                                <button type="button" style="margin-left:50px" id="btn_download" class="btn btn-primary" >数据导出</button>
+                                <button type="button" id="myExportData" value="excel" class='btn btn-mini btn-info'>导出二</button>
+
                             </div>
                         </div>
 
                         <!--<button class="btn btn-primary searchData">Search</button>-->
 
-                        <div class="table-responsive" style="height: 45em; overflow:scroll;">
+                        <div class="table-responsive">
 
                             <table id="_table_user_search" class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -261,7 +283,21 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
@@ -289,6 +325,17 @@
         el.attr("title", message);
         el.tooltip('show');
     }
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
+
     $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
         _reset($(".form-horizontal.add-new-user"));
         $("#dialog-user-management-update-title").html("Add new user");
@@ -342,10 +389,6 @@
         });
     });
 
-    $("#btn_download").click(function () {
-        $('#_table_user_search').tableExport({ type: 'excel', escape: 'false' ,fileName: '用户列表',worksheetName: 'sheet1',tableName: '用户列表',
-            onMsoNumberFormat: doOnMsoNumberFormat,onCellHtmlData: DoOnCellHtmlData
-    })
 </script>
 
 <script type="text/javascript">
@@ -492,6 +535,20 @@
         return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期
     }
 
+    $("#btn_download").click(function () {
+        $('#_table_user_search').tableExport({
+            type: 'excel',
+            exportDataType: "all",
+            escape: 'false',
+            ignoreColumn: [0],  //忽略某一列的索引
+            fileName: '用户列表',  //文件名称设置
+            worksheetName: 'sheet1',  //表格工作区名称
+            tableName: '用户列表',
+            onMsoNumberFormat: doOnMsoNumberFormat,
+            onCellHtmlData: DoOnCellHtmlData,
+        });
+    });
+
     function doOnMsoNumberFormat(cell, row, col){
         var result = "";
         if (row > 0 && col == 0){
@@ -499,7 +556,6 @@
         }
         return result;
     }
-
     //处理导出内容,这个方法可以自定义某一行、某一列、甚至某个单元格的内容,也就是将其值设置为自己想要的内容
     function DoOnCellHtmlData(cell, row, col, data){
         if(row == 0){
