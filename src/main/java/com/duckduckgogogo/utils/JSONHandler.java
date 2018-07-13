@@ -23,10 +23,16 @@ public class JSONHandler {
 
                 return true;
             } else {
+                if(object.getString("status") != null && object.getString("status") == "FAILED"){
+                    return false;
+                }
+
                 object = null;
 
                 return false;
             }
+
+
 
         }catch (JSONException e){//JSONArray
             try {

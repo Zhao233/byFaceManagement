@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title></title>
+    <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
@@ -213,11 +213,19 @@
             text-align: center;
             vertical-align: middle !important;
         }
+
+        .search{
+            padding-bottom: 1em;
+        }
     </style>
 </head>
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -228,9 +236,7 @@
             <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
 
-        <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-        </ul>
+
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -457,8 +463,8 @@
 
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
                             <button type="button" class="btn btn-primary add-new-user">保存</button>
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </form>
@@ -488,9 +494,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认
-                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -505,8 +510,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

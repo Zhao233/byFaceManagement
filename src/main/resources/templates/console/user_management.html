@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title></title>
+    <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
@@ -47,19 +47,26 @@
 
 
     <style>
-        table tbody {
-            display:block;
-            height:30em;
-            overflow-y:scroll;
+        .fixed-table-body {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 30em;
+            width: 100%;
         }
-        table thead, tbody tr {
-            display:table;
-            width:100%;
-            table-layout:fixed;
-        }
-        table thead {
-            width: calc( 100% - 1em )
-        }
+
+        /*table tbody {*/
+            /*display:block;*/
+            /*height:30em;*/
+            /*overflow-y:scroll;*/
+        /*}*/
+        /*table thead, tbody tr {*/
+            /*display:table;*/
+            /*width:100%;*/
+            /*table-layout:fixed;*/
+        /*}*/
+        /*table thead {*/
+            /*width: calc( 100% - 1em )*/
+        /*}*/
         table thead th{
             background:#275AB2;
         }
@@ -81,11 +88,26 @@
             text-align: center;
             vertical-align: middle !important;
         }
+        .search{
+            padding-bottom: 1em;
+        }
+
+        .W180{width:180px;}
+        .W150{width:150px;}
+        .W150 {width:100px !important;}
+        .W280{width:280px !important;}
+        .W400{width:400px !important;}
+        .W100 {width:100px !important;}
+        .W30 {width:30px !important;}
     </style>
 </head>
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -95,10 +117,6 @@
             </button>
             <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
-
-        <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -118,7 +136,7 @@
                         <!--<label id="adminEmail" style="alignment: center"></label>-->
                         <!--</div>-->
                     </div>
-                    <br></br>
+                    <br>
                 </li>
 
                 <!--区域安全防范系统-->
@@ -220,13 +238,13 @@
                                 <table id="_table_user_search" class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                        <th data-field="username">用户名</th>
-                                        <th data-field="firstName">姓</th>
-                                        <th data-field="lastName">名</th>
-                                        <th data-field="email">邮箱地址</th>
-                                        <th data-field="role">级别</th>
-                                        <th data-field="enabled" data-formatter="_formatted_select">是否启用</th>
+                                        <th data-field="id" class="W30" data-formatter="_formatte_user_id" data-align="center"></th>
+                                        <th data-field="username" class="W100">用户名</th>
+                                        <th data-field="firstName" class="W100">姓</th>
+                                        <th data-field="lastName" class="W100">名</th>
+                                        <th data-field="email" class="W100">邮箱地址</th>
+                                        <th data-field="role" class="W100">级别</th>
+                                        <th data-field="enabled" class="W100" data-formatter="_formatted_select">是否启用</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -325,8 +343,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
                             <button type="button" class="btn btn-primary add-new-user">保存</button>
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
                         </div>
                     </div>
                 </form>
@@ -354,8 +372,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -369,8 +387,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

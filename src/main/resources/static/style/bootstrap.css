@@ -5227,7 +5227,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination {
     display: inline-block;
     padding-left: 0;
-    margin: 20px 0;
+    margin: 5px 0;
     border-radius: 4px;
 }
 
@@ -5828,6 +5828,10 @@ a.thumbnail.active {
 
 .media > .pull-right {
     margin-left: 10px;
+}
+
+.pagination-detail {
+    margin-top: 10px;
 }
 
 .media-list {

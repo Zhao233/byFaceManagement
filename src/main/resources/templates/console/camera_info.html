@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title></title>
+    <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
@@ -40,25 +40,32 @@
 
 
     <style>
-        table tbody {
-            display:block;
-            height:30em;
-            overflow-y:scroll;
+        .fixed-table-body {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 30em;
+            width: 100%;
         }
-        table thead, tbody tr {
-            display:table;
-            width:100%;
-            table-layout:fixed;
-        }
-        table thead {
-            width: calc( 100% - 1em )
-        }
-        table thead th{
-            background:#275AB2;
-        }
-        thead{
-            color:#FFFFFF;
-        }
+
+        /*table tbody {*/
+            /*display:block;*/
+            /*height:30em;*/
+            /*overflow-y:scroll;*/
+        /*}*/
+        /*table thead, tbody tr {*/
+            /*display:table;*/
+            /*width:100%;*/
+            /*table-layout:fixed;*/
+        /*}*/
+        /*table thead {*/
+            /*width: calc( 100% - 1em )*/
+        /*}*/
+        /*table thead th{*/
+            /*background:#275AB2;*/
+        /*}*/
+        /*thead{*/
+            /*color:#FFFFFF;*/
+        /*}*/
 
         .navbar-brand-right_{
             float:right;
@@ -84,8 +91,8 @@
         }
         .center-vertical {
             position: relative;
-            top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            transform: translateX(-50%);
         }
         .table th, .table td {
             text-align: center;
@@ -93,19 +100,24 @@
         }
 
         .search{
-            height: 10em;
+            padding-bottom: 1em;
         }
 
         .W180{width:180px;}
         .W150{width:150px;}
-        .W100{width:100px;}
+        .W100 {width:100px !important;}
         .W280{width:280px !important;}
+        .W400{width:400px !important;}
         .W30 {width:30px !important;}
     </style>
 </head>
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -115,10 +127,6 @@
             </button>
             <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
-
-        <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -240,7 +248,7 @@
                             <div  class="panel-heading">
                                 <h3>
                                     <lable for="cameraName">摄像头名称：</lable>
-                                    <input type="text" id="cameraName">
+                                    <input type="text" id="cameraName" readonly>
 
                                     <lable for="datepicker" >日期：</lable>
                                     <input type="text" id="datepicker" readonly>
@@ -261,7 +269,7 @@
                                         </h3>
 
                                         <div class="col-md-2 col-sm-0"></div>
-                                        <div class="col-md-8 col-sm-12" id="personInfo"></div>
+                                        <div class="col-md-8 col-sm-12 row" id="personInfo"></div>
                                         <div class="col-md-2 col-sm-0"></div>
                                     </div>
                                 </div>
@@ -288,24 +296,23 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">选择摄像头  | <span id="dialog-user-management-update-title"></span></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding-bottom: 0px">
                 <form role="form" class="form-horizontal add-new-user" method="POST">
                     <input type="text" style="display:none;" id="id" name="id" />
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 5px">
                         <div class="col-sm-22">
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" style="margin-bottom: 5px">
                                 <div class="panel-body">
-                                    <div class="table-responsive" style="height: 48em; overflow:scroll;">
+                                    <div class="table-responsive">
                                         <table id="cameraList" class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th data-field="id" data-formatter="_formatte_camera_id" class="W30" data-sortable="true"  style="border:none; " ></th>
-                                                <th data-field="cameraName" data-sortable="true" class="W100">摄像头名称</th>
-                                                <th data-field="taskId" data-sortable="true" class="W280" style="border:none;" align="center">任务ID</th>
-                                                <th data-field="server.serverName" data-sortable="true" class="W100" style="border:none;" align="center">服务器名称</th>
-                                                <th data-field="entranceGuardNO" data-sortable="true" class="W100" style="border:none;" align="center">门禁编号</th>
-                                                <th data-field="entranceGuard" data-sortable="true" class="W100" data-formatter="_formatted_select" style="border:none;" align="center">是否门禁摄像头</th>
+                                                <th data-field="id" data-formatter="_formatte_camera_id" class="W30" style="border:none; " ></th>
+                                                <th data-field="cameraName" class="W100">摄像头名称</th>
+                                                <th data-field="server.serverName" class="W100" style="border:none;" align="center">服务器名称</th>
+                                                <th data-field="entranceGuardNO" class="W100" style="border:none;" align="center">门禁编号</th>
+                                                <th data-field="entranceGuard" class="W100" data-formatter="_formatted_select" style="border:none;" align="center">是否门禁摄像头</th>
                                             </tr>
                                             </thead>
                                         </table>
@@ -316,9 +323,9 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 5px;margin-bottom: 5px">
+                            <button type="button" class="btn btn-primary add-new-user">确认</button>
                             <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary add-new-user">保存</button>
                         </div>
                     </div>
                 </form>
@@ -346,8 +353,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -400,7 +407,7 @@
             yearSuffix : "年",
             /* 格式化中文日期
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-mm-dd"
+            dateFormat : "yy-m-dd"
         });
 
         $('#cameraList').bootstrapTable({
@@ -550,18 +557,22 @@
 
                 console.log(content);
 
-                $("#personInfo").append("<div class=\"col-sm-3 col-md-6 col-lg-6\">" +
-                    "<div class=\"col-sm-6 col-md-6 col-lg-6\">"+
-                    "<img src=\""+content.feature+"\" style='height: 10em'></img>" +
-                    "</div>"+
-                    "<div class=\"col-sm-6 col-md-6 col-lg-6\">" +
-                    "<label>排行: "+i+"</label><br/>" +
-                    "<label>ID: "+content.personid+"</label><br/>" +
-                    "<label>姓名: "+content.personname+"</label><br/>" +
-                    "<label>编号: "+content.personnumber+"</label><br/>" +
-                    "<label>出现次数: "+content.times+"</label><br>" +
-                    "</div>" +
-                    "</div>");
+                // $("#personInfo").append("<div class=\"col-sm-3 col-md-6 col-lg-6\">" +
+                //     "<div class=\"col-sm-6 col-md-6 col-lg-6\">"+
+                //     "<img src=\""+content.feature+"\" style='height: 10em'></img>" +
+                //     "</div>"+
+                //     "<div class=\"col-sm-6 col-md-6 col-lg-6\">" +
+                //     "<label>排行: "+i+"</label><br/>" +
+                //     "<label>ID: "+content.personid+"</label><br/>" +
+                //     "<label>姓名: "+content.personname+"</label><br/>" +
+                //     "<label>编号: "+content.personnumber+"</label><br/>" +
+                //     "<label>出现次数: "+content.times+"</label><br>" +
+                //     "</div>" +
+                //     "</div>");
+
+                $("#personInfo").append( createPersonInfo(content.feature, parseInt(i)+1, content.personname, content.personnumber, content.times) )
+
+
             }
 
             //lineChartData.datasets[0].data = chart_data;
@@ -580,20 +591,37 @@
         $.ajaxSettings.async = true;
     }
 
+
+    function createPersonInfo(picUrl, rank, name, personNumber, times){
+        return "<div class=\"col-md-6 col-lg-6 col-xs-12 col-sm-12 panel-body\" style=\"padding-left: 3px; \">" +
+            "<div style='width: 100%'>"+
+            "    <div  style='padding-right: 0px;width: 50%; float:left;box-sizing: border-box; width: 40%'>" +
+            "            <img src=\""+picUrl+"\" class='img-responsive' style='height: 10em; vertical-align: middle;'>" +
+            "    </div>" +
+            "    <div style='padding-left: 0px;width: 50%; float:left;box-sizing: border-box; width: 60%'>" +
+            "        <label>排行: "+rank+"</label><br/>" +
+            "        <label>姓名: "+name+"</label><br/>" +
+            "        <label>编号: "+personNumber+"</label><br/>" +
+            "        <label>出现次数: "+times+"</label><br/>" +
+            "    </div>" +
+            "</div>"+
+            "</div>"
+    }
+
     function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]); return null; //返回参数值
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
     }
 
     function makeContent(ranking, id, name, time,number, picUrl){
         return "<div class=\"col-xs-12 col-sm-6\">" +
-            "<img src=\""+picUrl+"\"></img>" +
-            "<label value=\"Ranking: \""+ranking+"></label>" +
-            "<label value=\"ID: \""+id+"></label>" +
-            "<label value=\"Name: \""+name+"></label>" +
-            "<label value=\"PersonNumber: \""+number+"></label>" +
-            "<label value=\"Time: \""+time+"></label>" +
+            "<img src=\""+picUrl+"\"/>" +
+            "<label value=\"Ranking: \""+ranking+"></label><br/>" +
+            "<label value=\"ID: \""+id+"></label><br/>" +
+            "<label value=\"Name: \""+name+"></label><br/>" +
+            "<label value=\"PersonNumber: \""+number+"></label><br/>" +
+            "<label value=\"Time: \""+time+"></label><br/>" +
             "</div>"
     }
 

@@ -126,7 +126,6 @@ public class VisitorManagementController {
 
         Map<String, Object> r = new HashMap<>();
 
-
         MultipartFile mf = request.getFile("file");
         FileSystemResource resource = null;
 

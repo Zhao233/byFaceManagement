@@ -39,7 +39,7 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
                     return true;
                 }
 
-                if (role.equals(User.ROLE_ADMINISTRATOR)  /**&& uri.contains("/console/user_management")*/) {
+                if (role.equals(User.ROLE_ADMINISTRATOR)  /**&& uri.contains("/console/employee_management")*/) {
                     return true;
                 } else if (role.equals(User.ROLE_CUSTOMER) && uri.contains("/console/task_schedule_tracking")) {
                     return true;

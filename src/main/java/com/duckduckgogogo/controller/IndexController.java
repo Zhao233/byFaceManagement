@@ -39,7 +39,7 @@ public class IndexController {
         }else if(user.getRole().equals("C")){
         	return "redirect:/console/task_schedule_tracking";
         }else if(user.getRole().equals("A")){
-        	return "redirect:/console/user_management";
+        	return "redirect:/console/employee_management";
         }else {
         	return "redirect:/console";
         }

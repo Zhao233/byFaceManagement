@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title></title>
+    <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
@@ -46,6 +46,14 @@
             height: 30em;
             width: 100%;
         }
+
+        #serverList .fixed-table-body-serverList {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 10em;
+            width: 100%;
+        }
+
         /*table tbody {*/
             /*display:block;*/
             /*height:30em;*/
@@ -61,22 +69,23 @@
         /*table thead {*/
             /*width: calc( 100% - 1em )*/
         /*}*/
-        /*table thead th{*/
-            /*background:#275AB2;*/
-        /*}*/
-        /*thead{*/
-            /*color:#FFFFFF;*/
-        /*}*/
-
-        #serverList tbody {
-            display:block;
-            height:15em;
-            overflow-y:scroll;
+        table thead th{
+            background:#275AB2;
         }
+        thead{
+            color:#FFFFFF;
+        }
+
+        /*#serverList tbody {*/
+            /*display:block;*/
+            /*height:15em;*/
+            /*overflow-y:scroll;*/
+        /*}*/
 
         .navbar-brand-right_{
             float:right;
         }
+
         .center-vertical {
             position: relative;
             top: 50%;
@@ -88,11 +97,15 @@
             vertical-align: middle !important;
         }
 
-        .W180{width:180px;}
-        .W150{width:150px;}
-        .W150 {width:100px !important;}
+        .search{
+            padding-bottom: 1em;
+        }
+
+        .W180{width:180px !important;}
+        .W150{width:15em !important;}
         .W280{width:280px !important;}
         .W400{width:400px !important;}
+        .W100 {width:100px !important;}
         .W30 {width:30px !important;}
     </style>
 </head>
@@ -103,6 +116,10 @@
 
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -112,10 +129,6 @@
             </button>
             <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
-
-        <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -230,27 +243,25 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <div class="table-responsive" >
+                            <div >
                                 <table id="_table_user_search" class="table table-bordered" >
                                     <thead>
                                     <tr>
-                                        <th data-field="id" data-formatter="_formatte_user_id" class="W30" data-sortable="true"  style="border:none; " ></th>
-                                        <th data-field="cameraName" data-formatter="_formatte_name" data-sortable="true" class="W150">摄像头名称</th>
-                                        <th data-field="taskId" data-sortable="true" class="W280" style="border:none;" align="center">任务ID</th>
-                                        <th data-field="server.serverName" data-sortable="true" class="W150" style="border:none;" align="center">服务器名称</th>
-                                        <th data-field="entranceGuardNO" data-sortable="true" class="W150" style="border:none;" align="center">门禁编号</th>
-                                        <th data-field="entranceGuard" data-sortable="true" class="W150" style="border:none;" data-formatter="_formatted_select" align="center">是否门禁摄像头</th>
-                                        <th data-field="entranceGuardType" data-sortable="true" class="W150" style="border:none;" align="center">门禁类型</th>
-                                        <th data-field="enabled" data-sortable="true" class="W150" style="border:none;" data-formatter="_formatted_select" align="center">是否启用</th>
-                                        <th data-field="rtspUrl" data-sortable="true" class="W400" style="border:none;" align="center">rtspURL地址</th>
-                                        <th data-field="cameraXY" data-sortable="true" class="W150" style="border:none;" align="center">地图坐标</th>
-                                        <th data-field="updateDateString" data-sortable="true" class="W150" style="border:none;" align="center">修改时间</th>
+                                        <th data-field="id" data-formatter="_formatte_user_id" class="W30"style="border:none; " ></th>
+                                        <th data-field="cameraName" data-formatter="_formatte_name" class="W100">摄像头名称</th>
+                                        <th data-field="server.serverName" class="W150" style="border:none;white-space:nowrap;" align="center">服务器名称</th>
+                                        <th data-field="entranceGuardNO" class="W150" style="border:none;white-space:nowrap;" align="center">门禁编号</th>
+                                        <th data-field="entranceGuard" data-formatter="_formatted_select" class="W150" style="border:none;white-space:nowrap;" align="center">是否门禁摄像头</th>
+                                        <th data-field="entranceGuardType" class="W150" style="border:none;white-space:nowrap;" align="center">门禁类型</th>
+                                        <th data-field="rtspUrl" class="W280" data-formatter="_formatte_rtsp" style="border:none;" align="center">rtspURL地址</th>
+                                        <th data-field="cameraXY" class="W150" style="border:none;white-space:nowrap;" align="center">地图坐标</th>
+                                        <th data-field="updateDateString"  class="W150" style="border:none;white-space:nowrap;" align="center">修改时间</th>
                                     </tr>
                                     </thead>
                                 </table>
                             </div>
 
-                            <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">增加</button>
+                            <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
                             <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
                             <button class="btn btn-danger delete-employee-dialog">删除</button>
 
@@ -290,7 +301,7 @@
                     <div class="form-group">
                         <label for="rtspUrl" class="col-sm-4 control-label">rtspUrl地址</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" id="rtspUrl" name="rtspUrl" maxlength="70" />
+                            <input type="text" class="form-control" id="rtspUrl" name="rtspUrl" maxlength="200" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
@@ -299,13 +310,6 @@
                         <label for="entranceGuardNO" class="col-sm-4 control-label">门禁编号</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="entranceGuardNO" name="entranceGuardNO" maxlength="30" />
-                        </div>
-                        <div class="col-sm-1"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="entranceGuardNO" class="col-sm-4 control-label">地图坐标</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" id="cameraXY" name="cameraXY" maxlength="30" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
@@ -322,21 +326,37 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="entranceGuard" class="col-sm-4 control-label">摄像头类型</label>
+                        <label for="entranceGuard" class="col-sm-4 control-label">门禁类型</label>
                         <div class="col-sm-7">
                             <select id="entranceGuardType" name="entranceGuardType" class="form-control" required="required">
                                 <option value="in">入口</option>
                                 <option value="out">出口</option>
+                                <option value="inout">出入口</option>
                                 <option value="">其他</option>
                             </select>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
 
-
                     <div class="form-group">
+                        <label for="entranceGuardNO" class="col-sm-4 control-label">地图坐标</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="cameraXY" name="cameraXY" maxlength="30" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 5px !important;" id="serverInfo" style="display: none;">
+                        <label for="entranceGuardNO" class="col-sm-4 control-label">服务器名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="serverName" name="cameraXY" maxlength="30" readonly=""/>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 5px !important;" id="sever-form">
                         <div class="col-sm-22">
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" style="margin-bottom: 5px !important;">
                                 <div class="panel-heading">服务器列表</div>
                                 <div class="panel-body">
                                     <div class="table-responsive">
@@ -360,10 +380,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
+                    <div class="form-group" style="margin-bottom: 5px !important;">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 5px;">
                             <button type="button" class="btn btn-primary add-new-user">保存</button>
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </form>
@@ -382,7 +402,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -392,13 +411,12 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -408,8 +426,8 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -430,7 +448,7 @@
             queryParamsType: "limit",
             singleSelect: true,
             contentType: "application/x-www-form-urlencoded",
-            pageSize: 5,
+            pageSize: 10,
             pageNumber:1,
             search: true,
             showColumns: true,
@@ -541,6 +559,12 @@
         return $.trim(value) ==$.trim('true') ? "是":"否" ;
     }
 
+    function _formatte_rtsp(value,row,index){
+        if (value != undefined) {
+            return '<a href="/console/RTSP/?rtspUrl=' + value +'">' + value + '</a>';
+        }
+    }
+
     function _reset(from) {
         from[0].reset();
         _reset_input(from.find("input"));
@@ -571,6 +595,16 @@
         _reset($(".form-horizontal.add-new-user"));
 
         window.flag = 'add';
+
+        if(window.flag=='add'){
+            $("#serverInfo").css("display","none");
+
+            $("#sever-form").css("display","");
+        } else {
+            $("#serverInfo").css("display","");
+
+            $("#sever-form").css("display","none");
+        }
 
         $('#serverList').bootstrapTable({
             method: 'get',
@@ -617,35 +651,15 @@
         if (id != undefined) {
             _reset($(".form-horizontal.add-new-user"));
 
-            // $('#serverList').bootstrapTable({
-            //     method: 'get',
-            //     url: "/console/server_management/search",
-            //     striped: true,
-            //     dataType: "json",
-            //     pagination: true,
-            //     queryParamsType: "limit",
-            //     singleSelect: true,
-            //     contentType: "application/x-www-form-urlencoded",
-            //     pageSize: 10,
-            //     pageNumber:1,
-            //     search: true,
-            //     showColumns: true,
-            //     showRefresh: true,
-            //     sidePagination: "server", //服务端请求
-            //     queryParams: function(params) {
-            //         return {
-            //             limit: params.limit,
-            //             offset: params.offset / params.limit,
-            //             search: $(".search").find("input").val()
-            //         };
-            //     },
-            //     responseHandler: function(res) {
-            //         return {
-            //             "rows": res.rows,
-            //             "total": res.total
-            //         };
-            //     }
-            // });
+            if(window.flag=='add'){
+                $("#serverInfo").css("display","none");
+
+                $("#sever-form").css("display","");
+            } else {
+                $("#serverInfo").css("display","");
+
+                $("#sever-form").css("display","none");
+            }
 
             $.get("/console/camera_management/get/" + id, null, function(r, status) {
                 window.version = r.version;
@@ -658,15 +672,17 @@
 
                 $("#dialog-camera-management-update").find("input[id='entranceGuardNO']").val(r.entranceGuardNO);
                 $("#dialog-camera-management-update").find("input[id='cameraXY']").val(r.cameraXY);
-                $("#dialog-camera-management-update").find("select[id='entranceGuard']").val(r.entranceGuard ? "True" : "False");
+                $("#dialog-camera-management-update").find("select[id='entranceGuard']").val(r.entranceGuard ? "true" : "false");
 
                 var server_json = eval("(" + r.server + ")");
 
                 window.serverId = server_json.id;
 
+                $("#dialog-camera-management-update").find("input[id='serverName']").val(server_json.serverName);
+
                 //$("input[name='serverID']").find("input[value = serverID ]").attr("checked",true);
 
-                $("#dialog-camera-management-update-title").html("更新摄像头");
+                $("#dialog-camera-management-update-title").html("修改摄像头");
                 $("#dialog-camera-management-update").modal("show");
 
             });
@@ -678,9 +694,9 @@
         }
     });
 
-
-
     $(".btn.btn-primary.add-new-user").click(function() {
+
+
         var isComplete = true;
         var isFormatted = true;
 
@@ -703,11 +719,11 @@
         }
 
         if($("input[id='entranceGuardNO']").val() ==""){
-            _set($("input[id='entranceGuardNO']"), "请输入入口编号");
+            _set($("input[id='entranceGuardNO']"), "请输入门禁编号");
             isComplete = false;
         }
         if($("input[id='cameraXY']").val() ==""){
-            _set($("input[id='cameraXY']"), "请输入摄像头地址");
+            _set($("input[id='cameraXY']"), "请输入摄像头位置");
             isComplete = false;
         }
 
@@ -723,21 +739,23 @@
             if( !isLocation( $("input[id='cameraXY']").val() ) ){
                 isFormatted = false;
 
-                _set($("input[id='cameraXY']"), "请输入与 120,220 类似的坐标");
+                _set($("input[id='cameraXY']"), "请输入合法坐标( 形如 120,220 )");
             }
 
             if (isFormatted) {
 
                 var flag_ = window.flag;
 
-
-                var serverID = $("input[name='serverID']:checked").val();
+                if(window.flag == 'add') {
+                    var serverID = $("input[name='serverID']:checked").val();
+                } else {
+                    var serverID = window.serverId;
+                }
 
                 if (serverID == undefined) {
                     $("#dialog-return").find(".modal-body").html("请选择服务器");
                     $("#dialog-return").modal("show");
                 } else {
-
                     var data = new FormData();
 
                     data.append("id", $("input[id='id']").val());
@@ -748,6 +766,7 @@
                     } else {
                         data.append("server", $("input[name='serverID']:checked").val());
                     }
+
                     data.append("entranceGuard", $("select[id='entranceGuard']").val());
                     data.append("entranceGuardNO", $("input[id='entranceGuardNO']").val());
                     data.append("entranceGuardType", $("#entranceGuardType").val());

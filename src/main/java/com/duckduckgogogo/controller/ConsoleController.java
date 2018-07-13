@@ -20,7 +20,7 @@ public class ConsoleController {
 
     @RequestMapping
     public ModelAndView toIndex() {
-        return new ModelAndView("console/user_management");
+        return new ModelAndView("console/employee_management");
     }
 
     @RequestMapping("/profile")
@@ -118,6 +118,16 @@ public class ConsoleController {
     @RequestMapping("/camera_location")
     public ModelAndView toCameraLocation() {
         return new ModelAndView("console/camera_location");
+    }
+
+    @RequestMapping("/RTSP")
+    public ModelAndView toRTS() {
+        return new ModelAndView("console/RTSP");
+    }
+
+    @RequestMapping("/edit_pass")
+    public ModelAndView toEditPass() {
+        return new ModelAndView("console/edit_pass");
     }
 
     /**

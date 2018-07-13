@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class ServerInfoController {
     private ServerService serverService;
 
     @RequestMapping("/getStatus")
+    @ResponseBody
     private Map<String, Object> getStatus(@RequestParam("serverId") int id){
         Map<String, Object> map = new HashMap<>();
 
@@ -26,11 +28,19 @@ public class ServerInfoController {
         JSONObject object_info = JSONObject.fromObject(info);
 
         String status  = serverService.getServerInfoById(id);
-        JSONArray array = JSONArray.fromObject(status);
+        JSONObject array = JSONObject.fromObject(status);
 
         map.put("serverInfo",object_info);
-        map.put("status",array);
+        map.put("cameraStatus",array);
+
+        map.put("status","SUCCEED");
 
         return map;
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    private String test(){
+        return "asdfghjkl;";
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title></title>
+    <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
@@ -37,9 +37,10 @@
     <style>
         #canvas{
             border: 1px solid #ADACB0;
-            background-image: url("/images/test_floor2.jpg");
+            background-image: url("/images/floor.png");
             background-position: center;
             background-size: 100% 100%;
+            /*background-repeat: no-repeat;*/
         }
         .navbar-brand-right_{
             float:right;
@@ -49,12 +50,20 @@
             text-align: center;
             vertical-align: middle !important;
         }
+
+        .search{
+            padding-bottom: 1em;
+        }
     </style>
 
 </head>
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -64,10 +73,6 @@
             </button>
             <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
-
-        <ul class="nav navbar-top-links navbar-brand-right_">
-            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-        </ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -171,11 +176,11 @@
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div id="page-inner">
-            <div class="row">
-                <h1 class="page-header" style="color: #FFFFFF;">
-                    轨迹图
-                </h1>
-            </div>
+            <!--<div class="row">-->
+                <!--<h1 class="page-header" style="color: #FFFFFF;">-->
+                    <!--轨迹图-->
+                <!--</h1>-->
+            <!--</div>-->
             <!-- /. ROW  -->
 
             <div class="row">
