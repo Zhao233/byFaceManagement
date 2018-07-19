@@ -3,14 +3,17 @@ package com.duckduckgogogo.services.impl;
 import com.duckduckgogogo.domain.ConfigInfo;
 import com.duckduckgogogo.services.ConfigInfoService;
 import net.sf.json.JSONObject;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service("configInfoService")
@@ -125,5 +128,31 @@ public class ConfigInfoServiceImpl implements ConfigInfoService {
         } catch (ResourceAccessException e){
             return "{}";
         }
+    }
+
+
+    @Override
+    public String isActivityIPAndPort(String ip, String service) {
+        String url_status = "http://"+ip+service;
+
+        RestTemplate rest = new RestTemplate();
+
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        String response = "";
+        try {
+            response = rest.getForObject(url_status, String.class);
+        } catch (ResourceAccessException e){
+            System.out.println("error IP and port");
+
+            response = "false";
+
+            return response;
+        }
+        response = "true";
+
+        System.out.println("getServerInfoById: "+ response);
+
+        return response;
     }
 }

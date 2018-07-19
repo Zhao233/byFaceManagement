@@ -38,9 +38,28 @@ public class ServerInfoController {
         return map;
     }
 
+    @RequestMapping("/getAllStatus")
+    @ResponseBody
+    private Map<String, Object> getAllStatus(){
+        Map<String, Object> map = new HashMap<>();
+
+        String info = serverService.getAllServerInfo();
+        JSONArray object_info = JSONArray.fromObject(info);
+
+        map.put("rows",object_info);
+        map.put("total",object_info.size());
+
+        map.put("status","SUCCEED");
+
+        return map;
+
+    }
+
     @RequestMapping("/test")
     @ResponseBody
     private String test(){
         return "asdfghjkl;";
     }
+
+
 }

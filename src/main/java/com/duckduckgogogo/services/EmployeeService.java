@@ -16,4 +16,6 @@ public interface EmployeeService {
     String deleteEmployee(List<Integer> list);
 
     String getEmployeeById(int id);
+
+    String detect(FileSystemResource resource);
 }

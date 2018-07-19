@@ -196,9 +196,14 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
@@ -216,6 +221,12 @@
                         <li>
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
 
                         <!--考勤信息-->
                         <li>
@@ -250,6 +261,11 @@
                         <!--用户管理-->
                         <li>
                             <a href="/console/user_management">用户管理</a>
+                        </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
                         </li>
                     </ul>
                 </li>
@@ -381,7 +397,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -392,7 +408,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -407,7 +423,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -479,6 +495,8 @@
 
     //点击修改
     $(".btn.btn-primary.form-profile-save").click(function() {
+
+
         var flag = false;
 
         var ipAndPort = $("#serverIPandPort").val();
@@ -588,29 +606,76 @@
 
             $.ajax({
                 async : false ,
-                url : "http://"+$("input[id='serverIPandPort']").val() + "/api/config/query",
-                timeout : 100,
-                dataType : "jsonp",
-                jsonp : 'callback',
-                success : function () {
+                type : 'GET',
+                url : "/console/faceconfig_management/isActivityIPAndPort",
+                data : {
+                    "ip" : $("input[id='serverIPandPort']").val(),
+                    "service" : 0
                 },
-                error : function() {
+                beforeSend : function(){
+                    // $("#dialog-return").find(".modal-body").html("检查中,请稍后.............");
+                    // $("#dialog-return").modal("show");
+                },
+                timeout : 200,
+                success : function (r) {
+                    switch (r.status){
+                        case "SUCCEED" :
+                            break;
+                        case "FAILED" :
+                            isFormatted = false;
 
-                    _set($("input[id='serverIPandPort']"), "请输入有效的IP地址");
+                            _set($("input[id='serverIPandPort']"), "IP地址或端口有误，无数据返回，请输入输入IP地址");
+                            break
+                    }
+                },
 
-                    isFormatted = false;
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").modal("show");
+                },
+            });
+
+            $.ajax({
+                async : false ,
+                type : 'GET',
+                url : "/console/faceconfig_management/isActivityIPAndPort",
+                data : {
+                    "ip" : $("input[id='receiveURL']").val(),
+                    "service" : 1
+                },
+                timeout : 200,
+                success : function (r) {
+                    switch (r.status){
+                        case "SUCCEED" :
+                            break;
+                        case "FAILED" :
+                            isFormatted = false;
+
+                            _set($("input[id='receiveURL']"), "IP地址或端口有误，无数据返回，请输入输入IP地址");
+                            break
+                    }
+                },
+
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").modal("show");
+                },
+                complete : function() {
+                    if (isComplete && isFormatted) {
+                        $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
+                        $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+                        $(".bs-example-modal-sm").modal("show");
+                    }
                 }
-            })
+            });
 
-            flag = true;//test after checked the iPandPort
 
-            if (flag && isComplete && isFormatted) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否保存修改?");
-                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-                $(".bs-example-modal-sm").modal("show");
-            }
         }
     });
+
+    function jsonpGet(data){
+        alert(data);
+    }
 
     $(".btn-task-delete-confirm").click(function () {
 
@@ -652,8 +717,6 @@
                         }
                     }
                 });
-
-
     });
 
     function isName(val){//包括中文和英文数字-

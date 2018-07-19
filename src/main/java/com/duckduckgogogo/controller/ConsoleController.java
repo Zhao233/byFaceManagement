@@ -115,6 +115,11 @@ public class ConsoleController {
         return new ModelAndView("console/contacts_management");
     }
 
+    @RequestMapping("/contacts_config")
+    public ModelAndView toContactsConfig() {
+        return new ModelAndView("console/contacts_config");
+    }
+
     @RequestMapping("/camera_location")
     public ModelAndView toCameraLocation() {
         return new ModelAndView("console/camera_location");
@@ -125,9 +130,11 @@ public class ConsoleController {
         return new ModelAndView("console/RTSP");
     }
 
-    @RequestMapping("/edit_pass")
-    public ModelAndView toEditPass() {
-        return new ModelAndView("console/edit_pass");
+
+
+    @RequestMapping("/visitorRecord_management")
+    public ModelAndView toVisitorRecord() {
+        return new ModelAndView("console/visitorRecord_management");
     }
 
     /**

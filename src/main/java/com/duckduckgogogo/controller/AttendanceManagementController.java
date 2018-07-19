@@ -25,11 +25,22 @@ public class AttendanceManagementController extends Logger_{
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
             @RequestParam("search") String search,
-            @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit){
+            @RequestParam("offset") String offset,
+            @RequestParam(name="limit",required = false) Integer limit ){
         Map<String, Object> r = new HashMap<>();
 
-        String result = attendanceService.searchServers(search,offset,limit,startDate,endDate);
+        String result = "";
+
+        if(limit == null){
+            limit = Integer.MAX_VALUE;
+
+            offset = "0";
+
+            result = attendanceService.searchServers(search, Integer.parseInt(offset), limit, startDate, endDate);
+        } else {
+            result = attendanceService.searchServers(search, Integer.parseInt(offset), limit, startDate, endDate);
+        }
+
         System.out.println("search attendance succeed : "+result);
 
         super.logger.info("search attendance succeed : "+result);

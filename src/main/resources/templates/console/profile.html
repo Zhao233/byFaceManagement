@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BEYONDSOFT</title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <link href="/style/font-awesome.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
+
+    <script src="/javascript/jquery-ui.js"></script>
+
+    <script src="/javascript/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.backstretch.min.js"></script>
+    <script src="/assets/js/scripts.js"></script>
+
+    <!-- Metis Menu Js -->
+    <script src="/javascript/jquery.metisMenu.js"></script>
+
+    <script src="/javascript/custom-scripts.js"></script>
+
+    <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+    <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
+
+
+    <style>
+        .fixed-table-body {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 35em;
+            width: 100%;
+        }
+
+        #serverList .fixed-table-body-serverList {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 10em;
+            width: 100%;
+        }
+
+        /*table tbody {*/
+        /*display:block;*/
+        /*height:30em;*/
+        /*width: 500px;*/
+        /*overflow-x: scroll;*/
+        /*overflow-y:scroll;*/
+        /*}*/
+        /*table thead, tbody tr {*/
+        /*display:table;*/
+        /*width:100%;*/
+        /*table-layout:fixed;*/
+        /*}*/
+        /*table thead {*/
+        /*width: calc( 100% - 1em )*/
+        /*}*/
+        table thead th{
+            background:#275AB2;
+        }
+        thead{
+            color:#FFFFFF;
+        }
+
+        /*#serverList tbody {*/
+        /*display:block;*/
+        /*height:15em;*/
+        /*overflow-y:scroll;*/
+        /*}*/
+
+        .navbar-brand-right_{
+            float:right;
+        }
+
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .search{
+            padding-bottom: 1em;
+        }
+
+        .W180{width:180px !important;}
+        .W150{width:15em !important;}
+        .W280{width:280px !important;}
+        .W400{width:400px !important;}
+        .W100 {width:100px !important;}
+        .W30 {width:30px !important;}
+    </style>
+</head>
+<body>
+<script>
+    window.sign = 0;//0:add, 1:update
+</script>
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+
+                        <img src="/style/images/avtar.png">
+
+                        <!--<div>-->
+                        <!--<label id="adminName" style="alignment: center"></label>-->
+                        <!--</div>-->
+
+                        <!--<div>-->
+                        <!--<label id="adminEmail" style="alignment: center"></label>-->
+                        <!--</div>-->
+                    </div>
+                    <br>
+                </li>
+
+                <!--区域安全防范系统-->
+                <li>
+                    <a><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--轨迹图-->
+                        <li>
+                            <a href="/console/trace_info">轨迹图</a>
+                        </li>
+
+                        <!--轨迹统计图表-->
+                        <li>
+                            <a href="/console/camera_info">轨迹统计图表</a>
+                        </li>
+
+                        <!--告警设置-->
+                        <li>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--内部人员管理-->
+                <li>
+                    <a><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--员工管理-->
+                        <li>
+                            <a href="/console/employee_management">员工管理</a>
+                        </li>
+
+                        <!--访客管理-->
+                        <li>
+                            <a href="/console/visitor_management">访客管理</a>
+                        </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
+
+                        <!--考勤信息-->
+                        <li>
+                            <a href="/console/attendance_management">考勤信息</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--系统管理-->
+                <li>
+                    <a class="active-menu"><i class="fa fa-sitemap"></i> 系统管理<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">                        <!--服务器管理-->
+                        <li>
+                            <a href="/console/server_management">服务器管理</a>
+                        </li>
+
+                        <!--服务器信息-->
+                        <li>
+                            <a href="/console/server_info">服务器信息</a>
+                        </li>
+
+                        <!--摄像头管理-->
+                        <li>
+                            <a href="/console/camera_management" >摄像头管理</a>
+                        </li>
+
+                        <!--参数设置-->
+                        <li>
+                            <a href="/console/face_config">参数设置</a>
+                        </li>
+
+                        <!--用户管理-->
+                        <li>
+                            <a href="/console/user_management">用户管理</a>
+                        </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile" class="active-menu-item">用户信息修改</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header" style="color: #FFFFFF;">
+                        用户信息修改
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="panel-heading">
+                            </div>
+                            <form class="form-horizontal form-profile-save" method="post">
+                                <input type="text" style="display:none;" id="id" name="id" th:value="${user.id}" />
+                                <input type="text" style="display:none;" id="version" name="version" th:value="${user.version}" />
+                                <input type="text" style="display:none;" id="role" name="role" th:value="${user.role}" />
+                                <input type="text" style="display:none;" id="enable" name="enable" th:value="${user.enabled}" />
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-3 control-label">用户名</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstName" class="col-sm-3 control-label">姓</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="firstName" name="firstName" th:value="${user.firstName}" maxlength="30" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" class="col-sm-3 control-label">名</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="lastName" name="lastName" th:value="${user.lastName}" maxlength="30" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="col-sm-3 control-label">电子邮件</label>
+                                    <div class="col-sm-5">
+                                        <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" data-toggle="tooltip" data-placement="top" maxlength="200" placeholder="e.g john@example.com" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="col-sm-3 control-label">密码</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="password" name="password" data-toggle="tooltip" maxlength="20" data-placement="bottom" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="col-sm-3 control-label">确认密码</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+
+
+                        </form>
+
+                            <button class="btn btn-primary save">确认修改</button>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+            <!-- /. ROW  -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<!--//弹出框-->
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel0">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Custom Js -->
+<script>
+    var operate_flag = true;
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.removeClass("alert-danger");
+        el.tooltip('destroy');
+
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
+
+    $(".save").click(function () {
+        var isComplete = true;
+
+        var password = $("#password");
+        var confirmPassword = $("#confirmPassword");
+        var userName = $("#username");
+        var firstName = $("#firstname");
+        var lastName = $("#lastname");
+        var email = $("#email");
+
+        _reset_input(password);
+        _reset_input(userName);
+        _reset_input(firstName);
+        _reset_input(lastName);
+        _reset_input(email);
+
+        if(password.val() == ""){
+            isComplete = false;
+
+            _set(password, "请输入密码")
+        }
+        if(confirmPassword.val() == ""){
+            isComplete = false;
+
+            _set(confirmPassword, "请确认密码")
+        }
+        if(userName.val() == ""){
+            isComplete = false;
+
+            _set(userName, "请输入用户名")
+        }
+        if(firstName.val() == ""){
+            isComplete = false;
+
+            _set(firstName, "请输入姓")
+        }
+        if(lastName.val() == ""){
+            isComplete = false;
+
+            _set(lastName, "请输入名")
+        }
+        if(email.val() == ""){
+            isComplete = false;
+
+            _set(email, "请输入电子邮箱")
+        }
+
+        if(isComplete) {
+            if(! isEmail( email.val() )){
+                _set(email, "请输入合法的电子邮箱");
+
+                return ;
+            }
+
+            if (password.val() != confirmPassword.val()) {
+                _set(confirmPassword, "两次输入的密码不一致，请重新输入");
+
+                return ;
+            }
+
+            var post_data = $(".form-profile-save").serializeArray();
+
+            $.ajax({
+                async : false ,
+                type : 'POST',
+                url : "/console/user_management/save",
+                data : post_data,
+                timeout : 200,
+                success : function (r) {
+                    switch (r.status){
+                        case "SUCCEED" :
+                            $("#dialog-return").find(".modal-body").html("修改成功");
+                            $("#dialog-return").modal("show");
+
+                            operate_flag = true;
+
+                            break;
+
+                        case "FAILED" :
+                            if(r.message != undefined){
+                                $("#dialog-return").find(".modal-body").html(r.message);
+                                $("#dialog-return").modal("show");
+                            }
+
+                            operate_flag = false;
+
+                            break
+                    }
+                },
+
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").modal("show");
+
+                    operate_flag = false;
+                },
+            });
+
+        }
+    });
+
+    $('#dialog-return').on('hidden.bs.modal', function () {
+
+        if(operate_flag) { //修改成功后刷新页面
+            window.location.reload();
+        }
+    })
+
+
+    function isEmail(val){
+        var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        return myreg.test(val);
+    }
+
+
+</script>
+
+<script>
+    console.log("this script has been launched");
+</script>
+
+</body>
+</html>

@@ -32,14 +32,12 @@
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
 
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
-
     <script src="/javascript/custom-scripts.js"></script>
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
+
 
     <script>
         function _set(el, message) {
@@ -53,9 +51,10 @@
         .fixed-table-body {
             overflow-x: auto;
             overflow-y: scroll;
-            height: 30em;
+            height: 35em;
             width: 100%;
         }
+
         /*table tbody {*/
             /*display:block;*/
             /*height:33em;*/
@@ -206,9 +205,14 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
@@ -225,6 +229,12 @@
                         <li>
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
 
                         <!--考勤信息-->
                         <li>
@@ -260,6 +270,11 @@
                         <!--用户管理-->
                         <li>
                             <a href="/console/user_management">用户管理</a>
+                        </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
                         </li>
                     </ul>
                 </li>
@@ -343,7 +358,7 @@
                                 <div class="caption">
                                     <p>
                                         <label class="btn btn-primary choosePic" for="avatar-2">选择文件</label>
-                                        <input id="avatar-2" name="avatar-2" onchange="choosePic_complete(this);" type="file" style="display:none"/>
+                                        <input id="avatar-2" name="avatar-2" type="file" style="display:none"/>
 
                                         <a class="btn btn-default deletePic" role="button" style="display: none">删除图片</a>
                                     </p>
@@ -413,7 +428,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -424,7 +439,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -439,7 +454,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -678,7 +693,6 @@
                     if( !isPic(file.name) ){
                         $("#dialog-return").find(".modal-body").html("请选择格式为png,jpg,jpeg,bmp的图片");
 
-
                         $("#dialog-return").modal("show");
 
                         return ;
@@ -753,8 +767,6 @@
 
                 });
 
-                flag = '';
-
                 form = '';//避免重复点击
             }
         }
@@ -784,7 +796,7 @@
         return isMob.test(val)||isPhone.test(val)
     }
     function isPic(picture){
-        return (/\.(jpg|jpeg|bmp|png)$/).test(picture);
+        return (/\.(jpg|jpeg|png)$/).test(picture);
     }
 
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
@@ -880,22 +892,112 @@
     }
 
     $("#avatar-2").change(function (event) {
+        var isComplete = false;
+
         var file = event.target.files[0];
 
-        if(file.size > 1024*1024*8){
-            alert('图片大小不能超过 8MB!');
+        if(!isPic(file.name)){
+            $("#dialog-return").find(".modal-body").html("请选择以,jpg,jpeg,png结尾的图片");
+            $("#dialog-return").modal("show");
+
             return;
         }
 
-        var URL = window.URL || window.webkitURL;
+        if(file.size > 1024*1024*8){
+            $("#dialog-return").find(".modal-body").html("图片大小不能超过 8MB!");
+            $("#dialog-return").modal("show");
 
-        var imgURL = URL.createObjectURL(file);
+            return;
+        }
+
+        var form = new FormData();
+
+        form.append("file", file);
+
+        $.ajax({
+            async : false,
+            url : "/console/employee_management/detect",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success : function (res) {
+                switch (res.status){
+                    case "SUCCEED" :
+                        isComplete = true;
+
+                        break;
+                    case "FAILED" :
+                        if(res.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").html(res.errorMessage+"，请重新选择照片");
+                        } else {
+                            $("#dialog-return").find(".modal-body").html("请检查您的照片");
+                        }
+
+                        $("#dialog-return").modal("show");
+
+                        $("#avatar-2").val('');
+
+                        return;
+                }
+            },
+            error : function(){
+                $("#dialog-return").find(".modal-body").html("网络错误，请重试");
+
+                $("#dialog-return").modal("show");
 
 
-        $("#choosedPic").attr('src',src=imgURL);
+                $("#avatar-2").val('');
 
-        console.log(imgURL);
+                return;
+            }
+
+        });
+
+        // $.ajax({
+        //     url : "/console/employee_management/detect",
+        //     async : false,
+        //     data: form,
+        //     type : "POST",
+        //     success : function (res) {
+        //         switch (res.status){
+        //             case "SUCCEED" :
+        //
+        //                 break;
+        //             case "FAILED" :
+        //                 $("#dialog-return").find(".modal-body").html(r.message);
+        //
+        //                 $("#dialog-return").modal("show");
+        //
+        //                 return ;
+        //                 break;
+        //         }
+        //     },
+        //     error : function(){
+        //         $("#dialog-return").find(".modal-body").html("网络错误，请重试");
+        //
+        //         $("#dialog-return").modal("show");
+        //
+        //         return ;
+        //     }
+        // })
+        if(isComplete) {
+
+            var URL = window.URL || window.webkitURL;
+
+            var imgURL = URL.createObjectURL(file);
+
+            $("#choosedPic").attr('src', src = imgURL);
+
+            console.log(imgURL);
+        }
     })
+
+    function checkImageQuality(image){
+        $.ajax({
+            url : "",
+        })
+    }
 
     $(".btn.btn-default.deletePic").click(function () {
         var file_select = $("#avatar-2");

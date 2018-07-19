@@ -34,6 +34,7 @@ public class CameraManagementController {
             r.put("status", "SUCCEED");
         } else {
             r.put("status", "FAILED");
+
         }
 
         return r;

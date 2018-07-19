@@ -4,7 +4,9 @@ spring.profile.name: application-Dev.yml
 server:
   # connection-timeout: 60000
   session:
-    timeout: 9000 # 30'
+    timeout: 9000
+  port: 8888
+
 
 server.tomcat.basedir: /data/apps/temp
 

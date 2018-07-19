@@ -4,13 +4,16 @@ import com.duckduckgogogo.services.ServerService;
 import com.duckduckgogogo.utils.DeleteID;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class ServerServiceImp extends Info implements ServerService {
 
             String string = rest.postForObject(url, param, String.class);
 
-            System.out.print("查询成功：");
+            System.out.print("search server success：");
             System.out.println(string);
 
             return string;
@@ -72,7 +75,7 @@ public class ServerServiceImp extends Info implements ServerService {
 
             String string = rest.postForObject(url, request, String.class);
 
-            System.out.print("增加成功：");
+            System.out.print("add server success：");
             System.out.println(string);
 
             return string;
@@ -104,7 +107,7 @@ public class ServerServiceImp extends Info implements ServerService {
 
             String request = "{\"id\":"+id+",\"serverName\":\"" + serverName + "\",\"serverIP\":\"" + serverIP + "\",\"isMainServer\":\"" + isMainServer + "\",\"version\":"+version+"}";
 
-            System.out.println("update request: "+ request);
+            System.out.println("update server success: "+ request);
 
             String string = rest.postForObject(url, request, String.class);
 
@@ -149,7 +152,7 @@ public class ServerServiceImp extends Info implements ServerService {
 
             String string = rest.getForObject(url, String.class);
 
-            System.out.print("获取成功：");
+            System.out.print("get server success：");
             System.out.println(string);
 
             return string;
@@ -166,8 +169,23 @@ public class ServerServiceImp extends Info implements ServerService {
         rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         String string = rest.getForObject(url_status, String.class);
-        System.out.println("getServerInfoById: "+ string);
+        System.out.println("getServerInfoById success: "+ string);
 
         return string;
     }
+
+    @Override
+    public String getAllServerInfo() {
+        String url_status = "http://"+Info.serverIP+"/api/system/resource/all";
+
+        RestTemplate rest = new RestTemplate();
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        String string = rest.getForObject(url_status, String.class);
+        System.out.println("getAllServerInfo success: "+ string);
+
+        return string;
+    }
+
+
 }

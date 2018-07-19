@@ -45,6 +45,7 @@ public class VisitorManagementController {
 
         JSONObject object = JSONObject.fromObject(response);
 
+
         r.put("total",object.getInt("total"));
         JSONArray array = object.getJSONArray("rows");
 
@@ -209,14 +210,17 @@ public class VisitorManagementController {
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
-            r.put("status", "SUCCEED");
+            r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
             r.put("status", "FAILED");
+
+            if(object.getString("errorMessage") != null) {
+                r.put("errorMessage", object.getString("errorMessage"));
+            }
         }
+
         return r;
     }
-
-
-
-
 }

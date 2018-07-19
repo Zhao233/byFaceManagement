@@ -36,14 +36,11 @@
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
 
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
-
     <script src="/javascript/custom-scripts.js"></script>
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
     <!-- Custom Js -->
     <script>
@@ -274,9 +271,14 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
@@ -289,9 +291,14 @@
                             <a href="/console/employee_management">员工管理</a>
                         </li>
 
-                        <!--访客管理-->
+                        <!--访客管s理-->
                         <li>
                             <a href="/console/visitor_management" class="active-menu-item">访客管理</a>
+                        </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
                         </li>
 
                         <!--考勤信息-->
@@ -329,6 +336,11 @@
                         <li>
                             <a href="/console/user_management">用户管理</a>
                         </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -365,10 +377,8 @@
                                         <!--User ID-->
                                         <!--</th>-->
                                         <th data-field="name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
-                                        <th data-field="IDNumber" class="W100" style="border:none;">身份证号</th>
+                                        <th data-field="IDNumber" class="W100" style="border:none;">证件号码</th>
                                         <th data-field="phoneNumber" class="W100" style="border:none;">电话号码</th>
-                                        <th data-field="startDateString"  class="W100" style="border:none;">开始时间</th>
-                                        <th data-field="endDateString" class="W100" style="border:none;">结束时间</th>
                                         <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
                                         <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
                                     </tr>
@@ -416,7 +426,7 @@
                                 <div class="caption">
                                     <p>
                                         <label class="btn btn-primary choosePic" for="avatar-2">选择文件</label>
-                                        <input id="avatar-2" name="avatar-2" onchange="choosePic_complete(this);"
+                                        <input id="avatar-2" name="avatar-2"
                                                type="file" style="display:none"/>
 
                                         <a class="btn btn-default deletePic" role="button"
@@ -437,33 +447,32 @@
 
                                 <div class="col-sm-1"></div>
                             </div>
+
                             <div class="form-group">
-                                <label for="IDNumber" class="col-sm-4 control-label">身份证号</label>
+                                <label for="IDNumber" class="col-sm-4 control-label">证件类型</label>
+                                <div class="col-sm-7">
+                                    <select id="IDType" class="form-control">
+                                        <option value="id">身份证</option>
+                                        <option value="other">其他</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="IDNumber" class="col-sm-4 control-label">证件号码</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="IDNumber" name="IDNumber"
                                            maxlength="30"/>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
+
                             <div class="form-group">
                                 <label for="phoneNumber" class="col-sm-4 control-label">电话号码</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                            maxlength="30"/>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="datepicker_start" class="col-sm-4 control-label">开始时间</label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" readonly id="datepicker_start">
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="form-group ">
-                                <label for="datepicker_end" class="col-sm-4 control-label">结束时间</label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" readonly id="datepicker_end">
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
@@ -487,7 +496,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -499,7 +508,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -514,7 +523,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -643,15 +652,7 @@
             _set($("input[id='phoneNumber']"), "请输入电话号码");
             isComplete = false;
         }
-        if ($("input[id='datepicker_start']").val() == "") {
-            _set($("input[id='datepicker_start']"), "请选择开始日期");
-            isComplete = false;
-        }
 
-        if ($("input[id='datepicker_end']").val() == "") {
-            _set($("input[id='datepicker_end']"), "请选择结束日期");
-            isComplete = false;
-        }
 
         if(isComplete) {
             _reset_input( $("#dialog-visitor-management-update").find(".form-group").find("input") );
@@ -661,9 +662,11 @@
                 isFormatted = false;
             }
 
-            if ( !isIDNumber($("input[id='IDNumber']").val()) ) {
-                _set($("input[id='IDNumber']"), "请输入合法身份证号");
-                isFormatted = false;
+            if( $("#IDType").val() == 'id' ) {
+                if (!isIDNumber($("input[id='IDNumber']").val())) {
+                    _set($("input[id='IDNumber']"), "请输入合法身份证号");
+                    isFormatted = false;
+                }
             }
 
             if ( !isPhoneNumber($("input[id='phoneNumber']").val()) ) {
@@ -674,22 +677,22 @@
 
             if(isFormatted) {
 
-                startTime = $("input[id='datepicker_start']").val();
-                endTime = $("input[id='datepicker_end']").val();
+                // startTime = $("input[id='datepicker_start']").val();
+                // endTime = $("input[id='datepicker_end']").val();
+                //
+                // console.log("startTime: " + startTime);
+                // console.log("endTime: " + endTime);
 
-                console.log("startTime: " + startTime);
-                console.log("endTime: " + endTime);
-
-                var start_time = startTime.replace(/-/, "");
-                var end_time = endTime.replace(/-/, "");
-
-                if (end_time < start_time) {
-                    _set($("input[id='datepicker_start']"), "结束时间需小于开始时间");
-                    _set($("input[id='datepicker_end']"), "结束时间需小于开始时间");
-
-                    isComplete = false;
-                    return;
-                }
+                // var start_time = startTime.replace(/-/, "");
+                // var end_time = endTime.replace(/-/, "");
+                //
+                // if (end_time < start_time) {
+                //     _set($("input[id='datepicker_start']"), "结束时间需小于开始时间");
+                //     _set($("input[id='datepicker_end']"), "结束时间需小于开始时间");
+                //
+                //     isComplete = false;
+                //     return;
+                // }
 
                 var flag_ = window.flag;
                 console.log(window.flag);
@@ -711,8 +714,6 @@
                 form.append("personName", $("input[id='personName']").val());
                 form.append("IDNumber", $("input[id='IDNumber']").val());
                 form.append("phoneNumber", $("input[id='phoneNumber']").val());
-                form.append("startDate", startTime);
-                form.append("endDate", endTime);
 
                 $.ajax({
                     url: "/console/visitor_management/" + flag,
@@ -745,8 +746,14 @@
                                 break
 
                             case "FAILED" :
-                                $("#dialog-visitor-management-update").find(".modal-body").html("新增失败");
-                                $("#dialog-visitor-management-update").modal("show");
+                                if (flag_ == 'add') {
+                                    message = "新增失败";
+                                } else {
+                                    message = "修改失败";
+                                }
+
+                                $("#dialog-return").find(".modal-body").html(message);
+                                $("#dialog-return").modal("show");
 
                                 $(".btn.btn-default.add-new-user-close").click();
 
@@ -754,13 +761,11 @@
                         }
                     },
                     error: function (r) {
-                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").find(".modal-body").html("网络错误，请重试");
                         $("#dialog-return").modal("show");
                     }
 
                 });
-
-                flag = '';
 
                 form = '';//避免重复点击
             }
@@ -799,6 +804,10 @@
         else{
             return false;
         }
+    }
+
+    function isPic(picture){
+        return (/\.(jpg|jpeg|png)$/).test(picture);
     }
 
     $("#logout").click(function () {
@@ -895,21 +904,106 @@
     }
 
     $("#avatar-2").change(function (event) {
+        var isComplete = false;
+
         var file = event.target.files[0];
 
-        if (file.size > 1024 * 1024 * 8) {
-            alert('图片大小不能超过 8MB!');
+        if(!isPic(file.name)){
+            $("#dialog-return").find(".modal-body").html("请选择以,jpg,jpeg,png结尾的图片");
+            $("#dialog-return").modal("show");
+
+            return ;
+        }
+
+        if(file.size > 1024*1024*8){
+            $("#dialog-return").find(".modal-body").html("图片大小不能超过 8MB!");
+            $("#dialog-return").modal("show");
+
             return;
         }
 
-        var URL = window.URL || window.webkitURL;
+        var form = new FormData();
 
-        var imgURL = URL.createObjectURL(file);
+        form.append("file", file);
 
+        $.ajax({
+            async : false,
+            url : "/console/employee_management/detect",
+            type: "post",
+            data: form,
+            processData: false,
+            contentType: false,
+            success : function (res) {
+                switch (res.status){
+                    case "SUCCEED" :
+                        isComplete = true;
 
-        $("#choosedPic").attr('src', src = imgURL);
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("请检查您的照片");
 
-        console.log(imgURL);
+                        if(res.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").html(res.errorMessage+"，请重新选择照片");
+                        } else {
+                            $("#dialog-return").find(".modal-body").html("请检查您的照片");
+                        }
+
+                        $("#dialog-return").modal("show");
+
+                        $("#avatar-2").val('');
+
+                        return;
+                }
+            },
+            error : function(){
+                $("#dialog-return").find(".modal-body").html("网络错误，请重试");
+
+                $("#dialog-return").modal("show");
+
+                $("#avatar-2").val('');
+
+                return;
+            }
+
+        });
+
+        // $.ajax({
+        //     url : "/console/employee_management/detect",
+        //     async : false,
+        //     data: form,
+        //     type : "POST",
+        //     success : function (res) {
+        //         switch (res.status){
+        //             case "SUCCEED" :
+        //
+        //                 break;
+        //             case "FAILED" :
+        //                 $("#dialog-return").find(".modal-body").html(r.message);
+        //
+        //                 $("#dialog-return").modal("show");
+        //
+        //                 return ;
+        //                 break;
+        //         }
+        //     },
+        //     error : function(){
+        //         $("#dialog-return").find(".modal-body").html("网络错误，请重试");
+        //
+        //         $("#dialog-return").modal("show");
+        //
+        //         return ;
+        //     }
+        // })
+        if(isComplete) {
+
+            var URL = window.URL || window.webkitURL;
+
+            var imgURL = URL.createObjectURL(file);
+
+            $("#choosedPic").attr('src', src = imgURL);
+
+            console.log(imgURL);
+        }
     })
 
     $(".btn.btn-default.deletePic").click(function () {

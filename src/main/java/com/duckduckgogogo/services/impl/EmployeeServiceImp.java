@@ -140,4 +140,21 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             return "error : "+e.getMessage();
         }
     }
+
+    @Override
+    public String detect(FileSystemResource resource) {
+        String url = "http://" + Info.serverIP + "/api/face/detect";
+
+        RestTemplate rest = new RestTemplate();
+
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+
+        param.add("imageData", resource);
+
+        String result = rest.postForObject(url, param, String.class);
+
+        System.out.println("employee detect image : "+result);
+
+        return result;
+    }
 }

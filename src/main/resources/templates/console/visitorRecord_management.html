@@ -14,19 +14,22 @@
     <!-- Google Fonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
     <!-- TABLE STYLES-->
-    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
     <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
 
     <!--datePicker-->
     <link href="/style/jquery-ui.css" rel="stylesheet"/>
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
 
     <script src="/assets/js/jquery-1.11.1.min.js"></script>
 
     <!--datePicker-->
     <script src="/javascript/jquery-ui.js"></script>
 
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/js/jquery.backstretch.min.js"></script>
     <script src="/assets/js/scripts.js"></script>
 
@@ -35,43 +38,33 @@
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
 
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
-
     <script src="/javascript/custom-scripts.js"></script>
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
     <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
+    <script src="/javascript/visitor/bootstrap-datetimepicker.js"></script>
+    <script src="/javascript/visitor/bootstrap-datetimepicker.zh-CN.js"></script>
+
     <!-- Custom Js -->
     <script>
         $(document).ready(function () {
-            $('#_table_user_search').bootstrapTable({
+            $('#table_visitingRecord_search').bootstrapTable({
                 method: 'get',
-                url: "/console/contacts_management/search",
+                url: "/console/visitorRecord_management/search",
                 striped: true,
                 dataType: "json",
                 pagination: true,
                 queryParamsType: "limit",
                 singleSelect: true,
                 contentType: "application/x-www-form-urlencoded",
-                singleSelect: true,
-                contentType: "application/x-www-form-urlencoded",
                 pageSize: 10,
-                pageNumber:1,
+                pageNumber: 1,
                 search: true,
                 showColumns: true,
                 showRefresh: true,
                 sidePagination: "server", //服务端请求
-
-                showHeader : true,
-                //sidePagination : 'server',//服务器端分页
-                pageNumber : 1,
-                pageList: [5, 10, 20, 50],//分页步进值
-                search: true,//显示搜索框
-                clickToSelect: false,
                 queryParams: function (params) {
                     return {
                         limit: params.limit,
@@ -119,6 +112,13 @@
                 dateFormat: "yy-mm-dd"
             });
 
+            $(".form_datetime").datetimepicker({
+                    language:  'zh-CN',
+                    format: "yyyy-mm-dd hh:ii",
+                    autoclose: true,
+                    todayBtn: true,
+                });
+
             $.ajax({
                 type: "get",
                 url: "/console/user_management/getAdminInfo",
@@ -150,26 +150,27 @@
     </script>
     <!-- Custom Js -->
 
-    <script src="/javascript/custom-scripts.js"></script>
-
-    <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
-    <script src="/javascript/bootstrap-table.min.js"></script>
-
-
     <style>
-        table tbody {
-            display:block;
-            height:30em;
-            overflow-y:scroll;
+        .fixed-table-body {
+            overflow-x: auto;
+            overflow-y: scroll;
+            height: 35em;
+            width: 100%;
         }
-        table thead, tbody tr {
-            display:table;
-            width:100%;
-            table-layout:fixed;
-        }
-        table thead {
-            width: calc( 100% - 1em )
-        }
+
+        /*table tbody {*/
+        /*display:block;*/
+        /*height:30em;*/
+        /*overflow-y:scroll;*/
+        /*}*/
+        /*table thead, tbody tr {*/
+        /*display:table;*/
+        /*width:100%;*/
+        /*table-layout:fixed;*/
+        /*}*/
+        /*table thead {*/
+        /*width: calc( 100% - 1em )*/
+        /*}*/
         table thead th{
             background:#275AB2;
         }
@@ -217,10 +218,17 @@
         .search{
             padding-bottom: 1em;
         }
+
+        .W180{width:180px;}
+        .W150{width:150px;}
+        .W150 {width:100px !important;}
+        .W280{width:280px !important;}
+        .W400{width:400px !important;}
+        .W100 {width:100px !important;}
+        .W30 {width:30px !important;}
     </style>
 </head>
 <body>
-
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
         <ul class="nav navbar-top-links navbar-brand-right_">
@@ -234,10 +242,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" > <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+            <a class="navbar-brand"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
         </div>
-
-
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -262,8 +268,9 @@
 
                 <!--区域安全防范系统-->
                 <li>
-                    <a class="active-menu"><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse in" aria-expanded="true">                        <!--轨迹图-->
+                    <a><i class="fa fa-sitemap"></i> 区域安全防范系统<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--轨迹图-->
                         <li>
                             <a href="/console/trace_info">轨迹图</a>
                         </li>
@@ -280,16 +287,15 @@
 
                         <!--告警联系人-->
                         <li>
-                            <a href="/console/contacts_management" class="active-menu">告警联系人</a>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
 
                 <!--内部人员管理-->
                 <li>
-                    <a><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
-                    <ul class="nav ">
-                        <!--员工管理-->
+                    <a class="active-menu"><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse in" aria-expanded="true">                        <!--员工管理-->
                         <li>
                             <a href="/console/employee_management">员工管理</a>
                         </li>
@@ -299,11 +305,12 @@
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
 
+
+
                         <!--访客记录管理-->
                         <li>
-                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                            <a href="/console/visitorRecord_management" class="active-menu-item">访客记录管理</a>
                         </li>
-
 
                         <!--考勤信息-->
                         <li>
@@ -360,7 +367,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header" style="color: #FFFFFF;">
-                        告警联系人
+                        访客记录管理
                     </h1>
                 </div>
             </div>
@@ -373,29 +380,21 @@
                         <div class="panel-body">
                             <div class="table-responsive">
 
-                                <table id="_table_user_search" class="table table-striped table-bordered table-hover">
+
+                                <table id="table_visitingRecord_search" class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th data-field="id" data-formatter="_formatte_user_id"></th>
+                                        <th data-field="id" class="W30" data-formatter="_formatte_user_id"></th>
+                                        <!--<th data-field="userid" data-sortable="true" class="W30" style="border:none;">-->
+                                        <!--User ID-->
+                                        <!--</th>-->
+                                        <th data-field="userInfo.name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
+                                        <th data-field="cause" class="W100" style="border:none;">来访事由</th>
+                                        <th data-field="startDateString" class="W100" style="border:none;">开始时间</th>
+                                        <th data-field="endDateString"  class="W100" style="border:none;">结束时间</th>
+                                        <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
 
-                                        <th data-field="personName" data-sortable="true" class="W30" style="border:none;">
-                                            姓名
-                                        </th>
-                                        <th data-field="phoneNumber" data-sortable="true" class="W30"
-                                            style="border:none;">电话号码
-                                        </th>
-                                        <th data-field="sendPhoneNumber" data-formatter="_formatted_select" data-sortable="true" class="W30"
-                                            style="border:none;">是否发送短信
-                                        </th>
-                                        <th data-field="email" data-sortable="true" class="W30"
-                                            style="border:none;">电子邮件
-                                        </th>
-                                        <th data-field="sendEmail" data-sortable="true" data-formatter="_formatted_select" class="W30"
-                                            style="border:none;">是否发送电子邮件
-                                        </th>
-                                        <th data-field="updateDateString" data-sortable="true" class="W30"
-                                            style="border:none;">修改日期
-                                        </th>
+                                        <th data-field="userInfo.feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
                                     </tr>
                                     </thead>
                                 </table>
@@ -418,63 +417,62 @@
 </div>
 
 <!--//弹出框-->
-<div id="dialog-contacts-management-update" class="modal fade" tabindex="-1" role="dialog">
+<div id="dialog-visitor-management-update" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">报警设置 | <span id="dialog-contacts-management-update-title"></span></h4>
+                <h4 class="modal-title">访客记录管理 | <span id="dialog-visitor-management-update-title"></span></h4>
             </div>
 
             <div class="modal-body">
-                <form role="form" class="form-horizontal add-new-user" method="POST">
-                    <input type="text" style="display:none;" id="version" name="version" />
-                    <input type="text" style="display:none;" id="id" name="id" />
+                <form role="form" class="form-horizontal add-new-user form-uploadfiles"
+                      enctype="multipart/form-data"
+                      method="POST" method="POST">
+                    <input type="text" style="display:none;" id="id" name="id"/>
+                    <input type="text" style="display:none;" id="version" name="version"/>
+                    <input type="text" style="display:none;" id="userinfo" name="version"/>
 
                     <div class="form-group">
-                        <label for="personName" class="col-sm-4 control-label">姓名</label>
+                        <label for="cause" class="col-sm-4 control-label">来访事由</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" id="personName" name="personName" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                            <input type="text" class="form-control" id="cause" name="cause"
+                                   data-toggle="tooltip" data-placement="top" maxlength="30"
+                                   required="required"/>
                         </div>
+
                         <div class="col-sm-1"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="phoneNumber" class="col-sm-4 control-label">手机号码</label>
+                        <label for="startTimePicker" class="col-sm-4 control-label">开始时间</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" maxlength="30" />
+                            <div class="input-append date form_datetime">
+                                <input size="16" class="form-control" type="text" id="startTimePicker" value="" readonly>
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
                         </div>
-                        <div class="col-sm-1"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="sendPhoneNumber" class="col-sm-4 control-label">是否发送短信</label>
+                        <label for="startTimePicker" class="col-sm-4 control-label">结束时间</label>
                         <div class="col-sm-7">
-                            <select id="sendPhoneNumber" name="sendPhoneNumber" class="form-control" required="required">
-                                <option value="true">是</option>
-                                <option value="false">否</option>
-                            </select>
+                            <div class="input-append date form_datetime">
+                                <input size="16" class="form-control" type="text" id="endTimePicker" value="" readonly>
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
                         </div>
-                        <div class="col-sm-1"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="col-sm-4 control-label">电子邮件</label>
+                        <label for="cause" class="col-sm-4 control-label">来访人</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" id="email" name="email" maxlength="30" />
+                            <input type="text" class="form-control" id="username" name="cause"
+                                   data-toggle="tooltip" data-placement="top" maxlength="30"
+                                   required="required" readonly/>
                         </div>
-                        <div class="col-sm-1"></div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="sendEmail" class="col-sm-4 control-label">是否发送电子邮件</label>
-                        <div class="col-sm-7">
-                            <select id="sendEmail" name="sendEmail" class="form-control" required="required">
-                                <option value="true">是</option>
-                                <option value="false">否</option>
-                            </select>
-                        </div>
                         <div class="col-sm-1"></div>
                     </div>
 
@@ -486,9 +484,53 @@
                     </div>
                 </form>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+<div id="dialog-visitor-info" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">访客列表</h4></span></h4>
+            </div>
+
+            <div class="modal-body">
+                <form role="form" class="form-horizontal add-new-user form-uploadfiles"
+                      enctype="multipart/form-data"
+                      method="POST" method="POST">
+
+                    <div class="form-group ">
+                        <table id="visitorList" class="table table-striped table-bordered table-hover" >
+                            <thead>
+                            <tr>
+                                <th data-field="userid" class="W30" data-formatter="_formate_visitor_id"></th>
+                                <!--<th data-field="userid" data-sortable="true" class="W30" style="border:none;">-->
+                                <!--User ID-->
+                                <!--</th>-->
+                                <th data-field="name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
+                                <th data-field="IDNumber" class="W100" style="border:none;">证件号码</th>
+                                <th data-field="phoneNumber" class="W100" style="border:none;">电话号码</th>
+                                <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
+                                <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                            <button type="button" class="btn btn-primary add-new-user-visitorList">保存</button>
+                            <button type="button" class="btn btn-default add-new-user-close-visitorList" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -517,7 +559,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -534,12 +575,16 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
 <script>
-
 
     window.flag;
     window.id;
+
+    function _formatte_name(value,row,index) {
+        if (value != undefined) {
+            return '<a href="/console/trace_info?id=' + row.id + '&type=visitor">' + value + '</a>';
+        }
+    }
 
     !function ($) {
         $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
@@ -557,8 +602,9 @@
 
         from[0].reset();
 
-
         _reset_input(from.find("input"));
+
+        $("#choosedPic").attr("src","/images/default_avatar_male.jpg");
     }
 
     function _reset_input(input) {
@@ -572,16 +618,18 @@
         el.tooltip('show');
     }
 
-    //打开修改mdal
     $(".btn.btn-primary.open-add-new-user-dialog").click(function () {
         window.flag = 'add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-contacts-management-update-title").html("新增");
-        $("#dialog-contacts-management-update").modal("show");
+
+        $("#choosedPic").attr("src","/images/default_avatar_male.jpg");
+
+        $("#dialog-visitor-management-update-title").html("新增");
+
+        $("#dialog-visitor-management-update").modal("show");
     });
 
-    //修改
     $(".btn.btn-success.open-update-use-dialog").click(function () {
         window.flag = 'update'
 
@@ -594,23 +642,26 @@
             _reset($(".form-horizontal.add-new-user"));
 
             // 读取用户选中的用户信息
-            $.get("/console/contacts_management/get/" + id, null, function (r, status) {
+            $.get("/console/visitorRecord_management/get/" + id, null, function (r, status) {
                 console.log(r);
 
-                $("#dialog-contacts-management-update-title").html("修改");
-                $("#dialog-contacts-management-update").modal("show");
+                $("#dialog-visitor-management-update-title").html("修改");
+                $("#dialog-visitor-management-update").modal("show");
 
-                $("#dialog-contacts-management-update").find("input[id='id']").val(r.id);
-                $("#dialog-contacts-management-update").find("input[id='version']").val(r.version);
-                $("#dialog-contacts-management-update").find("input[id='personName']").val(r.personName);
-                $("#dialog-contacts-management-update").find("input[id='phoneNumber']").val(r.phoneNumber);
-                $("#sendPhoneNumber").val(r.sendPhoneNumber);
-                $("#dialog-contacts-management-update").find("input[id='email']").val(r.email);
-                $("#sendEmail").val(r.sendEmail);
+                $("#dialog-visitor-management-update").find("input[id='id']").val(r.id);
+                $("#dialog-visitor-management-update").find("input[id='version']").val(r.version);
+
+                var json_userinfo = $.parseJSON(r.userInfo);
+                $("#dialog-visitor-management-update").find("input[id='userinfo']").val(json_userinfo.id);
+                $("#dialog-visitor-management-update").find("input[id='username']").val(json_userinfo.name);
+
+                $("#dialog-visitor-management-update").find("input[id='cause']").val(r.cause);
+                $("#dialog-visitor-management-update").find("input[id='startTimePicker']").val(r.startDateString);
+                $("#dialog-visitor-management-update").find("input[id='endTimePicker']").val(r.endDateString);
             });
 
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("请选中后操作");
+            $(".bs-example-modal-sm").find(".modal-body").html("请选中来访记录后操作");
             $(".bs-example-modal-sm").modal("show");
         }
     });
@@ -621,79 +672,77 @@
         el.tooltip('show');
     }
 
-    //保存
     $(".btn.btn-primary.add-new-user").click(function () {
+        var startTime;
+        var endTime;
 
         var isComplete = true;
         var isFormatted = true;
 
-
         //check input
-        if ($("input[id='personName']").val() == "") {
-            _set($("input[id='personName']"), "请输入姓名");
-            isComplete = false;
-        }
-        if ($("input[id='phoneNumber']").val() == "") {
-            _set($("input[id='phoneNumber']"), "请输入电话号码");
-            isComplete = false;
-        }
-        if ($("input[id='sendPhoneNumber']").val() == "") {
-            _set($("input[id='sendPhoneNumber']"), "请选择是否发送短信");
-            isComplete = false;
-        }
-        if ($("input[id='email']").val() == "") {
-            _set($("input[id='email']"), "请输入电子邮箱");
+        if ($("input[id='cause']").val() == "") {
+            _set($("input[id='cause']"), "请输入来访事由");
             isComplete = false;
         }
 
-        if ($("input[id='sendEmail']").val() == "") {
-            _set($("input[id='sendEmail']"), "请选择是否发送电子邮件");
+        if ($("input[id='startTimePicker']").val() == "") {
+            _set($("input[id='startTimePicker']"), "请选择开始日期");
             isComplete = false;
         }
 
+        if ($("input[id='startTimePicker']").val() == "") {
+            _set($("input[id='endTimePicker']"), "请选择结束日期");
+            isComplete = false;
+        }
+
+        if ($("input[id='username']").val() == "") {
+            _set($("input[id='username']"), "请选择来访人");
+            isComplete = false;
+        }
 
         if(isComplete) {
-            _reset_input( $("#dialog-contacts-management-update").find(".form-group").find("input") );
+            _reset_input( $("#dialog-visitor-management-update").find(".form-group").find("input") );
 
 
-            if( !isName( $("input[id='personName']").val() ) ){
-                isFormatted = false;
+                startTime = $("input[id='startTimePicker']").val();
+                endTime = $("input[id='endTimePicker']").val();
 
-                _set($("input[id='personName']"), "请输入包含中文，英文，数字和-的名字");
-            }
+                console.log("startTime: " + startTime);
+                console.log("endTime: " + endTime);
 
-            if( !isPhoneNumber( $("input[id='phoneNumber']").val() ) ){
-                isFormatted = false;
+                var start_time = startTime.replace(/-/, "").replace(/-/, "");
+                var end_time = endTime.replace(/-/, "").replace(/-/, "");
 
-                _set($("input[id='phoneNumber']"), "请输入合法电话号码");
-            }
+                start_time = start_time.replace(/ /, "");
+                end_time = end_time.replace(/ /, "");
 
-            if (!isEmail( $("input[id='email']").val() ) ){
-                _set($("input[id='email']"), "请输入合法电子邮箱");
-                isFormatted = false;
-            }
+                start_time = start_time.replace(/:/, "");
+                end_time = end_time.replace(/:/, "");
 
-            if(isFormatted) {
+                if ( parseInt(end_time) < parseInt(start_time) ) {
+                    _set($("input[id='startTimePicker']"), "结束时间需小于开始时间");
+                    _set($("input[id='endTimePicker']"), "结束时间需小于开始时间");
+
+                    return;
+                }
+
                 var flag_ = window.flag;
                 console.log(window.flag);
 
                 var form = new FormData();
 
                 if (window.flag == "update") {
-                    form.append("id", $(".form-horizontal.add-new-user").find("input[id='id']").val());
-                    form.append("version", $("input[id='version']").val());
-
-                    console.log($("input[id='version']").val());
+                    form.append("id",  $("#id").val() );
+                    form.append("version", $("#version").val());
                 }
 
-                form.append("personName", $("input[id='personName']").val());
-                form.append("phoneNumber", $("input[id='phoneNumber']").val());
-                form.append("sendPhoneNumber", $("select[id='sendPhoneNumber']").val());
-                form.append("email", $("input[id='email']").val());
-                form.append("sendEmail", $("select[id='sendEmail']").val());
+                form.append("userInfo", $("#userinfo").val());
+                form.append("cause", $("input[id='cause']").val());
+                form.append("startDate", startTime+":00");
+                form.append("endDate", endTime+":00");
 
                 $.ajax({
-                    url: "/console/contacts_management/" + flag,
+                    url: "/console/visitorRecord_management/" + flag,
                     type: "post",
                     data: form,
                     processData: false,
@@ -714,10 +763,15 @@
                                 $(".btn.btn-default.add-new-user-close").click();
                                 $(".panel.panel-default").find("button[name='refresh']").click();
 
+
+                                // $("#dialog-visitor-management-update").find(".modal-body").html("新增成功");
+                                // $("#dialog-visitor-management-update").modal("show");
+                                //
+                                // $(".panel.panel-default").find("button[name='refresh']").click();
+
                                 break
 
                             case "FAILED" :
-                                var message;
                                 if (flag_ == 'add') {
                                     message = "新增失败";
                                 } else {
@@ -730,42 +784,103 @@
                         }
                     },
                     error: function (r) {
-                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").find(".modal-body").html("网络错误，请重试");
                         $("#dialog-return").modal("show");
                     }
 
                 });
 
-
                 form = '';//避免重复点击
-            }
         }
 
     });
 
-    function isName(val){//包括中文和英文数字-
-        var reg = /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_-]){1,20}$/;
+    $(".btn.btn-primary.add-new-user-visitorList").click(function () {
+        var id = $("#visitorList").find("input[name='id_visitor']:checked").val();
 
-        return reg.test(val);
+        $.ajax({
+            url: "/console/visitor_management/get/" + id,
+            type: "GET",
+            processData: false,
+            contentType: false,
+            success: function (r) {
+                switch (r.status) {
+                    case "SUCCEED" :
+                        $("#userinfo").val(id);
+                        $("#username").val(r.name);
+
+                        $(".btn.btn-default.add-new-user-close-visitorList").click();
+
+
+                        // $("#dialog-visitor-management-update").find(".modal-body").html("新增成功");
+                        // $("#dialog-visitor-management-update").modal("show");
+                        //
+                        // $(".panel.panel-default").find("button[name='refresh']").click();
+
+                        break
+
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("系统处理错误，请联系管理员");
+                        $("#dialog-return").modal("show");
+                        break
+                }
+            },
+            error: function (r) {
+                $("#dialog-return").find(".modal-body").html("网络错误，请重试");
+                $("#dialog-return").modal("show");
+            }
+
+        });
+    });
+
+    function isPic(picture){
+        return (/\.(jpg|jpeg|png)$/).test(picture);
     }
 
+    $("#username").click(function () {
+        $('#visitorList').bootstrapTable({
+            method: 'get',
+            url: "/console/visitor_management/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber: 1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server", //服务端请求
+            queryParams: function (params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function (res) {
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+        });
 
-    function isPhoneNumber(val){
-        var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;//手机号码
-        var isMob= /^0?1[3|4|5|8][0-9]\d{8}$/;// 座机格式
-        if(isMob.test(val)||isPhone.test(val)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    function isEmail(val){
-        var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-        return myreg.test(val);
-    }
+        $("#dialog-visitor-info").modal('show');
+    })
 
-    //删除
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
+
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
@@ -782,7 +897,7 @@
         form.append("list_ID", list_id);
 
         $.ajax({
-            url: "/console/contacts_management/delete",
+            url: "/console/visitorRecord_management/delete",
             type: "post",
             data: form,
             processData: false,
@@ -815,34 +930,38 @@
         });
     })
 
-    $("#logout").click(function () {
-        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
-        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-        $(".log-out-bs-example-modal-sm").modal("show");
-    });
-
-    $(".btn.btn-danger.btn-logout").click(function () {
-        window.location.href = "/logout";
-    })
-
     $(".btn.btn-danger.delete-employee-dialog").click(function () {
 
         var id = $("input[type='radio']:checked").val();
         if (id != undefined) {
             // 读取Project选中的用户信息
-            $.get("/console/contacts_management/get/" + id, null, function (r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除联系人：  " + r.personName + "?");
+            $.get("/console/visitorRecord_management/get/" + id, null, function (r, status) {
+
+                var json_visitor = $.parseJSON(r.userInfo);
+
+                $(".bs-example-modal-sm").find(".modal-body").html("是否删除"+ json_visitor.name +"的访客记录?");
                 $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("请选中后操作");
+            $("#dialog-return").find(".modal-body").html("请选中访客记录后操作");
             $("#dialog-return").modal("show");
         }
     })
 
     function _formatte_locale_image(value, row, index) {
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
+        var imgSrc = value;
+
+        console.log("图像信息 :"+value);
+
+        if(value == ""){
+            imgSrc = "/images/default_avatar_male.jpg";
+
+            return s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src=' + imgSrc+' /></a>';
+        }
+
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
+
         return s;
     }
 
@@ -850,9 +969,19 @@
         return '<input name="id" type="radio" value="' + value + '" />';
     }
 
-    function _formatted_select(value, row, index) {
-        return $.trim(value) ==$.trim('true') ? "是":"否" ;
+    function _formate_visitor_id(value, row, index){
+        return '<input name="id_visitor" type="radio" value="' + value + '" />';
     }
+
+    $(".btn.btn-default.deletePic").click(function () {
+        var file_select = $("#avatar-2");
+
+        file_select.after(file_select.clone().val(""));
+
+        file_select.remove();
+
+        $("#choosedPic").attr('src', src = "/images/default_avatar_male.jpg");
+    })
 </script>
 
 </body>

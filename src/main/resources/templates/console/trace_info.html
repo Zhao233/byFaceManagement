@@ -31,6 +31,7 @@
     <script src="/javascript/jquery.dataTables.js"></script>
     <script src="/javascript/dataTables.bootstrap.js"></script>
     <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
     <script src="/javascript/jquery-ui.js"></script>
 
@@ -40,6 +41,8 @@
             background-image: url("/images/floor.png");
             background-position: center;
             background-size: 100% 100%;
+
+            margin-top: 10px;
         }
 
         .fixed-table-body {
@@ -147,9 +150,14 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
@@ -167,6 +175,12 @@
                         <li>
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
 
                         <!--考勤信息-->
                         <li>
@@ -203,6 +217,11 @@
                         <li>
                             <a href="/console/user_management">用户管理</a>
                         </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -227,26 +246,53 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <div class="form-group">
 
-                                <select id="searchType">
-                                    <option value="employee">员工</option>
-                                    <option value="visitor">访客</option>
-                                </select>
-                                <input type="text" id="personName_show" style="width: 5em">
+                            <div class="form-inline">
 
-                                <label for="datepicker_start" style="padding-left: 1em">开始时间</label>
-                                <input type="text" id="datepicker_start" style="width: 6em" readonly>
+                                <div class="form-group">
+                                    <select id="searchType" class="form-control" >
+                                        <option value="employee">员工</option>
+                                        <option value="visitor">访客</option>
+                                    </select>
 
-                                <label for="datepicker_end" style="padding-left: 1em">结束时间</label>
-                                <input type="text" id="datepicker_end" style="width: 6em" readonly>
+                                    <input type="text" id="personName_show" class="form-control" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="datepicker_start" style="margin-left: 1em;text-align: right;">开始时间:</label>
+                                    <input type="text" id="datepicker_start" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="datepicker_end" style="margin-left: 1em;text-align: right;">结束时间:</label>
+                                    <input type="text" id="datepicker_end" class="form-control"  readonly>
+                                </div>
 
                                 <button class="btn btn-primary searchTrace" data-toggle="modal" style="padding-left: 1em">搜索</button>
                             </div>
 
-                            <canvas id="canvas" class="col-sm-12 col-xs-12" width="1200" height="680">
+                            <div class="form-group" style="position: relative;">
+                                <canvas id="canvas" class="col-sm-12 col-xs-12" width="1200" height="680" style="padding-left: 0; padding-right: 0;">
                                 浏览器不支持canvas
                             </canvas>
+
+                                <!--<div style="position: absolute; width: 50px; height: 50px; background-color: #3c763d; top: 50px;">-->
+                                <!--</div>-->
+
+                                <div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 140px; height: 72px" class="message">
+                                    <div class="form-group" style="margin-bottom: 0px">
+                                        <label class="name" style="font-size: 2px">名称：</label>
+                                    </div>
+
+                                    <label style="font-size: 2px">出现时间</label>
+
+                                    <div class="form-group showTime" style="overflow-y: scroll; height: 2em;font-size: 2px">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
 
                             <script>
                                 var personId = getUrlParam("id");
@@ -265,14 +311,16 @@
                                     y : 10
                                 }
                                 var offset_message = {
-                                    x : 0,
-                                    y : 0
+                                    x : 25,
+                                    y : -10
                                 }
 
-                                var cameraList_all;
-                                var cameraList_enable;
+                                var cameraList_all = new Array();
+                                var cameraList_enable = new Array();
 
-                                var trace_list;
+                                var trace_list = new Array();
+
+                                var camera_trace_list = new Array();
 
                                 function search(id, startDate, endDate){
                                     var data_ = {
@@ -423,7 +471,7 @@
                                         } else {
                                             location = temp_camera.camereXY.split(",");//0: x, 1: y
                                         }
-                                        var message = temp_camera.cameraname;
+                                        var message = temp_camera.cameraXY;
 
                                         context.fillText(message, parseInt(location[0]) + offset_message.x, parseInt(location[1]) + offset_message.y + offset_vertical_location);
                                     }
@@ -525,13 +573,65 @@
                                     $.ajaxSettings.async = true;
 
                                     var can = document.getElementById('canvas');
-                                    var context = can.getContext('2d');
+                                    var  context = can.getContext('2d');
 
                                     search_trace_gap();
                                     drawCamera(cameraList_all,context,false);
                                     drawTrace(cameraList_enable,context);
                                     drawCamera(cameraList_enable,context, true);
-                                    //drawMessage(cameraList_enable,context)
+                                    //drawMessage(cameraList_enable,context);
+                                }
+
+                                $("#canvas")[0].onmousemove = function(event) {
+
+                                    if(window.isSearched) {
+
+                                        //获取窗口坐标
+                                        var x = event.pageX - canvas.getBoundingClientRect().left;
+                                        var y = event.pageY - canvas.getBoundingClientRect().top;
+
+                                        //转换为canvas内坐标
+                                        x = parseInt((x * canvas.width) / canvas.getBoundingClientRect().width);
+                                        y = parseInt((y * canvas.height) / canvas.getBoundingClientRect().height);
+
+                                        console.log(x + "," + y);
+
+                                        reset_message($(".message"));
+
+                                        var length_cameraList = cameraList_enable.length;
+                                        for (var i = 0; i < length_cameraList; i++) {
+                                            var location_camera = cameraList_enable[i].cameraXY.split(",");
+
+                                            if (x >= (location_camera[0] - camera_size.width / 2) && x <= (location_camera[0] - camera_size.width / 2) + camera_size.width) {
+                                                if (y >= (location_camera[1] - camera_size.height / 2) && y <= (location_camera[1] - camera_size.height / 2) + camera_size.height) {
+                                                    console.log("clicked camera:" + cameraList_enable[i].cameraname)
+                                                    var messageBox = $(".message");
+
+
+                                                    $(".name").append(cameraList_enable[i].cameraname);
+
+                                                    $(".showTime").append("<lable style='width: 8em;'>" + cameraList_enable[i].tracedate + "</lable><br>");
+
+                                                    var left = (location_camera[0] * canvas.getBoundingClientRect().width) / canvas.width;
+                                                    var top = (location_camera[1] * canvas.getBoundingClientRect().height) / canvas.height;
+
+                                                    messageBox.css("top", parseInt((top - camera_size.width / 2)) - 72);
+                                                    messageBox.css("left", parseInt((left - camera_size.height / 2)) - 140);
+
+                                                    messageBox.css("display", "");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                function reset_message(message){
+                                    message.css("display","none");
+                                    message.css("top",0);
+                                    message.css("left",0);
+
+                                    $(".name").empty();
+                                    $(".showTime").empty();
                                 }
                             </script>
                         </div>
@@ -543,6 +643,7 @@
     </div>
     <!-- /. PAGE INNER  -->
 </div>
+
 
 <div id="dialog-select-person" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -599,7 +700,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -614,7 +715,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -625,7 +726,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -637,6 +738,8 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+    window.isSearched = false;
+
     $(document).ready(function () {
         //初始化日历
         $("#datepicker_start").datepicker({
@@ -650,9 +753,9 @@
             showMonthAfterYear: true,
             /* 年份后缀字符 */
             yearSuffix: "年",
-            /* 格式化中文日期
+            /* 格式化中文日期d
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat: "yy-mm-dd"
+            dateFormat: "yy-m-d"
         });
         $("#datepicker_end").datepicker({
             dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
@@ -667,12 +770,15 @@
             yearSuffix: "年",
             /* 格式化中文日期
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat: "yy-mm-dd"
+            dateFormat: "yy-m-d"
         });
 
         //获取时间
         var oDate = new Date();
         var date = oDate.getFullYear() + '-'+ (parseInt(oDate.getMonth())+1) +'-'+oDate.getDate();
+
+        $("#datepicker_start").val(date);
+        $("#datepicker_end").val(date);
 
         $("#personName_show").focus(function () {
              var searchURL;
@@ -754,6 +860,8 @@
                 $("#dialog-return").modal("show");
             }
         });
+
+
     })
 
     $("#logout").click(function () {
@@ -778,6 +886,7 @@
     })
 
     $(".searchTrace").click(function () {
+        window.isSearched = true;
         var id;
 
         if(personId != undefined){
@@ -823,7 +932,16 @@
     }
 
     function _formatte_locale_image(value, row, index) {
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + value + '" /></a>';
+        var imgSrc = value;
+
+        if(value == ""){
+            imgSrc = "/images/default_avatar_male.jpg";
+
+            return s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src=' + imgSrc+' /></a>';
+        }
+
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
+
         return s;
     }
 

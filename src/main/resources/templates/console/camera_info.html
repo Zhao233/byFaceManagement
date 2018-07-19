@@ -35,6 +35,8 @@
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
+
 
     <script src="/javascript/bootstrap.min.js"></script>
 
@@ -163,10 +165,17 @@
                             <a href="/console/camera_info" class="active-menu-item">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
                         </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
+                        </li>
+
+
                     </ul>
                 </li>
 
@@ -183,6 +192,12 @@
                         <li>
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
 
                         <!--考勤信息-->
                         <li>
@@ -219,6 +234,11 @@
                         <li>
                             <a href="/console/user_management">用户管理</a>
                         </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -246,41 +266,48 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div  class="panel-heading">
-                                <h3>
-                                    <lable for="cameraName">摄像头名称：</lable>
-                                    <input type="text" id="cameraName" readonly>
+                                <div class="form-inline">
 
-                                    <lable for="datepicker" >日期：</lable>
-                                    <input type="text" id="datepicker" readonly>
+                                    <div class="form-group" style="margin-bottom: 8px">
+                                        <lable for="cameraName">摄像头名称：</lable>
+                                        <input type="text" class="form-control" id="cameraName" readonly>
+                                    </div>
+
+
+                                    <div class="form-group" style="margin-bottom: 8px">
+                                        <lable for="datepicker" >日期：</lable>
+                                        <input type="text" class="form-control" id="datepicker" readonly>
+                                    </div>
 
                                     <button class="btn btn-primary searchData">查找</button>
-                                </h3>
+                                </div>
 
-                            </div>
-                                <div class="canvas-wrapper">
-                                    <div class="row">
-                                        <canvas class="col-sm-12 col-xs-12" id="line-chart" height="80em"></canvas>
+                                <div class="canvas-wrapper form-group" style="margin-top: 5px">
+                                    <div class="row col-sm-12 col-xs-12">
+                                        <canvas class="col-sm-12 col-xs-12" id="line-chart"></canvas>
                                     </div>
                                     <br>
 
-                                    <div class="row">
-                                        <h3>
+                                    <div class="row" style="margin-left: 15px;margin-right:15px">
+                                        <h2>
                                             详情：
-                                        </h3>
+                                        </h2>
 
                                         <div class="col-md-2 col-sm-0"></div>
-                                        <div class="col-md-8 col-sm-12 row" id="personInfo"></div>
+                                        <div class="col-md-8 col-sm-12 row" id="personInfo" style="padding-left: 5px;padding-right: 5px; overflow-y: scroll; max-height: 15em !important;"></div>
                                         <div class="col-md-2 col-sm-0"></div>
                                     </div>
                                 </div>
 
-                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <!--End Advanced Tables -->
             </div>
+                <!--End Advanced Tables -->
         </div>
+    </div>
         <!-- /. ROW  -->
 
     </div>
@@ -338,7 +365,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -349,7 +376,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -407,7 +434,7 @@
             yearSuffix : "年",
             /* 格式化中文日期
             （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-m-dd"
+            dateFormat : "yy-m-d"
         });
 
         $('#cameraList').bootstrapTable({
@@ -449,6 +476,36 @@
             }
 
         });
+
+        $.ajax({
+            type: "get",
+            url: "/console/user_management/getAdminInfo",
+            dataType: "json",
+            success: function (json) {
+                switch (json.status) {
+                    case "SUCCEED" :
+                        $("#adminName").append(json.adminName);
+                        $("#adminEmail").append(json.adminEmail);
+                        console.log("管理员姓名 ： " + json.adminName);
+                        console.log("管理员邮箱 ： " + json.adminEmail);
+
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+
+
+            },
+            error: function () {
+                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").modal("show");
+            }
+        });
+
+        $("#datepicker").val(date);
 
         var name="";
 
@@ -594,17 +651,15 @@
 
     function createPersonInfo(picUrl, rank, name, personNumber, times){
         return "<div class=\"col-md-6 col-lg-6 col-xs-12 col-sm-12 panel-body\" style=\"padding-left: 3px; \">" +
-            "<div style='width: 100%'>"+
-            "    <div  style='padding-right: 0px;width: 50%; float:left;box-sizing: border-box; width: 40%'>" +
-            "            <img src=\""+picUrl+"\" class='img-responsive' style='height: 10em; vertical-align: middle;'>" +
+            "    <div align='right' style='padding-right: 0px;width: 50%; float:left;box-sizing: border-box; width: 40%'>" +
+            "            <img src=\""+picUrl+"\" class='img-responsive' style='height: 10em; vertical-align: middle; '>" +
             "    </div>" +
-            "    <div style='padding-left: 0px;width: 50%; float:left;box-sizing: border-box; width: 60%'>" +
+            "    <div style='padding-left: 0px;width: 50%; float:left;box-sizing: border-box; width: 60%; padding-left: 5px'>" +
             "        <label>排行: "+rank+"</label><br/>" +
             "        <label>姓名: "+name+"</label><br/>" +
             "        <label>编号: "+personNumber+"</label><br/>" +
             "        <label>出现次数: "+times+"</label><br/>" +
             "    </div>" +
-            "</div>"+
             "</div>"
     }
 
@@ -612,17 +667,6 @@
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]); return null;
-    }
-
-    function makeContent(ranking, id, name, time,number, picUrl){
-        return "<div class=\"col-xs-12 col-sm-6\">" +
-            "<img src=\""+picUrl+"\"/>" +
-            "<label value=\"Ranking: \""+ranking+"></label><br/>" +
-            "<label value=\"ID: \""+id+"></label><br/>" +
-            "<label value=\"Name: \""+name+"></label><br/>" +
-            "<label value=\"PersonNumber: \""+number+"></label><br/>" +
-            "<label value=\"Time: \""+time+"></label><br/>" +
-            "</div>"
     }
 
     function displayLineChart() {
@@ -652,37 +696,23 @@
     })
 
     $(".searchData").click(function () {
+        if(date == ""){
+            $("#dialog-return").find(".modal-body").html("请选择日期");
+            $("#dialog-return").modal("show");
+            return ;
+        }
+
+        if(id == undefined){
+            $("#dialog-return").find(".modal-body").html("请选择摄像头");
+            $("#dialog-return").modal("show");
+            return ;
+        }
+
         var date = $( "#datepicker" ).val();
 
         console.log("choosed date : "+ date);
 
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            dataType: "json",
-            success: function (json) {
-                switch (json.status) {
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： " + json.adminName);
-                        console.log("管理员邮箱 ： " + json.adminEmail);
 
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-
-            },
-            error: function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
 
         var new_data = {
             "cameraID": id,

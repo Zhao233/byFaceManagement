@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BEYONDSOFT</title>
+    <!-- Bootstrap Styles-->
+    <link href="/style/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+
+    <!-- Morris Chart Styles-->
+
+    <!-- Custom Styles-->
+    <link href="/style/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
+
+    <link href="/style/font-awesome.css" rel="stylesheet"/>
+
+    <!-- it's about file upload box -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+    <style>
+        .navbar-brand-right_{
+            float:right;
+        }
+        .center-vertical {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .search{
+            padding-bottom: 1em;
+        }
+    </style>
+</head>
+
+<body>
+<script>
+    $(document).ready(function() {
+        console.log('Ready function');
+
+        $.ajax({
+            type: "get",
+            url: "/console/faceconfig_management/search",
+            dataType:"json",
+            success : function(r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $("#config-info").find("input[id='version']").val(r.version);
+                        // $("#config-info").find("input[id='serverIP']").val(r.serverIP);
+                        $("#config-info").find("input[id='showTimes']").val(r.times);
+
+                        console.log('get message : '+ r.times);
+
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取配置信息失败");
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+
+
+            },
+            error : function () {
+                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").modal("show");
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/console/user_management/getAdminInfo",
+            dataType:"json",
+            success : function(json) {
+                switch (json.status){
+                    case "SUCCEED" :
+                        $("#adminName").append(json.adminName);
+                        $("#adminEmail").append(json.adminEmail);
+                        console.log("管理员姓名 ： "+json.adminName);
+                        console.log("管理员邮箱 ： "+json.adminEmail);
+
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+
+            },
+            error : function () {
+                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").modal("show");
+            }
+        });
+    });
+</script>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <ul class="nav navbar-top-links navbar-brand-right_">
+            <li><a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+        </ul>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"> <strong> &nbsp &nbsp &nbsp BeyondSoft</strong></a>
+        </div>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <!--管理员信息-->
+                <li>
+                    <div style="display: table; width: auto; margin-left: auto;margin-right: auto">
+
+                        <img src="/style/images/avtar.png">
+
+                        <!--<div>-->
+                        <!--<label id="adminName" style="alignment: center"></label>-->
+                        <!--</div>-->
+
+                        <!--<div>-->
+                        <!--<label id="adminEmail" style="alignment: center"></label>-->
+                        <!--</div>-->
+                    </div>
+                    <br></br>
+                </li>
+
+                <!--区域安全防范系统-->
+                <li>
+                    <a class="active-menu-item"><i class="fa fa-sitemap" ></i> 区域安全防范系统<span class="fa arrow"></span></a>
+                    <ul class="nav  nav-second-level collapse in">
+                        <!--轨迹图-->
+                        <li>
+                            <a href="/console/trace_info">轨迹图</a>
+                        </li>
+
+                        <!--轨迹统计图表-->
+                        <li>
+                            <a href="/console/camera_info">轨迹统计图表</a>
+                        </li>
+
+                        <!--告警设置-->
+                        <li>
+                            <a href="/console/contacts_config" class="active-menu-item">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--内部人员管理-->
+                <li>
+                    <a><i class="fa fa-sitemap"></i> 内部人员管理<span class="fa arrow"></span></a>
+                    <ul class="nav ">
+                        <!--员工管理-->
+                        <li>
+                            <a href="/console/employee_management">员工管理</a>
+                        </li>
+
+                        <!--访客管理-->
+                        <li>
+                            <a href="/console/visitor_management">访客管理</a>
+                        </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
+
+                        <!--考勤信息-->
+                        <li>
+                            <a href="/console/attendance_management">考勤信息</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--系统管理-->
+                <li>
+                    <a><i class="fa fa-sitemap"></i> 系统管理<span class="fa arrow"></span></a>
+                    <ul class="nav" aria-expanded="true">                        <!--服务器管理-->
+                        <li>
+                            <a href="/console/server_management">服务器管理</a>
+                        </li>
+
+                        <!--服务器信息-->
+                        <li>
+                            <a href="/console/server_info">服务器信息</a>
+                        </li>
+
+                        <!--摄像头管理-->
+                        <li>
+                            <a href="/console/camera_management">摄像头管理</a>
+                        </li>
+
+                        <!--参数设置-->
+                        <li>
+                            <a href="/console/face_config">参数设置</a>
+                        </li>
+
+                        <!--用户管理-->
+                        <li>
+                            <a href="/console/user_management">用户管理</a>
+                        </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header" style="color: #FFFFFF;">
+                        告警设置
+                    </h1>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <!--基本信息-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="display:none;"><span class="glyphicon glyphicon-user"></span>Config Info</div>
+                        <div id="config-info" class="panel-body">
+                            <form class="form-horizontal form-profile-save" method="post">
+                                <fieldset>
+                                    <input type="text" style="display:none;" id="version" name="version" />
+
+                                    <div class="form-group">
+                                        <label for="showTimes" class="col-sm-3 control-label">一小时内出现次数告警阈值</label>
+                                        <div class="col-sm-5">
+                                            <input type="number" class="form-control" id="showTimes" name="showTimes" maxlength="30" required="required" />
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12 widget-left">
+                                            <button type="button" class="btn btn-primary form-profile-save pull-left">保存</button>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div><!--/.col-->
+            </div>
+            <!-- /. ROW  -->
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+
+<div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default btn-task-delete-cancel" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade log-out-bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                <button type="button" class="btn btn-danger btn-logout" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+<!-- jQuery Js -->
+<!-- <script src="javascript/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="/javascript/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="/javascript/jquery.metisMenu.js"></script>
+
+<!-- DATA TABLE SCRIPTS -->
+<script src="/javascript/jquery.dataTables.js"></script>
+<script src="/javascript/dataTables.bootstrap.js"></script>
+
+<!-- Custom Js -->
+<!-- Custom Js -->
+
+<script src="/javascript/custom-scripts.js"></script>
+
+<!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
+<script src="/javascript/bootstrap-table.min.js"></script>
+
+<script>
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+
+    $("#logout").click(function () {
+        $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
+        $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+        $(".log-out-bs-example-modal-sm").modal("show");
+    });
+
+    $(".btn.btn-danger.btn-logout").click(function () {
+        window.location.href = "/logout";
+    })
+
+    //点击修改
+    $(".btn.btn-primary.form-profile-save").click(function() {
+
+        var flag = false;
+
+        var isComplete = true;
+        var isFormatted = true;
+
+        //check input
+        if($("input[id='showTimes']").val() == ""){
+            _set($("input[id='showTimes']"), "请输入图片库名称");
+            isComplete = false;
+        }
+
+
+        if(isComplete) {
+            _reset_input($(".form-horizontal.form-profile-save").find(".form-group").find("input"));
+
+            if (!isNumberBetween($("input[id='showTimes']").val())) {
+                isFormatted = false;
+
+                _set($("input[id='showTimes']"), "请1到100之间的数字");
+
+                return;
+            }
+
+            $(".bs-example-modal-sm").find(".modal-body").html("确认保存修改？");
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
+
+        }
+    });
+
+    function jsonpGet(data){
+        alert(data);
+    }
+
+    $(".btn-task-delete-confirm").click(function () {
+
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: "/console/contacts_config/updateAlarm",
+            data: {
+                "times": $("input[id='showTimes']").val(),
+                "version": $("input[id='version']").val()
+            },
+            timeout: 200,
+            success: function (r) {
+                switch (r.status) {
+                    case "SUCCEED" :
+                        $("#dialog-return").find(".modal-body").html("保存成功");
+                        $("#dialog-return").modal("show");
+
+                        $(".btn-task-delete-cancel").click();
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("保存失败");
+                        $("#dialog-return").modal("show");
+
+                        $(".btn-task-delete-cancel").click();
+                        break;
+
+                }
+            },
+
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                $("#dialog-return").modal("show");
+
+                $(".btn-task-delete-cancel").click();
+
+            },
+        });
+
+    });
+
+    function isName(val){//包括中文和英文数字-
+        var reg = /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_-]){1,20}$/;
+
+        return reg.test(val);
+    }
+    function isNumberBetween(val) {
+        var reg = /^100$|^(\d|[1-9]\d)$/;
+
+        return reg.test(val);
+    }
+    function isIPAddandPort(val) {
+
+        return true;
+    }
+    function isUrl(val){
+        return true;
+    }
+</script>
+
+</body>
+</html>

@@ -64,37 +64,46 @@ public class ConfigInfoController {
 
     @RequestMapping("/search")
     @ResponseBody
-    public Map<String ,Object> get(){
-        Map<String, Object> map = new HashMap<>();
+    public Object get(){
+        JSONObject object = null;
 
         String result = configInfoService.search();
 
         if(JSONHandler.isSuccess(result)){
-            String[] keys = {"visitorquality","version","userquality","time1","warningscore","time2","time3","receiveURL","updateDateString","id","imageDBName","serverIPandPort","similarscore"};
+//            String[] keys = {"visitorquality","version","userquality","time1","warningscore","time2","time3","receiveURL","updateDateString","id","imageDBName","serverIPandPort","similarscore"};
+//
+//            String[] elements = JSONHandler.getElements(result,keys);
+//
+//            int size = keys.length;
+//            for(int i = 0; i < size; i++){
+//                map.put(keys[i], elements[i]);
+//            }
 
-            String[] elements = JSONHandler.getElements(result,keys);
+            object = JSONObject.fromObject(result);
+            object.put("status","SUCCEED");
 
-            int size = keys.length;
-            for(int i = 0; i < size; i++){
-                map.put(keys[i], elements[i]);
-            }
+        } else {
+            object.put("status","FAILED");
         }
-        map.put("status","SUCCEED");
 
-        return map;
+        return object;
     }
 
-    @RequestMapping("/isActive")
+    @RequestMapping("/isActivityIPAndPort")
     @ResponseBody
-    public Map<String, Object> isActive(@RequestParam("ipAndPort") String ip){
-        Map<String, Object> map = new HashMap();
+    private Map<String, Object> isActivityIPAndPort(@RequestParam("ip") String ip, @RequestParam("service") int service) {
+        Map<String, Object> map = new HashMap<>();
 
-        String result = configInfoService.isActiveOption(ip);
+        String respons = "";
 
-        JSONObject object = JSONObject.fromObject(result);
+        if(service == 0) {
+            respons = configInfoService.isActivityIPAndPort(ip, "/api/config/query");//API服务器地址
+        } else {
+            respons = configInfoService.isActivityIPAndPort(ip, "");//识别结果接收地址
+        }
 
-        if(object.size() != 0 ){
-            map.put("status","SUCCEED");
+        if(respons.equals("true")){
+            map.put("status", "SUCCEED");
         } else {
             map.put("status", "FAILED");
         }

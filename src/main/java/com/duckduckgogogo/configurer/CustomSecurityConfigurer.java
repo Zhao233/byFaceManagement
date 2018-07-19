@@ -71,7 +71,7 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
         private UserService userService;
 
         /**
-         * 实现登陆功能
+         * 登陆功能
          * */
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

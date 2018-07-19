@@ -50,7 +50,6 @@ public class EmployeeManagementController {
             array.getJSONObject(i).remove("server");
         }
 
-
         array.remove("server");
         r.put("rows", array);
 
@@ -214,5 +213,62 @@ public class EmployeeManagementController {
             r.put("status", "FAILED");
         }
         return r;
+    }
+
+    @RequestMapping("/detect")
+    @ResponseBody
+    private Map<String,Object> detect(MultipartHttpServletRequest request){
+        Map<String, Object> r = new HashMap<>();
+
+        MultipartFile mf = request.getFile("file");
+        FileSystemResource resource =null;
+
+        if(mf != null) {
+            String filename = mf.getOriginalFilename();
+            String suffix = filename.substring(filename.indexOf('.') + 1);
+            // File.separator
+            String folder = System.getProperty("java.io.tmpdir");
+            String datetime = String.valueOf(new Date().getTime());
+            String target = folder + PasswordEncodeAssistant.encode((datetime + filename).toCharArray()) + "." + suffix;
+            File file = new File(target);
+
+            try (FileInputStream fis = (FileInputStream) mf.getInputStream();
+                 FileOutputStream fos = new FileOutputStream(target)) {
+                byte[] b = new byte[1024];
+                int i = fis.read(b);
+                while (i > -1) {
+                    fos.write(b, 0, b.length);
+                    fos.flush();
+                    i = fis.read(b);
+                }
+            } catch (Exception e) {
+                try {
+                    throw e;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            resource = new FileSystemResource(file);
+
+        }
+
+        String response = employeeService.detect(resource);
+        System.out.println(response);
+
+        if(JSONHandler.isSuccess(response)){
+            r.put("status","SUCCEED");
+        } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            r.put("status", "FAILED");
+
+            if(object.getString("errorMessage") != null) {
+                r.put("errorMessage", object.getString("errorMessage"));
+            }
+        }
+
+        return r;
+
     }
 }

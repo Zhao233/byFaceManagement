@@ -14,4 +14,7 @@ public interface ConfigInfoService{
     String getServerIP();
 
     String isActiveOption(String ipAndPort);
+
+    String isActivityIPAndPort(String ip,String service);
+
 }

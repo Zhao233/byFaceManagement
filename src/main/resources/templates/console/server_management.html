@@ -31,20 +31,18 @@
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
 
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
-
     <script src="/javascript/custom-scripts.js"></script>
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/bootstrap-table-zh-CN.js"></script>
+
 
     <style>
         .fixed-table-body {
             overflow-x: auto;
             overflow-y: scroll;
-            height: 30em;
+            height: 35em;
             width: 100%;
         }
 
@@ -151,9 +149,14 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
-                        <!--报警设置-->
+                        <!--告警设置-->
                         <li>
-                            <a href="/console/contacts_management">报警设置</a>
+                            <a href="/console/contacts_config">告警设置</a>
+                        </li>
+
+                        <!--告警联系人-->
+                        <li>
+                            <a href="/console/contacts_management">告警联系人</a>
                         </li>
                     </ul>
                 </li>
@@ -171,6 +174,12 @@
                         <li>
                             <a href="/console/visitor_management">访客管理</a>
                         </li>
+
+                        <!--访客记录管理-->
+                        <li>
+                            <a href="/console/visitorRecord_management">访客记录管理</a>
+                        </li>
+
 
                         <!--考勤信息-->
                         <li>
@@ -205,6 +214,11 @@
                         <!--用户管理-->
                         <li>
                             <a href="/console/user_management">用户管理</a>
+                        </li>
+
+                        <!--用户信息修改-->
+                        <li>
+                            <a href="/console/profile">用户信息修改</a>
                         </li>
                     </ul>
                 </li>
@@ -319,7 +333,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
         </div><!-- /.modal-content -->
@@ -330,7 +344,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -345,7 +359,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="log-out-mySmallModalLabel">MESSAGE</h4>
+                <h4 class="modal-title" id="log-out-mySmallModalLabel">提示</h4>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
@@ -615,8 +629,6 @@
                         $("#dialog-return").modal("show");
                     }
                 });
-
-                window.flag = '';
             }
         }
 
