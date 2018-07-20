@@ -232,8 +232,8 @@
     </nav>
 
     <!-- /. NAV SIDE  -->
-    <div id="page-wrapper">
-        <div id="page-inner">
+    <div id="page-wrapper" style="padding-top: 0px; padding-bottom: 0px">
+        <div id="page-inner" style="margin-top:0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px">
             <!--<div class="row">-->
                     <!--<h1 class="page-header" style="color: #FFFFFF;">-->
                         <!--轨迹图-->
@@ -244,7 +244,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" style="margin-bottom: 0px">
                         <div class="panel-body">
 
                             <div class="form-inline">
@@ -255,7 +255,7 @@
                                         <option value="visitor">访客</option>
                                     </select>
 
-                                    <input type="text" id="personName_show" class="form-control" >
+                                    <input type="text" id="personName_show" class="form-control" readonly>
                                 </div>
 
                                 <div class="form-group">
@@ -279,14 +279,12 @@
                                 <!--<div style="position: absolute; width: 50px; height: 50px; background-color: #3c763d; top: 50px;">-->
                                 <!--</div>-->
 
-                                <div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 140px; height: 72px" class="message">
+                                <div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 12rem; height: 6rem" class="message">
                                     <div class="form-group" style="margin-bottom: 0px">
                                         <label class="name" style="font-size: 2px">名称：</label>
                                     </div>
 
-                                    <label style="font-size: 2px">出现时间</label>
-
-                                    <div class="form-group showTime" style="overflow-y: scroll; height: 2em;font-size: 2px">
+                                    <div class="form-group showTime" style="overflow-y: scroll; height: 4rem;font-size: 2px;margin-bottom: 0px">
 
                                     </div>
                                 </div>
@@ -318,11 +316,15 @@
                                 var cameraList_all = new Array();
                                 var cameraList_enable = new Array();
 
+                                var cameraList_all_info = new Array();
+
                                 var trace_list = new Array();
 
                                 var camera_trace_list = new Array();
 
                                 function search(id, startDate, endDate){
+                                    cameraList_all_info = new Array();
+
                                     var data_ = {
                                         id : id,
                                         startDate : startDate,
@@ -361,6 +363,25 @@
                                         }
                                     });
 
+                                    for(var i = 0; i < cameraList_all.length; i++){
+                                        cameraList_all_info.push({
+                                            name : cameraList_all[i].cameraName,
+                                            info : [],
+                                            cameraXY : cameraList_all[i].cameraXY
+                                        })
+                                    }
+
+                                    for(var i = cameraList_enable.length-1; i > 0; i--){
+                                        for(var j = 0; j < cameraList_all_info.length; j++){
+                                            if(cameraList_all_info[j].name == cameraList_enable[i].cameraname){
+
+                                                cameraList_all_info[j].info.push(cameraList_enable[i].tracedate);
+
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     search_trace_gap();
                                 }
 
@@ -376,8 +397,11 @@
                                     var location;
                                     var length = cameraList_.length;
 
-                                    location = cameraList_[length-1].cameraXY.split(",");//0: x, 1: y
-
+                                    if(length > 0) {
+                                        location = cameraList_[length - 1].cameraXY.split(",");//0: x, 1: y
+                                    } else {
+                                        return;
+                                    }
                                     console.log("trace_start: "+(parseInt(location[0])+ offset_trace.x) + ", "+ (parseInt(location[1])+ offset_trace.y));
                                     context.moveTo( parseInt(location[0])+ offset_trace.x - 10, parseInt(location[1])+ offset_trace.y - 10 );
 
@@ -563,6 +587,8 @@
                                     $("#datepicker_start").val(toDayTime);
                                     $("#datepicker_end").val(toDayTime);
 
+                                    $("#searchType").val(personType);
+
                                     start_draw(personId,toDayTime, toDayTime);
 
                                 }
@@ -584,7 +610,7 @@
 
                                 $("#canvas")[0].onmousemove = function(event) {
 
-                                    if(window.isSearched) {
+                                    if(true) {
 
                                         //获取窗口坐标
                                         var x = event.pageX - canvas.getBoundingClientRect().left;
@@ -598,19 +624,31 @@
 
                                         reset_message($(".message"));
 
-                                        var length_cameraList = cameraList_enable.length;
+                                        var length_cameraList = cameraList_all_info.length;
+                                        //var length_cameraList = cameraList_all.length;
                                         for (var i = 0; i < length_cameraList; i++) {
-                                            var location_camera = cameraList_enable[i].cameraXY.split(",");
+                                            //var camera_temp = cameraList_all[i];
+                                            var camera_temp = cameraList_all_info[i];
+
+                                            var location_camera = camera_temp.cameraXY.split(",");
 
                                             if (x >= (location_camera[0] - camera_size.width / 2) && x <= (location_camera[0] - camera_size.width / 2) + camera_size.width) {
                                                 if (y >= (location_camera[1] - camera_size.height / 2) && y <= (location_camera[1] - camera_size.height / 2) + camera_size.height) {
-                                                    console.log("clicked camera:" + cameraList_enable[i].cameraname)
+                                                    console.log("clicked camera:" + camera_temp.name)
                                                     var messageBox = $(".message");
 
 
-                                                    $(".name").append(cameraList_enable[i].cameraname);
+                                                    if($(".name").contents().length == 0  ){
+                                                        $(".name").append(camera_temp.name);
+                                                    }
 
-                                                    $(".showTime").append("<lable style='width: 8em;'>" + cameraList_enable[i].tracedate + "</lable><br>");
+                                                    for(x in camera_temp.info){
+                                                        $(".showTime").append("<lable style='width: 8em;'>" + camera_temp.info[x] + "</lable><br>");
+                                                    }
+
+                                                    // for(var j = 0; j <= camera_temp.info; j++) {
+                                                    //     $(".showTime").append("<lable style='width: 8em;'>" + camera_temp.info[j] + "</lable><br>");
+                                                    // }
 
                                                     var left = (location_camera[0] * canvas.getBoundingClientRect().width) / canvas.width;
                                                     var top = (location_camera[1] * canvas.getBoundingClientRect().height) / canvas.height;
@@ -622,6 +660,7 @@
                                                 }
                                             }
                                         }
+
                                     }
                                 }
 
@@ -741,6 +780,12 @@
     window.isSearched = false;
 
     $(document).ready(function () {
+
+        $(document.body).css({//禁止页面滚动
+            "overflow-x":"hidden",
+            "overflow-y":"hidden"
+        });
+
         //初始化日历
         $("#datepicker_start").datepicker({
             dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
@@ -860,8 +905,6 @@
                 $("#dialog-return").modal("show");
             }
         });
-
-
     })
 
     $("#logout").click(function () {

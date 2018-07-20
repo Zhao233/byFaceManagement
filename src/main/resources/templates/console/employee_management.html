@@ -55,34 +55,7 @@
             width: 100%;
         }
 
-        /*table tbody {*/
-            /*display:block;*/
-            /*height:33em;*/
-            /*overflow-y:scroll;*/
 
-        /*}*/
-        /*table thead, tbody tr {*/
-            /*display:table;*/
-            /*width:100%;*/
-            /*table-layout:fixed;*/
-        /*}*/
-        /*thead {*/
-            /*width: calc( 100% - 1em )*/
-        /*}*/
-
-        /*table tbody {*/
-            /*display:block;*/
-            /*height:30em;*/
-            /*overflow-y:scroll;*/
-        /*}*/
-        /*table thead, tbody tr {*/
-            /*display:table;*/
-            /*width:100%;*/
-            /*table-layout:fixed;*/
-        /*}*/
-        /*table thead {*/
-            /*width: calc( 100% - 1em )*/
-        /*}*/
         table thead th{
             background:#275AB2;
         }
@@ -404,7 +377,7 @@
                             <div class="form-group ">
                                 <label for="phoneNumber" class="col-sm-4 control-label">电话号码</label>
                                 <div class="col-sm-7">
-                                    <input type="text" type="number" class="form-control" id="phoneNumber" name="phoneNumber"
+                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                            maxlength="11" required="required"/>
                                 </div>
                                 <div class="col-sm-1"></div>
@@ -571,6 +544,7 @@
     }
 
     function _set(el, message) {
+        el.removeClass("alert-danger");
         el.tooltip('destroy');
 
         el.addClass("alert-danger");
@@ -636,6 +610,9 @@
     $(".btn.btn-primary.add-new-user").click(function () {
         var isComplete = true;
         var isFormatted = true;
+
+        _reset_input( $("#dialog-employee-management-update").find(".form-group").find("input"));
+
 
         //check input
         if($("input[id='personName']").val() == ""){
