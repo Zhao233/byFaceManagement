@@ -263,7 +263,7 @@
                                 <input type="text" style="display:none;" id="id" name="id" th:value="${user.id}" />
                                 <input type="text" style="display:none;" id="version" name="version" th:value="${user.version}" />
                                 <input type="text" style="display:none;" id="role" name="role" th:value="${user.role}" />
-                                <input type="text" style="display:none;" id="enable" name="enable" th:value="${user.enabled}" />
+                                <input type="text" style="display:none;" id="enabled" name="enabled" th:value="${user.enabled}" />
                                 <div class="form-group">
                                     <label for="username" class="col-sm-3 control-label">用户名</label>
                                     <div class="col-sm-5">
@@ -481,7 +481,8 @@
             $.ajax({
                 async : false ,
                 type : 'POST',
-                url : "/console/user_management/save",
+                url : "/console/profile/save",
+                timeout : 500,
                 data : post_data,
                 timeout : 200,
                 success : function (r) {
@@ -495,8 +496,10 @@
                             break;
 
                         case "FAILED" :
-                            if(r.message != undefined){
-                                $("#dialog-return").find(".modal-body").html(r.message);
+                            $("#dialog-return").find(".modal-body").html("修改失败");
+
+                            if(r.message.message != undefined){
+                                $("#dialog-return").find(".modal-body").html(r.message.message);
                                 $("#dialog-return").modal("show");
                             }
 
@@ -507,7 +510,7 @@
                 },
 
                 error : function(XMLHttpRequest, textStatus, errorThrown) {
-                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").find(".modal-body").html("网络错误");
                     $("#dialog-return").modal("show");
 
                     operate_flag = false;

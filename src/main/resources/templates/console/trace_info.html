@@ -13,27 +13,29 @@
     <link href="/style/custom-styles.css" rel="stylesheet"/>
     <!-- Google Fonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
-    <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
 
     <link href="/style/jquery-ui.css" rel="stylesheet"/>
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+
     <script src="/javascript/jquery-1.11.1.min.js"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascript/bootstrap.min.js"></script>
 
     <!-- Metis Menu Js -->
     <script src="/javascript/jquery.metisMenu.js"></script>
 
     <script src="/javascript/custom-scripts.js"></script>
 
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
     <script src="/javascript/bootstrap-table.min.js"></script>
     <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
     <script src="/javascript/jquery-ui.js"></script>
+
+    <script src="/javascript/bootstrap-datetimepicker.js"></script>
+    <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
 
     <style>
         #canvas{
@@ -100,6 +102,7 @@
 
 </head>
 <body>
+
 <div id="wrapper">
     <nav class="navbar navbar-default top-navbar" role="navigation">
         <ul class="nav navbar-top-links navbar-brand-right_">
@@ -259,13 +262,22 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="datepicker_start" style="margin-left: 1em;text-align: right;">开始时间:</label>
-                                    <input type="text" id="datepicker_start" class="form-control" readonly>
+                                    <label for="datepicker_start_box" style="margin-left: 1em;text-align: right;">开始时间:</label>
+                                    <div class="input-group date form_date" id="datepicker_start_box" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input class="form-control" id="datepicker_start" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    </div>
+
+                                    <!--<input type="text" id="datepicker_start" class="form-control" readonly>-->
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="datepicker_end" style="margin-left: 1em;text-align: right;">结束时间:</label>
-                                    <input type="text" id="datepicker_end" class="form-control"  readonly>
+                                    <label for="datepicker_end_box" style="margin-left: 1em;text-align: right;">结束时间:</label>
+                                    <div class="input-group date form_date" id="datepicker_end_box" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input class="form-control" id="datepicker_end"  size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    </div>
+                                    <!--<input type="text" id="datepicker_end" class="form-control"  readonly>-->
                                 </div>
 
                                 <button class="btn btn-primary searchTrace" data-toggle="modal" style="padding-left: 1em">搜索</button>
@@ -279,12 +291,22 @@
                                 <!--<div style="position: absolute; width: 50px; height: 50px; background-color: #3c763d; top: 50px;">-->
                                 <!--</div>-->
 
-                                <div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 12rem; height: 6rem" class="message">
+                                <!--<div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 12rem; height: 6.5rem" class="message">-->
+                                    <!--<div class="form-group" style="margin-bottom: 0px">-->
+                                        <!--<label class="name" style="font-size: 2px">名称：</label>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="form-group showTime" style="overflow-y: scroll; height: 4rem;font-size: 2px;margin-bottom: 0px">-->
+
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <div style="display: none; position: absolute; opacity:0.8; background-color: #FFFFFF; width: 12rem; height: 6.5rem" class="message">
                                     <div class="form-group" style="margin-bottom: 0px">
-                                        <label class="name" style="font-size: 2px">名称：</label>
+                                        <label class="name" style="font-size: 1rem">名称：</label>
                                     </div>
 
-                                    <div class="form-group showTime" style="overflow-y: scroll; height: 4rem;font-size: 2px;margin-bottom: 0px">
+                                    <div class="form-group showTime" style="overflow-y: scroll; height: 4rem;font-size: 1rem;margin-bottom: 0px">
 
                                     </div>
                                 </div>
@@ -313,6 +335,9 @@
                                     y : -10
                                 }
 
+                                var can = document.getElementById('canvas');
+                                var context = can.getContext('2d');
+
                                 var cameraList_all = new Array();
                                 var cameraList_enable = new Array();
 
@@ -334,18 +359,19 @@
                                     $.ajax({
                                         type: "get",
                                         url: "/console/trace/search",
+                                        timeout : 2000,
                                         data: data_,
                                         dataType:"json",
                                         success: function (r) {
                                             switch (r.status) {
                                                 case "SUCCEED" :
 
-                                                    cameraList_all = r.cameras.allCamera;
+                                                    //cameraList_all = r.cameras.allCamera;
                                                     cameraList_enable = r.cameras.traceCamera;
                                                     console.log("camera_enable: ");
                                                     console.log(cameraList_enable);
-                                                    console.log("camera_all: ");
-                                                    console.log(cameraList_all);
+                                                    //console.log("camera_all: ");
+                                                    //console.log(cameraList_all);
                                                     break
                                                 case "FAILED" :
                                                     $("#dialog-return").find(".modal-body").html("查询失败");
@@ -358,7 +384,7 @@
                                             // }
                                         },
                                         error: function (r) {
-                                            $("#dialog-return").find(".modal-body").html("网络故障，请恢复网络后重试");
+                                            $("#dialog-return").find(".modal-body").html("网络错误");
                                             $("#dialog-return").modal("show");
                                         }
                                     });
@@ -383,6 +409,43 @@
                                     }
 
                                     search_trace_gap();
+                                }
+                                function searchAllCamera(){
+                                    $.ajax({
+                                        async:false,
+                                        type: "get",
+                                        url: "/console/camera_management/search",
+                                        data:{
+                                            search : '',
+                                            limit:1000,
+                                            offset:0
+                                        },
+                                        timeout : 2000,
+                                        dataType:"json",
+                                        success: function (r) {
+                                            switch (r.status) {
+                                                case "SUCCEED" :
+
+                                                    cameraList_all = r.rows;
+
+                                                    console.log("camera_all: ");
+                                                    console.log(cameraList_all);
+                                                    break
+                                                case "FAILED" :
+                                                    $("#dialog-return").find(".modal-body").html("查询失败");
+                                                    $("#dialog-return").modal("show");
+                                                    break
+                                            }
+                                            // if (r.message.WARNING != undefined) {
+                                            //     $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                                            //     $("#dialog-return").modal("show");
+                                            // }
+                                        },
+                                        error: function (r) {
+                                            $("#dialog-return").find(".modal-body").html("网络错误");
+                                            $("#dialog-return").modal("show");
+                                        }
+                                    });
                                 }
 
                                 function drawTrace(cameraList_, context){
@@ -505,6 +568,7 @@
                                     $.ajax({
                                         type: "get",
                                         url: "/console/trace/search_trace",
+                                        timeout : 1000,
                                         dataType:"json",
                                         success: function (r) {
                                             switch (r.status) {
@@ -522,7 +586,7 @@
                                             }
                                         },
                                         error: function (r) {
-                                            $("#dialog-return").find(".modal-body").html("网络故障，请恢复网络后重试");
+                                            $("#dialog-return").find(".m错误odal-body").html("网络错误");
                                             $("#dialog-return").modal("show");
                                         }
                                     });
@@ -598,11 +662,8 @@
                                     search(id,startTime,endTime);
                                     $.ajaxSettings.async = true;
 
-                                    var can = document.getElementById('canvas');
-                                    var  context = can.getContext('2d');
-
                                     search_trace_gap();
-                                    drawCamera(cameraList_all,context,false);
+                                    //drawCamera(cameraList_all,context,false);
                                     drawTrace(cameraList_enable,context);
                                     drawCamera(cameraList_enable,context, true);
                                     //drawMessage(cameraList_enable,context);
@@ -781,42 +842,67 @@
 
     $(document).ready(function () {
 
-        $(document.body).css({//禁止页面滚动
-            "overflow-x":"hidden",
-            "overflow-y":"hidden"
-        });
+        if(navigator.userAgent.match(/mobile/i)) {
+            camera_size.width = 40;
+            camera_size.height = 40;
+
+            console.log("camera_size:");
+            console.log(camera_size);
+        }
+
+        searchAllCamera();
+
+        drawCamera(cameraList_all,context,false);
+
+        // $(document.body).css({//禁止页面滚动
+        //     "overflow-x":"hidden",
+        //     "overflow-y":"hidden"
+        // });
 
         //初始化日历
-        $("#datepicker_start").datepicker({
-            dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-            /* 每周从周一开始 */
-            firstDay: 1,
-            /* 区域化月名为中文习惯 */
-            monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
-                "7月", "8月", "9月", "10月", "11月", "12月"],
-            /* 月份显示在年后面 */
-            showMonthAfterYear: true,
-            /* 年份后缀字符 */
-            yearSuffix: "年",
-            /* 格式化中文日期d
-            （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat: "yy-m-d"
+
+        $('.form_date').datetimepicker({
+            format: "yyyy-m-d",
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
         });
-        $("#datepicker_end").datepicker({
-            dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-            /* 每周从周一开始 */
-            firstDay: 1,
-            /* 区域化月名为中文习惯 */
-            monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
-                "7月", "8月", "9月", "10月", "11月", "12月"],
-            /* 月份显示在年后面 */
-            showMonthAfterYear: true,
-            /* 年份后缀字符 */
-            yearSuffix: "年",
-            /* 格式化中文日期
-            （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat: "yy-m-d"
-        });
+
+        // $("#datepicker_start").datepicker({
+        //     dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+        //     /* 每周从周一开始 */
+        //     firstDay: 1,
+        //     /* 区域化月名为中文习惯 */
+        //     monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+        //         "7月", "8月", "9月", "10月", "11月", "12月"],
+        //     /* 月份显示在年后面 */
+        //     showMonthAfterYear: true,
+        //     /* 年份后缀字符 */
+        //     yearSuffix: "年",
+        //     /* 格式化中文日期d
+        //     （因为月份中已经包含“月”字，所以这里省略） */
+        //     dateFormat: "yy-m-d"
+        // });
+        // $("#datepicker_end").datepicker({
+        //     dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+        //     /* 每周从周一开始 */
+        //     firstDay: 1,
+        //     /* 区域化月名为中文习惯 */
+        //     monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
+        //         "7月", "8月", "9月", "10月", "11月", "12月"],
+        //     /* 月份显示在年后面 */
+        //     showMonthAfterYear: true,
+        //     /* 年份后缀字符 */
+        //     yearSuffix: "年",
+        //     /* 格式化中文日期
+        //     （因为月份中已经包含“月”字，所以这里省略） */
+        //     dateFormat: "yy-m-d"
+        // });
 
         //获取时间
         var oDate = new Date();
@@ -881,6 +967,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
+            timeout : 500,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -907,6 +994,12 @@
         });
     })
 
+    $("#searchType").change(function () {
+        $("#personName_show").val("");
+
+        window.personID = undefined;
+    });
+
     $("#logout").click(function () {
         $(".log-out-bs-example-modal-sm").find(".modal-body").html("确认退出系统？");
         $(".log-out-bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
@@ -930,12 +1023,13 @@
 
     $(".searchTrace").click(function () {
         window.isSearched = true;
+
         var id;
 
         if(personId != undefined){
             id = personId;
         } else {
-            id = $("input[name='id']:checked").val();
+            id = window.personID;
 
             if(id == undefined){
                 if($("#searchType").val() == "employee"){

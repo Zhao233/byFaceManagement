@@ -26,10 +26,9 @@ public class CameraManagementController {
                                          @RequestParam("entranceGuardType") String entranceGuardType,@RequestParam("entranceGuardNO") String entranceGuardNO, @RequestParam("cameraXY") String cameraXY){
 
         String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardType, entranceGuardNO, cameraXY);
-        Map<String, Object> r = null;
+        Map<String, Object> r = r = new HashMap<>();
 
         if(JSONHandler.isSuccess(result)){
-            r = new HashMap<>();
 
             r.put("status", "SUCCEED");
         } else {
@@ -57,8 +56,10 @@ public class CameraManagementController {
             JSONObject object = JSONObject.fromObject(result);
             r.put("total", object.getInt("total"));
             r.put("rows", object.getJSONArray("rows"));
+            r.put("status", "SUCCEED");
         } catch (JSONException e){
             System.out.println("错误："+e.getMessage());
+            r.put("status", "FAILED");
 
 
         }

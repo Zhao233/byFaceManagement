@@ -54,6 +54,7 @@
         $.ajax({
             type: "get",
             url: "/console/faceconfig_management/search",
+            timeout : 500,
             dataType:"json",
             success : function(r) {
                 switch (r.status){
@@ -83,6 +84,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
+            timeout : 500,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -431,11 +433,12 @@
             async: false,
             type: 'POST',
             url: "/console/contacts_config/updateAlarm",
+            timeout : 500,
             data: {
                 "times": $("input[id='showTimes']").val(),
                 "version": $("input[id='version']").val()
             },
-            timeout: 200,
+            timeout: 300,
             success: function (r) {
                 switch (r.status) {
                     case "SUCCEED" :
@@ -455,7 +458,7 @@
             },
 
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
 
                 $(".btn-task-delete-cancel").click();

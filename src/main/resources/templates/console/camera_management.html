@@ -494,6 +494,7 @@
 
         $.ajax({
             type: "get",
+            timeout : 500,
             url: "/console/user_management/getAdminInfo",
             dataType:"json",
             success : function(json) {
@@ -789,6 +790,7 @@
                     console.log(data);
                     $.ajax({
                         url: "/console/camera_management/" + window.flag,
+                        timeout : 300,
                         type: "post",
                         data: data,
                         processData: false,
@@ -885,6 +887,7 @@
 
         $.ajax({
             url: "/console/camera_management/delete",
+            timeout : 500,
             type: "post",
             data: form,
             processData: false,
@@ -910,7 +913,7 @@
             },
             error: function (r) {
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
             }
 

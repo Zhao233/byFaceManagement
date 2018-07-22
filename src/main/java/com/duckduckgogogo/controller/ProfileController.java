@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/console/profile")
-public class ProfileContriller {
+public class ProfileController {
 
     @Autowired
     private UserService userService;
@@ -27,7 +27,7 @@ public class ProfileContriller {
     @PostMapping("/save")
     @ResponseBody
     public Map<String, Object> save(@Valid User user,
-                                    @RequestParam String confirmPassword,
+                                    @RequestParam("confirmPassword") String confirmPassword,
                                     HttpServletRequest request)
             throws Exception {
         Map<String, Object> r = new HashMap<>();
@@ -62,19 +62,19 @@ public class ProfileContriller {
                 }
                 user.setPassword(PasswordEncodeAssistant.encode(user.getPassword().toCharArray()));
             }
-            if (user.getUsername() != null && !user.getUsername().isEmpty()) {
-                String regEx = "[A-Za-z0-9_-][A-Za-z0-9_-]{3,31}";
-                boolean ok = Pattern.compile(regEx).matcher(user.getUsername()).matches();
-                if (ok) {
-                    mark = userService.findByUsername(user.getUsername());
-                    if (mark != null && user.getId() != mark.getId())
-                        message.put("username", "Oh snap! Already existed.");
-                } else {
-                    message.put("username", "Oh snap! 4-30 letters,and must be A-Z,a-z,0-9 or _ or -");
-                }
-            } else {
-                message.put("username", "Oh snap! Can't be empty.");
-            }
+//            if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+//                String regEx = "[A-Za-z0-9_-][A-Za-z0-9_-]{3,31}";
+//                boolean ok = Pattern.compile(regEx).matcher(user.getUsername()).matches();
+//                if (ok) {
+//                    mark = userService.findByUsername(user.getUsername());
+//                    if (mark != null && user.getId() != mark.getId())
+//                        message.put("username", "Oh snap! Already existed.");
+//                } else {
+//                    message.put("username", "Oh snap! 4-30 letters,and must be A-Z,a-z,0-9 or _ or -");
+//                }
+//            } else {
+//                message.put("username", "Oh snap! Can't be empty.");
+//            }
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                 String regEx = "(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+){1,200}";
                 boolean ok = Pattern.compile(regEx).matcher(user.getEmail()).matches();

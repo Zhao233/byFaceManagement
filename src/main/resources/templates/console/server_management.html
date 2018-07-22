@@ -310,8 +310,8 @@
                         <label for="isMainServer" class="col-sm-4 control-label">是否为主服务器</label>
                         <div class="col-sm-7">
                             <select id="isMainServer" name="isMainServer" class="form-control" required="required">
-                                <option value="False">否</option>
-                                <option value="True">是</option>
+                                <option value="false">否</option>
+                                <option value="true">是</option>
                             </select>
                         </div>
                         <div class="col-sm-1"></div>
@@ -509,7 +509,7 @@
 
                 $("#dialog-server-management-update").find("input[id='serverName']").val(r.serverName);
                 $("#dialog-server-management-update").find("input[id='serverIP']").val(r.serverIP);
-                $("#dialog-server-management-update").find("select[id='isMainServer']").val(r.isMainServer ? "True" : "False");
+                $("#dialog-server-management-update").find("select[id='isMainServer']").val(r.isMainServer);
                 window.version = r.version;
 
                 console.log("version:" + window.version);

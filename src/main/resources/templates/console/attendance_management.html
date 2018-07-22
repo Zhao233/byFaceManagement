@@ -24,10 +24,14 @@
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
+    <link href="/style/jquery-ui.css" rel="stylesheet">
+
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+
+
     <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
 
     <!--datePicker-->
-    <link href="/style/jquery-ui.css" rel="stylesheet">
     <script src="/javascript/jquery-ui.js"></script>
     <script src="/javascript/bootstrap.min.js"></script>
 
@@ -42,6 +46,9 @@
     <!--tableExport-->
     <script src="/javascript/tableExport.js"></script>
     <script src="/javascript/bootstrap-table-export.js"></script>
+
+    <script src="/javascript/bootstrap-datetimepicker.js"></script>
+    <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
 
     <style>
         .fixed-table-body {
@@ -249,13 +256,22 @@
                             <div class="form-inline">
 
                                 <div class="form-group">
-                                    <label  for="datepicker_start">开始时间</label>
-                                    <input  type="text" class="form-control" id="datepicker_start" readonly>
+                                    <label  for="datepicker_start_box">开始时间</label>
+                                    <div class="input-group date form_date" id="datepicker_start_box"  data-link-field="dtp_input2" >
+                                        <input class="form-control" id="datepicker_start" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    </div>
+                                    <!--<input  type="text" class="form-control" id="datepicker_start" readonly>-->
                                 </div>
 
                                 <div class="form-group">
-                                    <label  for="datepicker_end">结束时间</label>
-                                    <input  type="text" class="form-control" id="datepicker_end" readonly>
+                                    <label  for="datepicker_end_box">结束时间</label>
+                                    <div class="input-group date form_date" id="datepicker_end_box"  data-link-field="dtp_input2" >
+                                        <input class="form-control" id="datepicker_end" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    </div>
+
+                                    <!--<input  type="text" class="form-control" id="datepicker_end" readonly>-->
                                 </div>
 
                                 <button class="btn btn-primary searchData">查询</button>
@@ -393,6 +409,7 @@
         $.ajax({
             type: "get",
             url: "/console/attendance_management/search",
+            timeout:500,
             data: {
                 limit:  window.limit,
                 offset:  window.offset,
@@ -403,6 +420,10 @@
             dataType:"json",
             success : function(json) {
                 $("#_table_user_search").bootstrapTable('load', json);//主要是要这种写法
+            },
+            error : function(res){
+                $("#dialog-return").find(".modal-body").html("网络错误");
+                $("#dialog-return").modal("show");
             }
         });
     });
@@ -476,40 +497,52 @@
         });
 
         //初始化日历
-        $( "#datepicker_start" ).datepicker({
-            dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
-            /* 每周从周一开始 */
-            firstDay : 1,
-            /* 区域化月名为中文习惯 */
-            monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
-                "7月", "8月", "9月", "10月", "11月", "12月"],
-            /* 月份显示在年后面 */
-            showMonthAfterYear : true,
-            /* 年份后缀字符 */
-            yearSuffix : "年",
-            /* 格式化中文日期
-            （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-m-d"
+        $('.form_date').datetimepicker({
+            format: "yyyy-m-d",
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
         });
-        $( "#datepicker_end" ).datepicker({
-            dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
-            /* 每周从周一开始 */
-            firstDay : 1,
-            /* 区域化月名为中文习惯 */
-            monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
-                "7月", "8月", "9月", "10月", "11月", "12月"],
-            /* 月份显示在年后面 */
-            showMonthAfterYear : true,
-            /* 年份后缀字符 */
-            yearSuffix : "年",
-            /* 格式化中文日期
-            （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-m-d"
-        });
+        // $( "#datepicker_start" ).datepicker({
+        //     dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
+        //     /* 每周从周一开始 */
+        //     firstDay : 1,
+        //     /* 区域化月名为中文习惯 */
+        //     monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
+        //         "7月", "8月", "9月", "10月", "11月", "12月"],
+        //     /* 月份显示在年后面 */
+        //     showMonthAfterYear : true,
+        //     /* 年份后缀字符 */
+        //     yearSuffix : "年",
+        //     /* 格式化中文日期
+        //     （因为月份中已经包含“月”字，所以这里省略） */
+        //     dateFormat : "yy-m-d"
+        // });
+        // $( "#datepicker_end" ).datepicker({
+        //     dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
+        //     /* 每周从周一开始 */
+        //     firstDay : 1,
+        //     /* 区域化月名为中文习惯 */
+        //     monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
+        //         "7月", "8月", "9月", "10月", "11月", "12月"],
+        //     /* 月份显示在年后面 */
+        //     showMonthAfterYear : true,
+        //     /* 年份后缀字符 */
+        //     yearSuffix : "年",
+        //     /* 格式化中文日期
+        //     （因为月份中已经包含“月”字，所以这里省略） */
+        //     dateFormat : "yy-m-d"
+        // });
 
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
+            timeout:300,
             dataType:"json",
             success : function(json) {
                 switch (json.status){

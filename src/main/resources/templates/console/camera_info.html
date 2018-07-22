@@ -23,22 +23,23 @@
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
+    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+
+
     <script src="/javascript/jquery.metisMenu.js"></script>
     <script src="/javascript/custom-scripts.js"></script>
 
     <script src="/javascript/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="/javascript/jquery.dataTables.js"></script>
-    <script src="/javascript/dataTables.bootstrap.js"></script>
+    <script src="/javascript/chart.js"></script>
 
     <!--<script src="/javascript/jquery-1.11.1.min.js"></script>-->
     <script src="/javascript/bootstrap-table.min.js"></script>
     <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
-
     <script src="/javascript/bootstrap.min.js"></script>
+
+    <script src="/javascript/bootstrap-datetimepicker.js"></script>
+    <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
 
 
     <style>
@@ -268,18 +269,26 @@
                             <div  class="panel-heading">
                                 <div class="form-inline">
 
-                                    <div class="form-group" style="margin-bottom: 8px">
+                                    <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
                                         <lable for="cameraName">摄像头名称：</lable>
                                         <input type="text" class="form-control" id="cameraName" readonly>
                                     </div>
 
 
-                                    <div class="form-group" style="margin-bottom: 8px">
-                                        <lable for="datepicker" >日期：</lable>
-                                        <input type="text" class="form-control" id="datepicker" readonly>
+                                    <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
+                                        <lable for="datepicker_start_box" >日期：</lable>
+                                        <div class="input-group date form_date" id="datepicker_start_box"  data-link-field="dtp_input2" >
+                                            <input class="form-control" id="datepicker" size="16" type="text" value="" readonly>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        </div>
+
+                                        <!--<input type="text" class="form-control" id="datepicker" readonly>-->
                                     </div>
 
-                                    <button class="btn btn-primary searchData">查找</button>
+                                    <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
+                                        <button class="btn btn-primary searchData">查找</button>
+                                    </div>
+
                                 </div>
 
                                 <div class="canvas-wrapper form-group" style="margin-top: 5px">
@@ -421,21 +430,34 @@
     })
 
     $(document).ready(function() {
-        $( "#datepicker" ).datepicker({
-            dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
-            /* 每周从周一开始 */
-            firstDay : 1,
-            /* 区域化月名为中文习惯 */
-            monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
-                "7月", "8月", "9月", "10月", "11月", "12月"],
-            /* 月份显示在年后面 */
-            showMonthAfterYear : true,
-            /* 年份后缀字符 */
-            yearSuffix : "年",
-            /* 格式化中文日期
-            （因为月份中已经包含“月”字，所以这里省略） */
-            dateFormat : "yy-m-d"
+        //初始化日历
+        $('.form_date').datetimepicker({
+            format: "yyyy-m-d",
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
         });
+
+        // $( "#datepicker" ).datepicker({
+        //     dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
+        //     /* 每周从周一开始 */
+        //     firstDay : 1,
+        //     /* 区域化月名为中文习惯 */
+        //     monthNames : ["1月", "2月", "3月", "4月", "5月", "6月",
+        //         "7月", "8月", "9月", "10月", "11月", "12月"],
+        //     /* 月份显示在年后面 */
+        //     showMonthAfterYear : true,
+        //     /* 年份后缀字符 */
+        //     yearSuffix : "年",
+        //     /* 格式化中文日期
+        //     （因为月份中已经包含“月”字，所以这里省略） */
+        //     dateFormat : "yy-m-d"
+        // });
 
         $('#cameraList').bootstrapTable({
             method: 'get',
@@ -480,6 +502,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
+            timeout : 300,
             dataType: "json",
             success: function (json) {
                 switch (json.status) {
@@ -531,6 +554,7 @@
 
             $.ajax({
                 type: "get",
+                timeout:300,
                 url: "/console/user_management/getAdminInfo",
                 dataType: "json",
                 success: function (json) {
@@ -562,6 +586,7 @@
     function getCameraNameById(id){
         $.ajax({
             url: "/console/camera_management/get/" + id,
+            timeout : 300,
             type: "get",
             processData: false,
             contentType: false,

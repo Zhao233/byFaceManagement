@@ -361,7 +361,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                             <button type="button" class="btn btn-primary add-new-user">保存</button>
-                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">退出</button>
+                            <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </form>
@@ -553,12 +553,16 @@
     })
 
     $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
+        window.flag = 'add';
+
         _reset($(".form-horizontal.add-new-user"));
         $("#dialog-user-management-update-title").html("增加用户");
         $("#dialog-user-management-update").modal("show");
     });
 
     $(".btn.btn-success.open-update-use-dialog").click(function() {
+        window.flag = 'update';
+
         var id = $("input[type='radio']:checked").val();
         if (id != undefined) {
             _reset($(".form-horizontal.add-new-user"));
@@ -577,8 +581,8 @@
                 $("#dialog-user-management-update").modal("show");
             });
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
-            $(".bs-example-modal-sm").modal("show");
+            $("#dialog-return").find(".modal-body").html("请选中用户后操作");
+            $("#dialog-return").modal("show");
         }
     });
 
@@ -643,21 +647,25 @@
             var pass = $("input[id='password']").val();
             var pass_confirm = $("input[id='confirmPassword']").val()
             if (pass != pass_confirm) {
+                isFormatted = false;
+
                 _set($("input[id='password']"), "两次密码输入不一致");
                 _set($("input[id='confirmPassword']"), "两次密码输入不一致");
             }//确认密码一致
 
             if (isFormatted) {
 
-
                 var data = $(".form-horizontal.add-new-user").serializeArray();
                 $.post("/console/user_management/save", data, function (r, status) {
                     switch (r.status) {
                         case "SUCCEED" :
-                            $(".bs-example-modal-sm").find(".modal-body").html(
-                                $("#dialog-user-management-update-title").html() + " succeeded."
-                            );
-                            $(".bs-example-modal-sm").modal("show");
+                            var message = "";
+
+                            message = window.flag=='add' ? '增加成功' : '修改成功';
+
+                            $("#dialog-return").find(".modal-body").html(message)
+                            $("#dialog-return").modal("show");
+
                             $(".btn.btn-default.add-new-user-close").click();
                             $(".panel.panel-default").find("button[name='refresh']").click();
 
@@ -672,46 +680,16 @@
                         case "FAILED" :
                             var inputError = false;
 
-                            if (r.message.username) {
-                                var message = r.message.username;
+                            var message = "";
 
-                                if(message == "Oh snap! Already existed."){
-                                    message = "用户名已存在,请重新输入";
-                                }
+                            message = window.flag=='add' ? '增加失败' : '修改失败';
 
-                                _set($(".form-horizontal.add-new-user").find("input[id='username']"), message);
+                            if(r.message != undefined) {
 
-                                inputError = true;
-                            }
-                            if (r.message.email) {
-                                _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
-
-                                inputError = true;
-                            }
-                            if (r.message.password) {
-                                _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
-
-                                inputError = true;
-                            }
-                            if (r.message.firstName) {
-                                _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
-
-                                inputError = true;
-                            }
-                            if (r.message.lastName) {
-                                _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
-
-                                inputError = true;
-                            }
-                            if (r.message.WARNING) {
-                                $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
-                                $(".bs-example-modal-sm").modal("show");
+                                $("#dialog-return").find(".modal-body").html(r.message.message)
+                                $("#dialog-return").modal("show");
                             }
 
-                            if(!inputError) {
-                                $("#dialog-user-management-update").find(".modal-body").html("新增失败");
-                                $("#dialog-user-management-update").modal("show");
-                            }
 
                             break
                     }
@@ -774,7 +752,7 @@
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("请选中后操作");
+            $("#dialog-return").find(".modal-body").html("请选中用户后操作");
             $("#dialog-return").modal("show");
         }
         //
@@ -843,6 +821,7 @@
 
         $.ajax({
                 url: "/console/user_management/delete",
+                timeout : 1000,
                 type: "post",
                 data: form,
                 processData: false,
@@ -859,18 +838,23 @@
                             break
 
                         case "FAILED" :
-                            $("#dialog-user-management-update").find(".modal-body").html("删除失败");
-                            $("#dialog-user-management-update").modal("show");
+                            $("#dialog-return").find(".modal-body").html("删除失败");
+                            $("#dialog-return").modal("show");
 
                             $(".btn.btn-default.add-new-user-close").click();
+
+                            $(".panel.panel-default").find("button[name='refresh']").click();
 
                             break
                     }
                 },
                 error: function (r) {
 
-                    $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                    $("#dialog-return").find(".modal-body").html("网络错误");
                     $("#dialog-return").modal("show");
+
+                    $(".panel.panel-default").find("button[name='refresh']").click();
+
                 }
 
             });

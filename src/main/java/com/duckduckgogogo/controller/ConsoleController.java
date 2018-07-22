@@ -125,6 +125,12 @@ public class ConsoleController {
         return new ModelAndView("console/camera_location");
     }
 
+    @RequestMapping("/test")
+    public ModelAndView toTest() {
+        return new ModelAndView("console/test");
+    }
+
+
     @RequestMapping("/RTSP")
     public ModelAndView toRTS() {
         return new ModelAndView("console/RTSP");

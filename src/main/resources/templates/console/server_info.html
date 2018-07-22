@@ -466,6 +466,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
+            timeout : 500,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -505,6 +506,7 @@
         $.ajax({
             type:'get',
             url:'/console/server_info/getStatus',
+            timeout : 500,
             data: data,
             dataType:"json",
             success:function(r,status){
@@ -541,7 +543,7 @@
                 }
             },
             error:function (response) {
-                $("#dialog-return").find(".modal-body").html("请求失败");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
 
             }

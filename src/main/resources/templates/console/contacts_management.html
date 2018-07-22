@@ -122,6 +122,7 @@
             $.ajax({
                 type: "get",
                 url: "/console/user_management/getAdminInfo",
+                timeout : 500,
                 dataType:"json",
                 success : function(json) {
                     switch (json.status){
@@ -138,7 +139,6 @@
 
                             break;
                     }
-
 
                 },
                 error : function () {
@@ -612,7 +612,7 @@
             });
 
         } else {
-            $(".bs-example-modal-sm").find(".modal-body").html("请选中后操作");
+            $(".bs-example-modal-sm").find(".modal-body").html("请选中联系人后操作");
             $(".bs-example-modal-sm").modal("show");
         }
     });
@@ -696,6 +696,7 @@
 
                 $.ajax({
                     url: "/console/contacts_management/" + flag,
+                    timeout : 500,
                     type: "post",
                     data: form,
                     processData: false,
@@ -732,7 +733,7 @@
                         }
                     },
                     error: function (r) {
-                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").find(".modal-body").html("网络错误");
                         $("#dialog-return").modal("show");
                     }
 
@@ -785,6 +786,7 @@
 
         $.ajax({
             url: "/console/contacts_management/delete",
+            timeout : 500,
             type: "post",
             data: form,
             processData: false,
@@ -810,7 +812,7 @@
             },
             error: function (r) {
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
             }
 
@@ -838,7 +840,7 @@
                 $(".bs-example-modal-sm").modal("show");
             });
         } else {
-            $("#dialog-return").find(".modal-body").html("请选中后操作");
+            $("#dialog-return").find(".modal-body").html("请选中联系人后操作");
             $("#dialog-return").modal("show");
         }
     })

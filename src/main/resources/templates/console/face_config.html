@@ -608,6 +608,7 @@
                 async : false ,
                 type : 'GET',
                 url : "/console/faceconfig_management/isActivityIPAndPort",
+                timeout : 500,
                 data : {
                     "ip" : $("input[id='serverIPandPort']").val(),
                     "service" : 0
@@ -630,7 +631,7 @@
                 },
 
                 error : function(XMLHttpRequest, textStatus, errorThrown) {
-                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").find(".modal-body").html("网络错误");
                     $("#dialog-return").modal("show");
                 },
             });
@@ -639,6 +640,7 @@
                 async : false ,
                 type : 'GET',
                 url : "/console/faceconfig_management/isActivityIPAndPort",
+                timeout : 500,
                 data : {
                     "ip" : $("input[id='receiveURL']").val(),
                     "service" : 1
@@ -657,7 +659,7 @@
                 },
 
                 error : function(XMLHttpRequest, textStatus, errorThrown) {
-                    $("#dialog-return").find(".modal-body").html("网络错误请重试");
+                    $("#dialog-return").find(".modal-body").html("网络错误");
                     $("#dialog-return").modal("show");
                 },
                 complete : function() {

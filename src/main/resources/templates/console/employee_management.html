@@ -486,6 +486,7 @@
 
         $.ajax({
             type: "get",
+            timeout : 500,
             url: "/console/user_management/getAdminInfo",
             dataType:"json",
             success : function(json) {
@@ -693,6 +694,7 @@
 
                 $.ajax({
                     url: "/console/employee_management/" + flag,
+                    timeout : 1000,
                     type: "post",
                     data: form,
                     processData: false,
@@ -738,7 +740,7 @@
                     },
                     error: function (r) {
 
-                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").find(".modal-body").html("网络错误");
                         $("#dialog-return").modal("show");
                     }
 
@@ -793,6 +795,7 @@
 
         $.ajax({
             url: "/console/employee_management/delete",
+            timeout : 700,
             type: "post",
             data: form,
             processData: false,
@@ -813,13 +816,18 @@
                         $("#dialog-return").find(".modal-body").html("删除失败");
                         $("#dialog-return").modal("show");
 
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+
+
                         break
                 }
             },
             error: function (r) {
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
+
+                $(".panel.panel-default").find("button[name='refresh']").click();
             }
 
         });
@@ -877,12 +885,16 @@
             $("#dialog-return").find(".modal-body").html("请选择以,jpg,jpeg,png结尾的图片");
             $("#dialog-return").modal("show");
 
+            $("#avatar-2").val('');
+
             return;
         }
 
         if(file.size > 1024*1024*8){
             $("#dialog-return").find(".modal-body").html("图片大小不能超过 8MB!");
             $("#dialog-return").modal("show");
+
+            $("#avatar-2").val('');
 
             return;
         }
@@ -894,6 +906,7 @@
         $.ajax({
             async : false,
             url : "/console/employee_management/detect",
+            timeout : 500,
             type: "post",
             data: form,
             processData: false,
@@ -922,7 +935,6 @@
                 $("#dialog-return").find(".modal-body").html("网络错误，请重试");
 
                 $("#dialog-return").modal("show");
-
 
                 $("#avatar-2").val('');
 
@@ -970,11 +982,6 @@
         }
     })
 
-    function checkImageQuality(image){
-        $.ajax({
-            url : "",
-        })
-    }
 
     $(".btn.btn-default.deletePic").click(function () {
         var file_select = $("#avatar-2");
