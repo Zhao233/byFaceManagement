@@ -378,6 +378,8 @@
 
 <!-- Custom Js -->
 <script>
+    var timeout_network = 3000;
+
     $(document).ready(function() {
         /*bootstrap table*/
 
@@ -496,7 +498,7 @@
         var flag_ = window.flag;
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-server-management-update-title").html("新增服务器");
+        $("#dialog-server-management-update-title").html("新增");
         $("#dialog-server-management-update").modal("show");
     });
 
@@ -519,7 +521,7 @@
 
                 console.log("version:" + window.version);
 
-                $("#dialog-server-management-update-title").html("修改服务器");
+                $("#dialog-server-management-update-title").html("修改");
                 $("#dialog-server-management-update").modal("show");
             });
         } else {
@@ -695,7 +697,7 @@
             },
             error: function (r) {
 
-                $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                $("#dialog-return").find(".modal-body").html("网络错误");
                 $("#dialog-return").modal("show");
             }
 

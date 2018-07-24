@@ -250,7 +250,7 @@
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
-                        <div class="panel-body">
+                        <div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
                             <div  class="panel-heading">
                                 <div class="form-inline">
 
@@ -277,8 +277,8 @@
                                 </div>
 
                                 <div class="canvas-wrapper form-group" style="margin-top: 5px;margin-left: 15px;">
-                                    <div class="row col-sm-12 col-xs-12">
-                                        <canvas class="col-sm-12 col-xs-12" id="line-chart" style="padding-right: 0px; min-height: 100px;"></canvas>
+                                    <div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px">
+                                        <canvas  id="line-chart" style="padding-right: 0px; min-height: 200px;width: 100%;"></canvas>
                                     </div>
                                     <br>
 
@@ -382,6 +382,8 @@
 </div><!-- /.modal -->
 
 <script>
+    var timeout_network = 3000;
+
     var ischoosedCamera = false;
     var id = getUrlParam("id");
 
@@ -517,6 +519,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -570,6 +577,11 @@
                             break;
                         case "FAILED" :
                             $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                            if(json.message != undefined){
+                                $("#dialog-return").find(".modal-body").append(json.message);
+                            }
+
                             $("#dialog-return").modal("show");
 
                             break;
@@ -601,6 +613,10 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取摄像头名称失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
 
                         $("#dialog-return").modal("show");
 

@@ -338,6 +338,22 @@
                                     y : -70
                                 }
 
+                                var profileImage_size = {
+                                    x : 100,
+                                    y : 125
+                                }
+                                var offset_profileImage = {
+                                    x : 0,
+                                    y : 0
+                                }
+
+                                var offset_noInfoMessage = {
+                                    x : 5,
+                                    y : 30
+                                }
+
+                                var profileImage;
+
                                 var can = document.getElementById('canvas');
                                 var context = can.getContext('2d');
 
@@ -362,7 +378,7 @@
                                     $.ajax({
                                         type: "get",
                                         url: "/console/trace/search",
-                                        timeout : 2000,
+                                        timeout : timeout_network,
                                         data: data_,
                                         dataType:"json",
                                         success: function (r) {
@@ -412,6 +428,12 @@
                                     }
 
                                     search_trace_gap();
+
+                                    drawprofileImage(profileImage,context);
+
+                                    if(cameraList_enable.length == 0){
+                                        drawMessage_noInfo("未查询到相关轨迹信息!",context);
+                                    }
                                 }
                                 function searchAllCamera(){
                                     $.ajax({
@@ -423,7 +445,7 @@
                                             limit:1000,
                                             offset:0
                                         },
-                                        timeout : 2000,
+                                        timeout : timeout_network,
                                         dataType:"json",
                                         success: function (r) {
                                             switch (r.status) {
@@ -544,6 +566,15 @@
                                     }
                                 }
 
+                                function clearprofileImage(context){
+                                    if(profileImage != undefined) {
+                                        context.clearRect(parseInt(offset_profileImage.x) + 0, parseInt(offset_profileImage.y) + 0, profileImage_size.x, (profileImage.height / profileImage.width * profileImage_size.x));
+                                    }
+                                }
+                                function drawprofileImage(image,context){
+                                    context.drawImage(image, parseInt(offset_profileImage.x)+0,parseInt(offset_profileImage.y)+0,profileImage_size.x, (profileImage.height/profileImage.width*profileImage_size.x));
+                                }
+
                                 function drawMessage(cameraList_, context){
                                     var offset_vertical_location = 0;//纵向的信息位置偏移量
 
@@ -567,11 +598,17 @@
                                     }
                                 }
 
+                                function drawMessage_noInfo(message,context){
+                                    context.font = "20px Georgia"
+
+                                    context.fillText(message,0+offset_noInfoMessage.x+profileImage_size.x,0+offset_noInfoMessage.y);
+                                }
+
                                 function search_trace_gap(){
                                     $.ajax({
                                         type: "get",
                                         url: "/console/trace/search_trace",
-                                        timeout : 1000,
+                                        timeout : timeout_network,
                                         dataType:"json",
                                         success: function (r) {
                                             switch (r.status) {
@@ -610,6 +647,10 @@
                                     return ;
                                 }
 
+                                function clearCanvas(context){
+                                    context.clearRect(0,0,canvas.width,canvas.height);
+                                }
+
                                 function getUrlParam(name) {
                                     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
                                     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -628,6 +669,17 @@
 
                                     $.get(searchURL, null, function(r, status) {
                                         $("#personName_show").val(r.name);
+
+                                        clearprofileImage(context);
+
+                                        profileImage = new Image();
+                                        profileImage.src = r.feature;
+
+                                        profileImage.onload = function(){
+                                            drawprofileImage(profileImage,context);
+                                        };
+
+
                                     });
                                 }
 
@@ -661,12 +713,16 @@
                                 }
                                 
                                 function start_draw(id, startTime, endTime) {
+                                    clearCanvas(context);
+
                                     $.ajaxSettings.async = false;
                                     search(id,startTime,endTime);
                                     $.ajaxSettings.async = true;
 
+                                    //drawprofileImage(profileImage,context);
+
                                     search_trace_gap();
-                                    //drawCamera(cameraList_all,context,false);
+                                    drawCamera(cameraList_all,context,false);
                                     drawTrace(cameraList_enable,context);
                                     drawCamera(cameraList_enable,context, true);
                                     //drawMessage(cameraList_enable,context);
@@ -772,7 +828,7 @@
                                         <tr>
                                             <th data-field="userid" data-formatter="_formatte_person_id" data-align="center"></th>
                                             <th id="person_name" data-field="name" style="border:none;">姓名</th>
-                                            <th data-field="IDNumber" style="border:none;">身份证号码</th>
+                                            <th data-field="IDNumber" style="border:none;">证件号码</th>
                                             <th data-field="phoneNumber" style="border:none;">电话</th>
                                             <th data-field="feature" data-formatter="_formatte_locale_image" style="border:none;">图像信息
                                             </th>
@@ -842,6 +898,7 @@
 
 <script type="text/javascript">
     window.isSearched = false;
+    var timeout_network = 3000;
 
     var pageSize_personList = 10;
 
@@ -959,7 +1016,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
-            timeout : 500,
+            timeout : timeout_network,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -1053,7 +1110,17 @@
             return ;
         }
 
-        start_draw(id,startTime,endTime);
+        var startTime = startTime.replace(/-/, "").replace(/-/, "");
+        var endTime = endTime.replace(/-/, "").replace(/-/, "");
+
+        if(parseInt(startTime) > parseInt(endTime)){
+            $("#dialog-return").find(".modal-body").html("开始时间需小于结束时间");
+            $("#dialog-return").modal("show");
+
+            return ;
+        }
+
+        start_draw(id,$("#datepicker_start").val(),$("#datepicker_end").val());
     })
 
     function _formatte_person_id(value, row, index) {

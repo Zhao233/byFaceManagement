@@ -1,9 +1,15 @@
 package com.duckduckgogogo.test;
 
+import com.duckduckgogogo.services.EmployeeService;
+import com.duckduckgogogo.services.impl.EmployeeServiceImp;
 import com.duckduckgogogo.utils.PasswordEncodeAssistant;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class PasswordEncodeAssistantTest {
     private char[] chapters = "123456".toCharArray();
@@ -35,5 +41,51 @@ public class PasswordEncodeAssistantTest {
         Assert.assertTrue(MD5.equals(
                 PasswordEncodeAssistant.encode(chapters, PasswordEncodeAssistant.MD5)
         ));
+    }
+
+    @Test
+    public void deleteAllEmployee(){
+        EmployeeService employeeService = new EmployeeServiceImp();
+
+        List<Integer> list = new LinkedList<>();
+
+        list.add(97);
+        list.add(107);
+        list.add(112);
+        list.add(113);
+        list.add(114);
+        list.add(115);
+        list.add(116);
+        list.add(117);
+        list.add(125);
+        list.add(133);
+        list.add(158);
+        list.add(159);
+        list.add(161);
+        list.add(162);
+        list.add(163);
+        list.add(164);
+        list.add(175);
+        list.add(176);
+        list.add(178);
+        list.add(189);
+        list.add(190);
+        list.add(191);
+        list.add(197);
+        list.add(198);
+        list.add(199);
+        list.add(200);
+        list.add(202);
+        list.add(203);
+        list.add(204);
+        list.add(205);
+        list.add(206);
+        list.add(207);
+        list.add(209);
+        list.add(212);
+        list.add(213);
+
+        employeeService.deleteEmployee(list);
+
     }
 }

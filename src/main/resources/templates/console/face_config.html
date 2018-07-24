@@ -465,6 +465,8 @@
 <script src="/javascript/bootstrap-table.min.js"></script>
 
 <script>
+    var timeout_network = 3000;
+
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -613,7 +615,7 @@
                 async : false ,
                 type : 'GET',
                 url : "/console/faceconfig_management/isActivityIPAndPort",
-                timeout : 500,
+                timeout : timeout_network,
                 data : {
                     "ip" : $("input[id='serverIPandPort']").val(),
                     "service" : 0
@@ -622,7 +624,6 @@
                     // $("#dialog-return").find(".modal-body").html("检查中,请稍后.............");
                     // $("#dialog-return").modal("show");
                 },
-                timeout : 200,
                 success : function (r) {
                     switch (r.status){
                         case "SUCCEED" :
@@ -645,12 +646,11 @@
                 async : false ,
                 type : 'GET',
                 url : "/console/faceconfig_management/isActivityIPAndPort",
-                timeout : 500,
+                timeout : timeout_network,
                 data : {
                     "ip" : $("input[id='receiveURL']").val(),
                     "service" : 1
                 },
-                timeout : 200,
                 success : function (r) {
                     switch (r.status){
                         case "SUCCEED" :

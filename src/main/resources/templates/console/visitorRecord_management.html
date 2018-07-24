@@ -95,7 +95,7 @@
             $.ajax({
                 type: "get",
                 url: "/console/user_management/getAdminInfo",
-                timeout : 500,
+                timeout : timeout_network,
                 dataType:"json",
                 success : function(json) {
                     switch (json.status){
@@ -130,6 +130,10 @@
             overflow-y: scroll;
             height: 35em;
             width: 100%;
+        }
+
+        td{
+
         }
 
         table thead th{
@@ -186,6 +190,9 @@
         .W280{width:280px !important;}
         .W400{width:400px !important;}
         .W100 {width:100px !important;}
+        /*td.W100.cause{width:100px !important;*/
+            /*overflow: auto;*/
+            /*max-height: 100px;}*/
         .W30 {width:30px !important;}
     </style>
 </head>
@@ -354,7 +361,7 @@
                                         <!--User ID-->
                                         <!--</th>-->
                                         <th data-field="userInfo.name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
-                                        <th data-field="cause" class="W100" style="border:none;">来访事由</th>
+                                        <th data-field="cause" data-formatter="_formate_textarea_cause" class="W100 cause" style="border:none;">来访事由</th>
                                         <th data-field="startDateString" class="W100" style="border:none;">开始时间</th>
                                         <th data-field="endDateString"  class="W100" style="border:none;">结束时间</th>
                                         <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
@@ -404,7 +411,7 @@
                         <div class="col-sm-7">
                             <textarea type="text" class="form-control" id="cause" name="cause"
                                    data-toggle="tooltip" data-placement="top" maxlength="200"
-                                   required="required"/>
+                                      required="required" style="resize: none"></textarea>
                         </div>
 
                         <div class="col-sm-1"></div>
@@ -413,8 +420,8 @@
                     <div class="form-group">
                         <label for="startTimePicker" class="col-sm-4 control-label">开始时间</label>
 
-                        <div class="input-group date form_datetime col-sm-7" id="startTimePicker" data-link-field="dtp_input1" style="padding-left: 15px;padding-right: 15px">
-                            <input class="form-control" size="16" type="text" value="" readonly>
+                        <div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1" style="padding-left: 15px;padding-right: 15px">
+                            <input class="form-control" size="16" id="startTimePicker" type="text" value="" readonly>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
@@ -430,8 +437,8 @@
                     <div class="form-group">
                         <label for="endTimePicker" class="col-sm-4 control-label">结束时间</label>
 
-                        <div class="input-group date form_datetime col-sm-7" id="endTimePicker" data-link-field="dtp_input1" style="padding-left: 15px;padding-right: 15px">
-                            <input class="form-control" size="16" type="text" value="" readonly>
+                        <div class="input-group date form_datetime col-sm-7" data-link-field="dtp_input1" style="padding-left: 15px;padding-right: 15px">
+                            <input class="form-control" size="16" id="endTimePicker" type="text" value="" readonly>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
@@ -555,6 +562,7 @@
 </div><!-- /.modal -->
 
 <script>
+    var timeout_network = 3000;
 
     window.flag;
     window.id;
@@ -659,8 +667,8 @@
         var isFormatted = true;
 
         //check input
-        if ($("input[id='cause']").val() == "") {
-            _set($("input[id='cause']"), "请输入来访事由");
+        if ($("textarea[id='cause']").val() == "") {
+            _set($("textarea[id='cause']"), "请输入来访事由");
             isComplete = false;
         }
 
@@ -716,13 +724,13 @@
                 }
 
                 form.append("userInfo", $("#userinfo").val());
-                form.append("cause", $("input[id='cause']").val());
+                form.append("cause", $("textarea[id='cause']").val());
                 form.append("startDate", startTime+":00");
                 form.append("endDate", endTime+":00");
 
                 $.ajax({
                     url: "/console/visitorRecord_management/" + flag,
-                    timeout : 500,
+                    timeout : timeout_network,
                     type: "post",
                     data: form,
                     processData: false,
@@ -780,7 +788,7 @@
 
         $.ajax({
             url: "/console/visitor_management/get/" + id,
-            timeout : 500,
+            timeout : timeout_network,
             type: "GET",
             processData: false,
             contentType: false,
@@ -879,7 +887,7 @@
 
         $.ajax({
             url: "/console/visitorRecord_management/delete",
-            timeout : 500,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,
@@ -953,6 +961,10 @@
 
     function _formate_visitor_id(value, row, index){
         return '<input name="id_visitor" type="radio" value="' + value + '" />';
+    }
+
+    function _formate_textarea_cause(value, row, index){
+        return '<textarea readonly class="form-control" style="resize:none; min-height:100px; width:100%;padding: 0px;background-color:#ffffff">'+value+'</textarea>';
     }
 
     $(".btn.btn-default.deletePic").click(function () {

@@ -373,6 +373,7 @@
 <!-- Custom Js -->
 <script>
     var operate_flag = true;
+    var timeout_network = 3000;
 
     function _set(el, message) {
         el.addClass("alert-danger");
@@ -487,9 +488,8 @@
                 async : false ,
                 type : 'POST',
                 url : "/console/profile/save",
-                timeout : 500,
+                timeout : timeout_network,
                 data : post_data,
-                timeout : 200,
                 success : function (r) {
                     switch (r.status){
                         case "SUCCEED" :

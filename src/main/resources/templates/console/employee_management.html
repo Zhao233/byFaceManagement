@@ -518,7 +518,7 @@
 
         $.ajax({
             type: "get",
-            timeout : 900,
+            timeout : timeout_network,
             url: "/console/user_management/getAdminInfo",
             dataType:"json",
             success : function(json) {
@@ -549,6 +549,8 @@
 
 
 <script>
+    var timeout_network = 3000;
+
     window.flag;
     window.id;
 
@@ -600,7 +602,7 @@
         window.flag='add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-employee-management-update-title").html("添加员工");
+        $("#dialog-employee-management-update-title").html("新增");
         $("#dialog-employee-management-update").modal("show");
     });
 
@@ -618,7 +620,7 @@
             $.get("/console/employee_management/get/" + id, null, function (r, status) {
                 console.log(r);
 
-                $("#dialog-employee-management-update-title").html("更新员工信息");
+                $("#dialog-employee-management-update-title").html("修改");
                 $("#dialog-employee-management-update").modal("show");
 
                 $("#dialog-employee-management-update").find("input[id='version']").val(r.version);
@@ -733,7 +735,7 @@
 
                 $.ajax({
                     url: "/console/employee_management/" + flag,
-                    // timeout : 1000,
+                    timeout : timeout_network,
                     type: "post",
                     data: form,
                     processData: false,
@@ -839,7 +841,7 @@ F
 
         $.ajax({
             url: "/console/employee_management/delete",
-            timeout : 1500,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,
@@ -954,7 +956,7 @@ F
 
         $.ajax({
             url : "/console/employee_management/detect",
-            timeout : 1000,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,

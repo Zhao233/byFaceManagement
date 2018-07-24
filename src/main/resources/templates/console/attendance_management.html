@@ -414,7 +414,7 @@
         $.ajax({
             type: "get",
             url: "/console/attendance_management/search",
-            timeout:500,
+            timeout:timeout_network,
             data: {
                 limit:  window.limit,
                 offset:  window.offset,
@@ -428,6 +428,10 @@
             },
             error : function(res){
                 $("#dialog-return").find(".modal-body").html("网络错误");
+
+                if(json.message != undefined){
+                    $("#dialog-return").find(".modal-body").append(json.message);
+                }
                 $("#dialog-return").modal("show");
             }
         });
@@ -436,6 +440,8 @@
 </script>
 
 <script type="text/javascript">
+    var timeout_network = 3000;
+
     $(document).ready(function() {
         //初始化table
         var date = new Date();
@@ -547,7 +553,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
-            timeout:300,
+            timeout:timeout_network,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -560,6 +566,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;

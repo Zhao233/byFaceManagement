@@ -511,6 +511,8 @@
 </script>
 
 <script>
+    var timeout_network = 3000;
+
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -561,7 +563,7 @@
         window.flag = 'add';
 
         _reset($(".form-horizontal.add-new-user"));
-        $("#dialog-user-management-update-title").html("增加用户");
+        $("#dialog-user-management-update-title").html("增加");
         $("#dialog-user-management-update").modal("show");
     });
 
@@ -582,7 +584,7 @@
                 $("#dialog-user-management-update").find("select[id='role']").val(r.role);
                 $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
 
-                $("#dialog-user-management-update-title").html("修改用户");
+                $("#dialog-user-management-update-title").html("修改");
                 $("#dialog-user-management-update").modal("show");
             });
         } else {
@@ -826,7 +828,7 @@
 
         $.ajax({
                 url: "/console/user_management/delete",
-                timeout : 1000,
+                timeout : timeout_network,
                 type: "post",
                 data: form,
                 processData: false,

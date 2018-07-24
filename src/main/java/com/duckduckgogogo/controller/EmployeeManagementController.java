@@ -106,7 +106,13 @@ public class EmployeeManagementController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
             r.put("status", "FAILED");
+
+            if(object.getString("errorMessage") != null) {
+                r.put("errorMessage", object.getString("errorMessage"));
+            }
         }
 
         return r;
@@ -166,7 +172,13 @@ public class EmployeeManagementController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
             r.put("status", "FAILED");
+
+            if(object.getString("errorMessage") != null) {
+                r.put("errorMessage", object.getString("errorMessage"));
+            }
         }
 
         return r;
@@ -193,7 +205,13 @@ public class EmployeeManagementController {
 
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
             r.put("status","FAILED");
+
+            if(object.getString("errorMessage") != null) {
+                r.put("errorMessage", object.getString("errorMessage"));
+            }
         }
 
         return r;

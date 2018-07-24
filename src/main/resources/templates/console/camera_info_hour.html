@@ -249,7 +249,7 @@
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
-                        <div class="panel-body">
+                        <div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
                             <div  class="panel-heading">
                                 <div class="form-inline">
 
@@ -288,7 +288,9 @@
                                             <label id="time_show" style="font-size: 1.5em"></label>
                                         </div>
 
-                                        <canvas class="col-sm-12 col-xs-12" id="line-chart" style="padding-right: 0px; min-height: 100px;"></canvas>
+                                        <div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px">
+                                            <canvas  id="line-chart" style="padding-right: 0px; min-height: 200px;width: 100%;"></canvas>
+                                        </div>
                                     </div>
                                     <br>
 
@@ -394,6 +396,8 @@
 <script>
     var ischoosedCamera = false;
     var id = getUrlParam("id");
+    var timeout_network = 3000;
+
 
     //获取时间
     var oDate = new Date();
@@ -498,7 +502,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
-            timeout : 300,
+            timeout : timeout_network,
             dataType: "json",
             success: function (json) {
                 switch (json.status) {
@@ -511,6 +515,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -550,7 +559,7 @@
 
             $.ajax({
                 type: "get",
-                timeout:300,
+                timeout:timeout_network,
                 url: "/console/user_management/getAdminInfo",
                 dataType: "json",
                 success: function (json) {
@@ -564,6 +573,11 @@
                             break;
                         case "FAILED" :
                             $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                            if(json.message != undefined){
+                                $("#dialog-return").find(".modal-body").append(json.message);
+                            }
+
                             $("#dialog-return").modal("show");
 
                             break;
@@ -582,7 +596,7 @@
     function getCameraNameById(id){
         $.ajax({
             url: "/console/camera_management/get/" + id,
-            timeout : 700,
+            timeout : timeout_network,
             type: "get",
             processData: false,
             contentType: false,
@@ -595,6 +609,10 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取摄像头名称失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(r.message);
+                        }
 
                         $("#dialog-return").modal("show");
 

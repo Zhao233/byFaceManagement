@@ -110,7 +110,7 @@
             $.ajax({
                 type: "get",
                 url: "/console/user_management/getAdminInfo",
-                timeout : 700,
+                timeout : timeout_network,
                 dataType:"json",
                 success : function(json) {
                     switch (json.status){
@@ -544,6 +544,7 @@
 </div><!-- /.modal -->
 
 <script>
+    var timeout_network = 3000;
 
     window.flag;
     window.id;
@@ -726,7 +727,7 @@
 
                 $.ajax({
                     url: "/console/visitor_management/" + flag,
-                    timeout : 1000,
+                    timeout : timeout_network,
                     type: "post",
                     data: form,
                     processData: false,
@@ -847,7 +848,7 @@
 
         $.ajax({
             url: "/console/employee_management/delete",
-            timeout : 700,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,
@@ -950,7 +951,7 @@
 
         $.ajax({
             url : "/console/employee_management/detect",
-            timeout : 1000,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,

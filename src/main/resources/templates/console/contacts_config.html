@@ -48,13 +48,15 @@
 
 <body>
 <script>
+    var timeout_network = 3000;
+
     $(document).ready(function() {
         console.log('Ready function');
 
         $.ajax({
             type: "get",
             url: "/console/faceconfig_management/search",
-            timeout : 500,
+            timeout : timeout_network,
             dataType:"json",
             success : function(r) {
                 switch (r.status){
@@ -84,7 +86,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
-            timeout : 500,
+            timeout : timeout_network,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -439,12 +441,11 @@
             async: false,
             type: 'POST',
             url: "/console/contacts_config/updateAlarm",
-            timeout : 500,
+            timeout : timeout_network,
             data: {
                 "times": $("input[id='showTimes']").val(),
                 "version": $("input[id='version']").val()
             },
-            timeout: 300,
             success: function (r) {
                 switch (r.status) {
                     case "SUCCEED" :

@@ -499,7 +499,7 @@
 
         $.ajax({
             type: "get",
-            timeout : 500,
+            timeout : timeout_network,
             url: "/console/user_management/getAdminInfo",
             dataType:"json",
             success : function(json) {
@@ -513,6 +513,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -542,6 +547,8 @@
 
 
 <script>
+    var timeout_network = 3000;
+
     function _set(el, message) {
         el.addClass("alert-danger");
         el.attr("title", message);
@@ -658,7 +665,7 @@
 
         $("#dialog-camera-management-update").find("input[id='rtspUrl']").removeAttr("readOnly");
 
-        $("#dialog-camera-management-update-title").html("新增摄像头");
+        $("#dialog-camera-management-update-title").html("新增");
         $("#dialog-camera-management-update").modal("show");
     });
 
@@ -702,7 +709,7 @@
 
                 //$("input[name='serverID']").find("input[value = serverID ]").attr("checked",true);
 
-                $("#dialog-camera-management-update-title").html("修改摄像头");
+                $("#dialog-camera-management-update-title").html("修改");
                 $("#dialog-camera-management-update").modal("show");
 
             });
@@ -796,7 +803,7 @@
                     console.log(data);
                     $.ajax({
                         url: "/console/camera_management/" + window.flag,
-                        timeout : 300,
+                        timeout : timeout_network,
                         type: "post",
                         data: data,
                         processData: false,
@@ -829,6 +836,10 @@
                                         $("#dialog-return").find(".modal-body").html("增加失败");
                                     } else {
                                         $("#dialog-return").find(".modal-body").html("修改失败");
+                                    }
+
+                                    if(r.message != undefined){
+                                        $("#dialog-return").find(".modal-body").append(r.message);
                                     }
 
                                     $("#dialog-return").modal("show");
@@ -893,7 +904,7 @@
 
         $.ajax({
             url: "/console/camera_management/delete",
-            timeout : 500,
+            timeout : timeout_network,
             type: "post",
             data: form,
             processData: false,
@@ -912,6 +923,11 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("删除失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(r.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break

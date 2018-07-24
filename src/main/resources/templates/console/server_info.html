@@ -404,6 +404,7 @@
 
 
 <script>
+    var timeout_network = 3000;
     var id = getUrlParam("id");
 
     //alert(11111);
@@ -471,7 +472,7 @@
         $.ajax({
             type: "get",
             url: "/console/user_management/getAdminInfo",
-            timeout : 500,
+            timeout : timeout_network,
             dataType:"json",
             success : function(json) {
                 switch (json.status){
@@ -511,7 +512,7 @@
         $.ajax({
             type:'get',
             url:'/console/server_info/getStatus',
-            timeout : 500,
+            timeout : timeout_network,
             data: data,
             dataType:"json",
             success:function(r,status){
