@@ -57,6 +57,8 @@ public class CameraInfoController {
         return r;
     }
 
+
+
     @RequestMapping("/search")
     @ResponseBody
     public Map<String, Object> search(@RequestParam("cameraID") int id,
@@ -65,6 +67,33 @@ public class CameraInfoController {
 
         String result_chart = cameraInfoService.getChart(id,date);
         String result_rank = cameraInfoService.getRank(id,date);
+        String result_cameraName = cameraService.get(id);
+
+        System.out.println("查询结果 chart:" + result_chart);
+        System.out.println("查询结果 rank:" + result_rank);
+
+        JSONArray object_chart = JSONArray.fromObject(result_chart);
+        JSONArray object_rank = JSONArray.fromObject(result_rank);
+        JSONObject object_camera = JSONObject.fromObject(result_cameraName);
+
+        JSONObject object = new JSONObject();
+        object.put("chartData",object_chart);
+        object.put("rankData", object_rank);
+        object.put("cameraName", object_camera.getString("cameraName"));
+
+        map.put("data",object);
+
+        return map;
+    }
+
+    @RequestMapping("/search_hour")
+    @ResponseBody
+    public Map<String, Object> search_hour(@RequestParam("cameraID") int id,
+                                      @RequestParam("date") String date){
+        Map<String, Object> map = new HashMap<>();
+
+        String result_chart = cameraInfoService.getChart_hour(id,date);
+        String result_rank = cameraInfoService.getRank_hour(id,date);
         String result_cameraName = cameraService.get(id);
 
         System.out.println("查询结果 chart:" + result_chart);

@@ -49,5 +49,35 @@ public class CameraInfoServiceImp extends Info implements CameraInfoService {
         }
     }
 
-    
+    @Override
+    public String getChart_hour(int cameraID, String date) {
+        String url = "http://"+ Info.serverIP +"/api/query/camera/hour/chart";
+
+        RestTemplate rest = new RestTemplate();
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+        param.add("queryDate", date);
+        param.add("id", cameraID);
+
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        String string = rest.postForObject(url, param, String.class);
+        return string;
+    }
+
+    @Override
+    public String getRank_hour(int cameraID, String date) {
+        String url = "http://"+ Info.serverIP +"/api/query/camera/hour/ranking";
+
+        RestTemplate rest = new RestTemplate();
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<String, Object>();
+        param.add("queryDate", date);
+        param.add("id", cameraID);
+
+        rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        String string = rest.postForObject(url, param, String.class);
+        return string;
+    }
+
+
 }

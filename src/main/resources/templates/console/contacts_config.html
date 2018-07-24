@@ -161,6 +161,11 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
+                        <!--轨迹统计图表_小时-->
+                        <li>
+                            <a href="/console/camera_info_hour">轨迹统计图表_小时</a>
+                        </li>
+
                         <!--告警设置-->
                         <li>
                             <a href="/console/contacts_config" class="active-menu-item">告警设置</a>
@@ -258,8 +263,8 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="display:none;"><span class="glyphicon glyphicon-user"></span>Config Info</div>
-                        <div id="config-info" class="panel-body">
-                            <form class="form-horizontal form-profile-save" method="post">
+                        <div id="config-info" class="panel-body" style="min-height: 45em">
+                            <form class="form-horizontal form-profile-save" method="post" style="margin-top: 20px">
                                 <fieldset>
                                     <input type="text" style="display:none;" id="version" name="version" />
 
@@ -271,11 +276,13 @@
                                         <div class="col-sm-4"></div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <div class="col-md-12 widget-left">
-                                            <button type="button" class="btn btn-primary form-profile-save pull-left">保存</button>
-                                        </div>
-                                    </div>
+                                    <button type="button" class="btn btn-primary form-profile-save pull-left" style="margin-left: 100px">保存</button>
+
+                                    <!--<div class="form-group">-->
+                                        <!--<div class="col-md-12 widget-center">-->
+                                            <!--<button type="button" class="btn btn-primary form-profile-save pull-left">保存</button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
 
                                 </fieldset>
                             </form>
@@ -348,7 +355,6 @@
 <script src="/javascript/jquery.dataTables.js"></script>
 <script src="/javascript/dataTables.bootstrap.js"></script>
 
-<!-- Custom Js -->
 <!-- Custom Js -->
 
 <script src="/javascript/custom-scripts.js"></script>

@@ -60,10 +60,10 @@ public class EmployeeManagementController {
     @ResponseBody
     public  Map<String,Object> add(MultipartHttpServletRequest request,
                                    @RequestParam(value = "personName") String personName,
-                                      @RequestParam(value = "personNumber") String personNumber,
-                                      @RequestParam(value = "cardNumber") String cardNumber,
-                                      @RequestParam(value = "IDNumber") String IDNumber,
-                                      @RequestParam(value = "phoneNumber") String phoneNumber
+                                   @RequestParam(value = "personNumber") String personNumber,
+                                   @RequestParam(value = "cardNumber") String cardNumber,
+                                   @RequestParam(value = "IDNumber") String IDNumber,
+                                   @RequestParam(value = "phoneNumber") String phoneNumber
                                       ){
         Map<String, Object> r = new HashMap<>();
 

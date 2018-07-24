@@ -44,7 +44,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     }
 
     @Override
-    public String addVisitor(FileSystemResource resource, String personName, String IDNumber, String phoneNumber, String startDate, String endData) {
+    public String addVisitor(FileSystemResource resource, String personName, String IDNumber, String phoneNumber) {
         try{
             String url = "http://" + Info.serverIP + "/api/face/add";
             RestTemplate rest = new RestTemplate();
@@ -54,8 +54,6 @@ public class VisitorServiceImp extends Info implements VisitorService {
             object.put("personName", personName);
             object.put("IDNumber",IDNumber);
             object.put("phoneNumber",phoneNumber);
-            object.put("startDate",startDate);
-            object.put("endDate",endData);
             object.put("role","visitor");
 
             if(resource == null){
@@ -74,7 +72,7 @@ public class VisitorServiceImp extends Info implements VisitorService {
     }
 
     @Override
-    public String updateVisitor(FileSystemResource resource, int personID, String personName, String IDNumber, String phoneNumber, int version, String startDate, String endDate) {
+    public String updateVisitor(FileSystemResource resource, int personID, String personName, String IDNumber, String phoneNumber, int version) {
         try{
             String url = "http://" + Info.serverIP + "/api/face/update";
 
@@ -86,8 +84,6 @@ public class VisitorServiceImp extends Info implements VisitorService {
             object.put("role", "visitor");
             object.put("IDNumber", IDNumber);
             object.put("phoneNumber", phoneNumber);
-            object.put("startDate", startDate);
-            object.put("endDate", endDate);
             object.put("version", version);
 
             if(resource == null){

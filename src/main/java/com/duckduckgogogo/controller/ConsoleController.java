@@ -100,6 +100,11 @@ public class ConsoleController {
         return new ModelAndView("console/camera_info");
     }
 
+    @RequestMapping("/camera_info_hour")
+    public ModelAndView toCameraInfoHour() {
+        return new ModelAndView("console/camera_info_hour");
+    }
+
     @RequestMapping("/trace_info")
     public ModelAndView toTraceInfo() {
         return new ModelAndView("console/trace_info");

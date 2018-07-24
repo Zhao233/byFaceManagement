@@ -3323,9 +3323,9 @@ select[multiple].input-lg {
         width: auto;
     }
 
-    .form-inline .input-group > .form-control {
-        width: 100%;
-    }
+    /*.form-inline .input-group > .form-control {*/
+        /*width: 100%;*/
+    /*}*/
 
     .form-inline .control-label {
         margin-bottom: 0;
@@ -4227,7 +4227,6 @@ tbody.collapse.in {
 
 .input-group .form-control {
     position: relative;
-    z-index: 2;
     float: left;
     width: 100%;
     margin-bottom: 0;

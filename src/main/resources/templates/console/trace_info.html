@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
@@ -54,7 +54,6 @@
             width: 100%;
         }
 
-
         /*table tbody {*/
             /*display:block;*/
             /*height:30em;*/
@@ -74,7 +73,6 @@
         /*thead{*/
             /*color:#FFFFFF;*/
         /*}*/
-
 
         .navbar-brand-right_{
             float:right;
@@ -151,6 +149,11 @@
                         <!--轨迹统计图表-->
                         <li>
                             <a href="/console/camera_info">轨迹统计图表</a>
+                        </li>
+
+                        <!--轨迹统计图表_小时-->
+                        <li>
+                            <a href="/console/camera_info_hour">轨迹统计图表_小时</a>
                         </li>
 
                         <!--告警设置-->
@@ -331,8 +334,8 @@
                                     y : 10
                                 }
                                 var offset_message = {
-                                    x : 25,
-                                    y : -10
+                                    x : -140,
+                                    y : -70
                                 }
 
                                 var can = document.getElementById('canvas');
@@ -714,8 +717,8 @@
                                                     var left = (location_camera[0] * canvas.getBoundingClientRect().width) / canvas.width;
                                                     var top = (location_camera[1] * canvas.getBoundingClientRect().height) / canvas.height;
 
-                                                    messageBox.css("top", parseInt((top - camera_size.width / 2)) - 72);
-                                                    messageBox.css("left", parseInt((left - camera_size.height / 2)) - 140);
+                                                    messageBox.css("top", parseInt((top - camera_size.width / 2)) + offset_message.y);
+                                                    messageBox.css("left", parseInt((left - camera_size.height / 2)) + offset_message.x);
 
                                                     messageBox.css("display", "");
                                                 }
@@ -840,14 +843,24 @@
 <script type="text/javascript">
     window.isSearched = false;
 
-    $(document).ready(function () {
+    var pageSize_personList = 10;
 
-        if(navigator.userAgent.match(/mobile/i)) {
+    $(document).ready(function () {
+        var pageSize_cameraList = 10;
+
+        var isCellPhone = navigator.userAgent.match(/mobile/i);
+
+        if(isCellPhone) {
             camera_size.width = 40;
             camera_size.height = 40;
 
             console.log("camera_size:");
             console.log(camera_size);
+
+            pageSize_personList = 5;
+
+            offset_message.x = -120;
+            offset_message.y = -45;
         }
 
         searchAllCamera();
@@ -860,7 +873,6 @@
         // });
 
         //初始化日历
-
         $('.form_date').datetimepicker({
             format: "yyyy-m-d",
             language:  'zh-CN',
@@ -873,36 +885,14 @@
             forceParse: 0
         });
 
-        // $("#datepicker_start").datepicker({
-        //     dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-        //     /* 每周从周一开始 */
-        //     firstDay: 1,
-        //     /* 区域化月名为中文习惯 */
-        //     monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
-        //         "7月", "8月", "9月", "10月", "11月", "12月"],
-        //     /* 月份显示在年后面 */
-        //     showMonthAfterYear: true,
-        //     /* 年份后缀字符 */
-        //     yearSuffix: "年",
-        //     /* 格式化中文日期d
-        //     （因为月份中已经包含“月”字，所以这里省略） */
-        //     dateFormat: "yy-m-d"
-        // });
-        // $("#datepicker_end").datepicker({
-        //     dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-        //     /* 每周从周一开始 */
-        //     firstDay: 1,
-        //     /* 区域化月名为中文习惯 */
-        //     monthNames: ["1月", "2月", "3月", "4月", "5月", "6月",
-        //         "7月", "8月", "9月", "10月", "11月", "12月"],
-        //     /* 月份显示在年后面 */
-        //     showMonthAfterYear: true,
-        //     /* 年份后缀字符 */
-        //     yearSuffix: "年",
-        //     /* 格式化中文日期
-        //     （因为月份中已经包含“月”字，所以这里省略） */
-        //     dateFormat: "yy-m-d"
-        // });
+        //手机端修改dialog的长度
+        $("#dialog-select-person").on('show.bs.modal', function () {
+            if(isCellPhone){
+                $(".fixed-table-body").css("height","15em");
+            } else {
+                $(".fixed-table-body").css("height","30em");
+            }
+        })
 
         //获取时间
         var oDate = new Date();
@@ -912,7 +902,9 @@
         $("#datepicker_end").val(date);
 
         $("#personName_show").focus(function () {
-             var searchURL;
+            var searchURL;
+
+            var that = this;
 
             $("#personList").bootstrapTable('destroy');
 
@@ -934,7 +926,7 @@
                 queryParamsType: "limit",
                 singleSelect: true,
                 contentType: "application/x-www-form-urlencoded",
-                pageSize: 10,
+                pageSize: pageSize_personList,
                 pageNumber: 1,
                 search: true,
                 showColumns: true,

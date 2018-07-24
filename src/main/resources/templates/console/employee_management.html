@@ -38,6 +38,7 @@
     <script src="/javascript/bootstrap-table.min.js"></script>
     <script src="/javascript/bootstrap-table-zh-CN.js"></script>
 
+    <script src="/javascript/jquery.animate-colors-min.js"></script>
 
     <script>
         function _set(el, message) {
@@ -178,6 +179,11 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
+                        <!--轨迹统计图表_小时-->
+                        <li>
+                            <a href="/console/camera_info_hour">轨迹统计图表_小时</a>
+                        </li>
+
                         <!--告警设置-->
                         <li>
                             <a href="/console/contacts_config">告警设置</a>
@@ -283,7 +289,7 @@
                                         <th data-field="name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
                                         <th data-field="personNumber"  class="W100" style="border:none;">员工编号</th>
                                         <th data-field="cardNumber"  class="W100" style="border:none;">卡号</th>
-                                        <th data-field="IDNumber"  class="W100" style="border:none;">身份证号</th>
+                                        <th data-field="IDNumber"  class="W100" style="border:none;">证件号码</th>
                                         <th data-field="phoneNumber" class="W100" style="border:none;">电话号码</th>
                                         <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
                                         <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
@@ -336,6 +342,8 @@
                                         <a class="btn btn-default deletePic" role="button" style="display: none">删除图片</a>
                                     </p>
                                 </div>
+
+                                <lable id="show-process" class="control-label" style="color: #f50000;"></lable>
                             </div>
                         </div>
 
@@ -366,8 +374,20 @@
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
+
                             <div class="form-group">
-                                <label for="IDNumber" class="col-sm-4 control-label">身份证号</label>
+                                <label for="IDNumber" class="col-sm-4 control-label">证件类型</label>
+                                <div class="col-sm-7">
+                                    <select id="IDType" class="form-control">
+                                        <option value="id">身份证</option>
+                                        <option value="other">其他</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="IDNumber" class="col-sm-4 control-label">证件号码</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" id="IDNumber" name="IDNumber"
                                            maxlength="18" required="required"/>
@@ -437,6 +457,18 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="dialog-return-show-process" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <!-- Custom Js -->
 <script>
@@ -486,7 +518,7 @@
 
         $.ajax({
             type: "get",
-            timeout : 500,
+            timeout : 900,
             url: "/console/user_management/getAdminInfo",
             dataType:"json",
             success : function(json) {
@@ -614,7 +646,6 @@
 
         _reset_input( $("#dialog-employee-management-update").find(".form-group").find("input"));
 
-
         //check input
         if($("input[id='personName']").val() == ""){
             _set($("input[id='personName']"), "请输入姓名");
@@ -646,11 +677,19 @@
 
                 _set($("input[id='personName']"), "请输入包含中文，英文，数字和-的名字");
             }
-            if( !isIDNumber( $("input[id='IDNumber']").val() ) ){
-                isFormatted = false;
 
-                _set($("input[id='IDNumber']"), "请输入合法身份证号");
+            if( $("#IDType").val() == 'id' ) {
+                if (!isIDNumber($("input[id='IDNumber']").val())) {
+                    _set($("input[id='IDNumber']"), "请输入合法身份证号");
+                    isFormatted = false;
+                }
             }
+
+            // if( !isIDNumber( $("input[id='IDNumber']").val() ) ){
+            //     isFormatted = false;
+            //
+            //     _set($("input[id='IDNumber']"), "请输入合法身份证号");
+            // }
             if( !isPhoneNumber( $("input[id='phoneNumber']").val() ) ){
                 isFormatted = false;
 
@@ -694,11 +733,14 @@
 
                 $.ajax({
                     url: "/console/employee_management/" + flag,
-                    timeout : 1000,
+                    // timeout : 1000,
                     type: "post",
                     data: form,
                     processData: false,
                     contentType: false,
+                    beforeSend : function(r){
+                        $(".btn.btn-primary.add-new-user").attr({ disabled: "disabled" });
+                    },
                     success: function (r) {
                         switch (r.status) {
                             case "SUCCEED" :
@@ -714,7 +756,7 @@
 
 
                                 $(".panel.panel-default").find("button[name='refresh']").click();
-
+F
                                 break
 
                             case "FAILED" :
@@ -742,8 +784,10 @@
 
                         $("#dialog-return").find(".modal-body").html("网络错误");
                         $("#dialog-return").modal("show");
+                    },
+                    complete: function () {
+                        $(".btn.btn-primary.add-new-user").removeAttr("disabled");
                     }
-
                 });
 
                 form = '';//避免重复点击
@@ -795,7 +839,7 @@
 
         $.ajax({
             url: "/console/employee_management/delete",
-            timeout : 700,
+            timeout : 1500,
             type: "post",
             data: form,
             processData: false,
@@ -877,13 +921,18 @@
     }
 
     $("#avatar-2").change(function (event) {
+        $(".btn.btn-primary.add-new-user").attr({ disabled: "disabled" });
+
+        $("#show-process").empty();
+        $("#show-process").append("检查中........");
+
         var isComplete = false;
 
         var file = event.target.files[0];
 
         if(!isPic(file.name)){
-            $("#dialog-return").find(".modal-body").html("请选择以,jpg,jpeg,png结尾的图片");
-            $("#dialog-return").modal("show");
+            $("#show-process").empty();
+            $("#show-process").append("请选择以,jpg,jpeg,png结尾的图片");
 
             $("#avatar-2").val('');
 
@@ -891,8 +940,8 @@
         }
 
         if(file.size > 1024*1024*8){
-            $("#dialog-return").find(".modal-body").html("图片大小不能超过 8MB!");
-            $("#dialog-return").modal("show");
+            $("#show-process").empty();
+            $("#show-process").append("图片大小不能超过 8MB!");
 
             $("#avatar-2").val('');
 
@@ -904,27 +953,37 @@
         form.append("file", file);
 
         $.ajax({
-            async : false,
             url : "/console/employee_management/detect",
-            timeout : 500,
+            timeout : 1000,
             type: "post",
             data: form,
             processData: false,
             contentType: false,
+
             success : function (res) {
+                $("#dialog-return-show-process").modal('hide');
+
                 switch (res.status){
                     case "SUCCEED" :
+                        $("#show-process").empty();
+
                         isComplete = true;
 
                         break;
                     case "FAILED" :
                         if(res.errorMessage != undefined){
-                            $("#dialog-return").find(".modal-body").html(res.errorMessage+"，请重新选择照片");
+                            $("#show-process").empty();
+                            $("#show-process").append(res.errorMessage+"，请重新选择照片");
+
+                            //$("#dialog-return").find(".modal-body").html(res.errorMessage+"，请重新选择照片");
                         } else {
-                            $("#dialog-return").find(".modal-body").html("请检查您的照片");
+                            $("#show-process").empty();
+                            $("#show-process").append("请选择包含清晰人脸的彩色照片");
+
+                            //$("#dialog-return").find(".modal-body").html("请检查您的照片");
                         }
 
-                        $("#dialog-return").modal("show");
+                        //$("#dialog-return").modal("show");
 
                         $("#avatar-2").val('');
 
@@ -932,6 +991,8 @@
                 }
             },
             error : function(){
+                $("#show-process").empty();
+
                 $("#dialog-return").find(".modal-body").html("网络错误，请重试");
 
                 $("#dialog-return").modal("show");
@@ -939,10 +1000,26 @@
                 $("#avatar-2").val('');
 
                 return;
-            }
+            },
+
+            complete: function () {
+                $(".btn.btn-primary.add-new-user").removeAttr("disabled");
+
+                $("#dialog-return-show-process").modal('hide');
+
+                if(isComplete) {
+
+                    var URL = window.URL || window.webkitURL;
+
+                    var imgURL = URL.createObjectURL(file);
+
+                    $("#choosedPic").attr('src', src = imgURL);
+
+                    console.log(imgURL);
+                }
+            },
 
         });
-
         // $.ajax({
         //     url : "/console/employee_management/detect",
         //     async : false,
@@ -970,16 +1047,6 @@
         //         return ;
         //     }
         // })
-        if(isComplete) {
-
-            var URL = window.URL || window.webkitURL;
-
-            var imgURL = URL.createObjectURL(file);
-
-            $("#choosedPic").attr('src', src = imgURL);
-
-            console.log(imgURL);
-        }
     })
 
 

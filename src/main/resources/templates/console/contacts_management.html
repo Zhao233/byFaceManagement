@@ -275,6 +275,11 @@
                             <a href="/console/camera_info">轨迹统计图表</a>
                         </li>
 
+                        <!--轨迹统计图表_小时-->
+                        <li>
+                            <a href="/console/camera_info_hour">轨迹统计图表_小时</a>
+                        </li>
+
                         <!--告警设置-->
                         <li>
                             <a href="/console/contacts_config">告警设置</a>
@@ -536,6 +541,19 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="dialog-return_show_process" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <script>
 
@@ -701,6 +719,11 @@
                     data: form,
                     processData: false,
                     contentType: false,
+
+                    beforeSend : function(r){
+                        $(".btn.btn-primary.add-new-user").attr({ disabled: "disabled" });
+                    },
+
                     success: function (r) {
                         switch (r.status) {
                             case "SUCCEED" :
@@ -735,7 +758,11 @@
                     error: function (r) {
                         $("#dialog-return").find(".modal-body").html("网络错误");
                         $("#dialog-return").modal("show");
-                    }
+                    },
+
+                    complete: function () {
+                        $(".btn.btn-primary.add-new-user").removeAttr("disabled");
+                    },
 
                 });
 

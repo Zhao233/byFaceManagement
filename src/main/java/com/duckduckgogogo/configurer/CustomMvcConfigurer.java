@@ -16,7 +16,7 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
 
-        registry.addInterceptor(new SecurityInterceptor()).addPathPatterns("/console/**");
+        registry.addInterceptor(new SecurityInterceptor()).addPathPatterns("/console/**").excludePathPatterns("login");
     }
 
     /**
@@ -50,7 +50,33 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
                 }
             }
 
+            response.sendRedirect("/login");
+
             return false;
+        }
+
+        @Override
+        public void postHandle(HttpServletRequest request,
+                               HttpServletResponse response,
+                               Object handler,
+                               ModelAndView modelAndView) throws Exception {
+
+        }
+
+        @Override
+        public void afterCompletion(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Object handler, Exception ex) throws Exception {
+        }
+    }
+
+    static class SecurityInterceptor_RTSP implements HandlerInterceptor {
+        @Override
+        public boolean preHandle(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 Object handler) throws Exception {
+
+            return true;
         }
 
         @Override

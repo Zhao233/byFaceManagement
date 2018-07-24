@@ -1,11 +1,9 @@
 package com.duckduckgogogo.controller;
 
-import com.duckduckgogogo.services.EmployeeService;
 import com.duckduckgogogo.services.VisitorService;
 import com.duckduckgogogo.utils.JSONHandler;
 import com.duckduckgogogo.utils.PasswordEncodeAssistant;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -64,9 +62,7 @@ public class VisitorManagementController {
     public  Map<String,Object> add(MultipartHttpServletRequest request,
                                    @RequestParam(value = "personName") String personName,
                                    @RequestParam(value = "IDNumber") String IDNumber,
-                                   @RequestParam(value = "phoneNumber") String phoneNumber,
-                                   @RequestParam(value = "startDate") String startDate,
-                                   @RequestParam(value = "endDate") String endDate
+                                   @RequestParam(value = "phoneNumber") String phoneNumber
     ){
         Map<String, Object> r = new HashMap<>();
 
@@ -102,7 +98,7 @@ public class VisitorManagementController {
             resource = new FileSystemResource(file);
         }
 
-        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber,startDate,endDate);
+        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -121,8 +117,6 @@ public class VisitorManagementController {
                                       @RequestParam(value = "personName") String personName,
                                       @RequestParam(value = "IDNumber") String IDNumber,
                                       @RequestParam(value = "phoneNumber") String phoneNumber,
-                                      @RequestParam(value = "startDate") String startDate,
-                                      @RequestParam(value = "endDate") String endDate,
                                       @RequestParam(value = "version") int version){
 
         Map<String, Object> r = new HashMap<>();
@@ -160,7 +154,7 @@ public class VisitorManagementController {
             resource = new FileSystemResource(file);
         }
 
-        String response = visitorService.updateVisitor(resource,personID, personName,IDNumber,phoneNumber,version+1,startDate, endDate);
+        String response = visitorService.updateVisitor(resource,personID, personName,IDNumber,phoneNumber,version+1);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
