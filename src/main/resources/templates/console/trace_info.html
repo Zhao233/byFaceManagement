@@ -165,6 +165,11 @@
                         <li>
                             <a href="/console/contacts_management">告警联系人</a>
                         </li>
+
+                        <!--人脸检测-->
+                        <li>
+                            <a href="" title="人脸检测" target="_blank" id="detectURL">人脸检测</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -934,6 +939,33 @@
             offset_message.x = -120;
             offset_message.y = -45;
         }
+
+        $.ajax({
+            type: "get",
+            dataType:"json",
+            url : "/console/faceconfig_management/search",
+
+            success : function (r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $("#detectURL").attr("href","http://"+r.serverIPandPort+"/console/face_detect");
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取配置信息失败");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+            },
+            error : function (r) {
+
+            }
+        })
 
         searchAllCamera();
 

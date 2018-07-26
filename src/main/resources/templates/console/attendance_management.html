@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/xhtml">
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:http="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -170,6 +170,11 @@
                         <li>
                             <a href="/console/contacts_management">告警联系人</a>
                         </li>
+
+                        <!--人脸检测-->
+                        <li>
+                            <a href="" title="人脸检测" target="_blank" id="detectURL">人脸检测</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -338,6 +343,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
+
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -457,6 +463,33 @@
         window.limit;
         window.offset;
         window.search;
+
+        $.ajax({
+            type: "get",
+            dataType:"json",
+            url : "/console/faceconfig_management/search",
+
+            success : function (r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        $("#detectURL").attr("href","http://"+r.serverIPandPort+"/console/face_detect");
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("获取配置信息失败");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+            },
+            error : function (r) {
+
+            }
+        })
 
         $('#_table_user_search').bootstrapTable({
             method: 'get',
