@@ -2,6 +2,7 @@ package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.services.ContactsConfigService;
 import com.duckduckgogogo.utils.JSONHandler;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,12 @@ public class ContactsConfigController {
         if (JSONHandler.isSuccess(response)) {
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
             r.put("status", "FAILED");
         }
 

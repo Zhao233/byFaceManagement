@@ -58,6 +58,14 @@ public class ServerManagementController {
         if(isSuccess){
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(data);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status", "FAILED");
         }
 
@@ -78,7 +86,13 @@ public class ServerManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status","SUCCEED");
         } else {
-            r.put("status","FAILED");
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -93,7 +107,13 @@ public class ServerManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status","SUCCEED");
         } else {
-            r.put("status","FAILED");
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -126,6 +146,14 @@ public class ServerManagementController {
 
                 map.put("status", "SUCCEED");
             } else {
+                JSONObject object = JSONObject.fromObject(response);
+
+                if(object.getString("errorMessage") != null){
+                    map.put( "errorMessage", object.getString("errorMessage") );
+                }
+
+                map.put("status", "FAILED");
+
                 map.put("status","FAILED");
             }
 

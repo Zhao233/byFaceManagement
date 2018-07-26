@@ -108,6 +108,11 @@
                             break;
                         case "FAILED" :
                             $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                            if(json.errorMessage != undefined){
+                                $("#dialog-return").find(".modal-body").append(json.errorMessage);
+                            }
+
                             $("#dialog-return").modal("show");
 
                             break;
@@ -564,6 +569,8 @@
 <script>
     var timeout_network = 3000;
 
+    var contactsNameMap;
+
     window.flag;
     window.id;
 
@@ -605,6 +612,10 @@
         el.tooltip('show');
     }
 
+    $("#dialog-visitor-info").on('hide.bs.modal',function () {
+        $("input[name='id_visitor']").removeAttr("checked");
+    })
+
     $(".btn.btn-primary.open-add-new-user-dialog").click(function () {
         window.flag = 'add';
 
@@ -620,16 +631,34 @@
     $(".btn.btn-success.open-update-use-dialog").click(function () {
         window.flag = 'update'
 
-        var id = $("input[name='id']:checked").val();
+        var id = new Array();
+
+        var selectedBox = $("input[name='visitorRecord_id']:checked");
+
         window.id = id;
         console.log('clicked update');
 
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push( selectedBox[i].value );
+
+            if(id.length > 2){
+                break;
+            }
+        }
+
         console.log(id);
-        if (id != undefined) {
+        if (id.length != 0) {
+            if(id.length > 1){
+                $("#dialog-return").find(".modal-body").html("请选择一条访客记录");
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
+
             _reset($(".form-horizontal.add-new-user"));
 
             // 读取用户选中的用户信息
-            $.get("/console/visitorRecord_management/get/" + id, null, function (r, status) {
+            $.get("/console/visitorRecord_management/get/" + id[0], null, function (r, status) {
                 console.log(r);
 
                 $("#dialog-visitor-management-update-title").html("修改");
@@ -642,7 +671,7 @@
                 $("#dialog-visitor-management-update").find("input[id='userinfo']").val(json_userinfo.id);
                 $("#dialog-visitor-management-update").find("input[id='username']").val(json_userinfo.name);
 
-                $("#dialog-visitor-management-update").find("input[id='cause']").val(r.cause);
+                $("#dialog-visitor-management-update").find("textarea[id='cause']").val(r.cause);
                 $("#dialog-visitor-management-update").find("input[id='startTimePicker']").val(r.startDateString);
                 $("#dialog-visitor-management-update").find("input[id='endTimePicker']").val(r.endDateString);
             });
@@ -767,6 +796,11 @@
                                 }
 
                                 $("#dialog-return").find(".modal-body").html(message);
+
+                                if(r.errorMessage != undefined){
+                                    $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                                }
+
                                 $("#dialog-return").modal("show");
                                 break
                         }
@@ -785,6 +819,13 @@
 
     $(".btn.btn-primary.add-new-user-visitorList").click(function () {
         var id = $("#visitorList").find("input[name='id_visitor']:checked").val();
+
+        if(id == undefined){
+            $("#dialog-return").find(".modal-body").html("请选择访客");
+            $("#dialog-return").modal("show");
+
+            return ;
+        }
 
         $.ajax({
             url: "/console/visitor_management/get/" + id,
@@ -810,6 +851,11 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("系统处理错误，请联系管理员");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
                         $("#dialog-return").modal("show");
                         break
                 }
@@ -873,11 +919,13 @@
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
-        var id = $("input[type='radio']:checked").val();
-
         var list_id = new Array();
 
-        list_id[0] = (id);
+        var selectedBox = $("input[name='visitorRecord_id']:checked");
+
+        for(var i = 0; i <  selectedBox.length; i++){
+            list_id.push( parseInt(selectedBox[i].value) );
+        }
 
         console.log(list_id);
 
@@ -906,6 +954,11 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("删除失败");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break
@@ -921,9 +974,15 @@
     })
 
     $(".btn.btn-danger.delete-employee-dialog").click(function () {
+        var selectedBox = $("input[name='visitorRecord_id']:checked");
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
+        var id = new Array();
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push(selectedBox[i].value);
+        }
+
+        if (id.length > 0) {
             // 读取Project选中的用户信息
             $.get("/console/visitorRecord_management/get/" + id, null, function (r, status) {
 
@@ -933,6 +992,17 @@
                 $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
                 $(".bs-example-modal-sm").modal("show");
             });
+
+            $(".bs-example-modal-sm").find(".modal-body").html("是否删除</br>");
+
+            for(var i = 0; i < id.length; i++){
+                $(".bs-example-modal-sm").find(".modal-body").append("</br>"+contactsNameMap.get( parseInt(id[i]) ));
+            }
+
+            $(".bs-example-modal-sm").find(".modal-body").append("</br></br>的访客记录？");
+
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
         } else {
             $("#dialog-return").find(".modal-body").html("请选中访客记录后操作");
             $("#dialog-return").modal("show");
@@ -956,15 +1026,33 @@
     }
 
     function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
+        if(index == 0){
+            contactsNameMap = new Map();
+        }
+
+        contactsNameMap.set(value,row.userInfo.name);
+
+        return '<input name="visitorRecord_id" type="checkbox" value="' + value + '" />';
     }
 
     function _formate_visitor_id(value, row, index){
-        return '<input name="id_visitor" type="radio" value="' + value + '" />';
+        var selectedVisitor_id = $("#dialog-visitor-management-update").find("input[id='userinfo']").val();
+
+        if(selectedVisitor_id == value){
+            return '<input name="id_visitor" type="radio" checked value="' + value + '" />';
+        } else {
+            return '<input name="id_visitor" type="radio" value="' + value + '" />';
+
+        }
+
     }
 
     function _formate_textarea_cause(value, row, index){
-        return '<textarea readonly class="form-control" style="resize:none; min-height:100px; width:100%;padding: 0px;background-color:#ffffff">'+value+'</textarea>';
+        if(index%2 == 0){
+            return '<div readonly class="form-control" style="resize:none; min-height:100px; width:100%;padding: 0px;background-color:transparent;overflow-y: auto;border: 0px;">'+value+'</div>';
+        } else {
+            return '<div readonly class="form-control" style="resize:none; min-height:100px; width:100%;padding: 0px;background-color:transparent;overflow-y: auto;border: 0px;">'+value+'</div>';
+        }
     }
 
     $(".btn.btn-default.deletePic").click(function () {

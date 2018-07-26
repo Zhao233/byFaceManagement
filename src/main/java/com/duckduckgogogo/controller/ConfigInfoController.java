@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.duckduckgogogo.services.impl.Info;
 import com.duckduckgogogo.utils.JSONHandler;
 import net.sf.json.JSONObject;
 import org.omg.CORBA.OBJ_ADAPTER;
@@ -51,6 +52,8 @@ public class ConfigInfoController {
                 version);
 
         if(JSONHandler.isSuccess(result)){
+            Info.serverIP = configInfoService.getServerIP();
+
             r.put("status", "SUCCEED");
         } else {
             Map<String, String> message = new HashMap<>();
@@ -83,6 +86,10 @@ public class ConfigInfoController {
             object.put("status","SUCCEED");
 
         } else {
+            if(object.getString("errorMessage") != null){
+                object.put( "errorMessage", object.getString("errorMessage") );
+            }
+
             object.put("status","FAILED");
         }
 

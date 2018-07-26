@@ -260,6 +260,7 @@
                                     </div>
 
 
+
                                     <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
                                         <lable for="datepicker_start_box" >时间：</lable>
                                         <div class="input-group date form_date" id="datepicker_start_box"  data-link-field="dtp_input2" >
@@ -270,11 +271,17 @@
                                         <!--<input type="text" class="form-control" id="datepicker" readonly>-->
                                     </div>
 
+
+
                                     <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
                                         <button class="btn btn-primary searchData">查找</button>
                                     </div>
 
                                 </div>
+
+                                <h4 class="searchResult">
+
+                                </h4>
 
                                 <div class="canvas-wrapper form-group" style="margin-top: 5px;margin-left: 15px;">
                                     <div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px">
@@ -521,7 +528,7 @@
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
 
                         if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append(json.message);
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
                         }
 
                         $("#dialog-return").modal("show");
@@ -579,7 +586,7 @@
                             $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
 
                             if(json.message != undefined){
-                                $("#dialog-return").find(".modal-body").append(json.message);
+                                $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
                             }
 
                             $("#dialog-return").modal("show");
@@ -615,7 +622,7 @@
                         $("#dialog-return").find(".modal-body").html("获取摄像头名称失败");
 
                         if(r.message != undefined){
-                            $("#dialog-return").find(".modal-body").append(json.message);
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
                         }
 
                         $("#dialog-return").modal("show");
@@ -637,10 +644,16 @@
 
         $.get("/console/camera_info/search/", data, function(r, status) {
             console.log("recived chart data : "+r.data.chartData);
-            console.log("recived chart data : "+r.data.rankData);
+            console.log("recived rank data : "+r.data.rankData);
 
             var chart_data = r.data.chartData;
             var rank_data = r.data.rankData;
+
+            if(rank_data.length == 0){
+                $(".searchResult").append("未查询到数据");
+            } else {
+                $(".searchResult").empty();
+            }
 
             data_chart.datasets[0].data = chart_data;
 
@@ -683,7 +696,7 @@
             displayLineChart();
 
             if(length == 0){
-                $("#personInfo").append("没有查询到数据！");
+                $("#personInfo").append("未查询到数据");
 
             }
         });
@@ -739,6 +752,8 @@
     })
 
     $(".searchData").click(function () {
+        var date = $("#datepicker").val();
+
         if(date == ""){
             $("#dialog-return").find(".modal-body").html("请选择日期");
             $("#dialog-return").modal("show");
@@ -754,8 +769,6 @@
         var date = $( "#datepicker" ).val();
 
         console.log("choosed date : "+ date);
-
-
 
         var new_data = {
             "cameraID": id,

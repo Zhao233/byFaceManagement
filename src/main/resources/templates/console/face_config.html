@@ -81,6 +81,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取配置信息失败");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -130,6 +135,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.errorMessage);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;

@@ -568,7 +568,7 @@
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
 
                         if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append(json.message);
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
                         }
 
                         $("#dialog-return").modal("show");

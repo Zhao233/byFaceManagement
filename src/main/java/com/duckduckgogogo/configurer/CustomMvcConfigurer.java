@@ -41,11 +41,11 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
 
                 if (role.equals(User.ROLE_ADMINISTRATOR)  /**&& uri.contains("/console/employee_management")*/) {
                     return true;
-                } else if (role.equals(User.ROLE_CUSTOMER) && uri.contains("/console/task_schedule_tracking")) {
+                } else if (role.equals(User.ROLE_CUSTOMER) /**&& uri.contains("/console/task_schedule_tracking")*/) {
                     return true;
-                } else if (role.equals(User.ROLE_SUPPLIER) && uri.contains("/console/task_management")) {
+                } else if (role.equals(User.ROLE_SUPPLIER) /**&& uri.contains("/console/task_management")*/) {
                     return true;
-                } else if (role.equals(User.ROLE_PROJECT_MANAGEMENT) && uri.contains("/console/task_allocation")) {
+                } else if (role.equals(User.ROLE_PROJECT_MANAGEMENT) /**&& uri.contains("/console/task_allocation")*/) {
                     return true;
                 }
             }
@@ -53,6 +53,7 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
             response.sendRedirect("/login");
 
             return false;
+
         }
 
         @Override

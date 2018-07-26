@@ -394,6 +394,11 @@
                                                     break
                                                 case "FAILED" :
                                                     $("#dialog-return").find(".modal-body").html("查询失败");
+
+                                                    if(r.message != undefined){
+                                                        $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                                                    }
+
                                                     $("#dialog-return").modal("show");
                                                     break
                                             }
@@ -458,6 +463,11 @@
                                                     break
                                                 case "FAILED" :
                                                     $("#dialog-return").find(".modal-body").html("查询失败");
+
+                                                    if(r.message != undefined){
+                                                        $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                                                    }
+
                                                     $("#dialog-return").modal("show");
                                                     break
                                             }
@@ -621,6 +631,11 @@
                                                     break
                                                 case "FAILED" :
                                                     $("#dialog-return").find(".modal-body").html("查询失败");
+
+                                                    if(r.message != undefined){
+                                                        $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                                                    }
+
                                                     $("#dialog-return").modal("show");
                                                     break
                                             }
@@ -1029,6 +1044,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;

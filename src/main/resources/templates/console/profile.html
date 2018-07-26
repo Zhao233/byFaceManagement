@@ -503,8 +503,8 @@
                         case "FAILED" :
                             $("#dialog-return").find(".modal-body").html("修改失败");
 
-                            if(r.message.message != undefined){
-                                $("#dialog-return").find(".modal-body").html(r.message.message);
+                            if(r.message != undefined){
+                                $("#dialog-return").find(".modal-body").html("\n原因:"+r.message);
                                 $("#dialog-return").modal("show");
                             }
 

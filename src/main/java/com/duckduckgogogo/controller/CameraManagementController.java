@@ -27,11 +27,19 @@ public class CameraManagementController {
 
         String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardType, entranceGuardNO, cameraXY);
         Map<String, Object> r = r = new HashMap<>();
+//        JSONObject
+
 
         if(JSONHandler.isSuccess(result)){
 
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
             r.put("status", "FAILED");
 
         }
@@ -81,7 +89,13 @@ public class CameraManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(result);
 
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -98,11 +112,16 @@ public class CameraManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
             r.put("status", "FAILED");
         }
 
         return r;
-
     }
 
     @RequestMapping("/get/{id}")
@@ -128,7 +147,13 @@ public class CameraManagementController {
 
             r.put("status","SUCCEED");
         } else {
-            r.put("status","FAILED");
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;

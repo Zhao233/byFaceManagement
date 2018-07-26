@@ -69,6 +69,11 @@
 
                         break;
                     case "FAILED" :
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                        }
+
                         $("#dialog-return").find(".modal-body").html("获取配置信息失败");
                         $("#dialog-return").modal("show");
 
@@ -99,6 +104,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -456,6 +466,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("保存失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         $(".btn-task-delete-cancel").click();

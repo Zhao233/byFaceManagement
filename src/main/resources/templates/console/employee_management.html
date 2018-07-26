@@ -532,6 +532,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.errorMessage);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -551,6 +556,8 @@
 <script>
     var timeout_network = 3000;
 
+    var contactsNameMap;
+
     window.flag;
     window.id;
 
@@ -567,6 +574,8 @@
     });
 
     function _reset(from) {
+        $("#show-process").empty();
+
         from[0].reset();
         _reset_input(from.find("input"));
 
@@ -576,6 +585,7 @@
     function _reset_input(input) {
         input.removeClass("alert-danger");
         input.tooltip('destroy');
+
     }
 
     function _set(el, message) {
@@ -607,17 +617,37 @@
     });
 
     $(".btn.btn-success.open-update-use-dialog").click(function () {
-        var id = $("input[type='radio']:checked").val();
+        window.flag='update'
+
+        var id = new Array();
+
+        var selectedBox = $("input[name='employee_id']:checked");
+
         window.id = id;
         console.log('clicked update');
 
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push( selectedBox[i].value );
+
+            if(id.length > 2){
+                break;
+            }
+        }
+
         console.log(id);
-        if (id != undefined) {
-            window.flag='update'
+
+        if (id.length != 0) {
+            if(id.length > 1){
+                $("#dialog-return").find(".modal-body").html("请选择一个员工");
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
 
             _reset($(".form-horizontal.add-new-user"));
+
             // 读取用户选中的用户信息
-            $.get("/console/employee_management/get/" + id, null, function (r, status) {
+            $.get("/console/employee_management/get/" + id[0], null, function (r, status) {
                 console.log(r);
 
                 $("#dialog-employee-management-update-title").html("修改");
@@ -758,7 +788,7 @@
 
 
                                 $(".panel.panel-default").find("button[name='refresh']").click();
-F
+
                                 break
 
                             case "FAILED" :
@@ -778,7 +808,7 @@ F
 
 
                         if(r.message != undefined){
-                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                            $("#dialog-return").find(".modal-body").html("\n原因:"+r.message.WARNING);
                             $("#dialog-return").modal("show");
                         }
                     },
@@ -827,11 +857,13 @@ F
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
-        var id = $("input[type='radio']:checked").val();
-
         var list_id = new Array();
 
-        list_id[0] = (id);
+        var selectedBox = $("input[name='employee_id']:checked");
+
+        for(var i = 0; i <  selectedBox.length; i++){
+            list_id.push( parseInt(selectedBox[i].value) );
+        }
 
         console.log(list_id);
 
@@ -860,6 +892,11 @@ F
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("删除失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         $(".panel.panel-default").find("button[name='refresh']").click();
@@ -880,15 +917,23 @@ F
     })
 
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
+        var selectedBox = $("input[name='employee_id']:checked");
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
-            // 读取Project选中的用户信息
-            $.get("/console/employee_management/get/" + id, null, function(r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除员工：  " + r.name + "?");
-                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-                $(".bs-example-modal-sm").modal("show");
-            });
+        var id = new Array();
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push(selectedBox[i].value);
+        }
+
+        if (id.length > 0) {
+            $(".bs-example-modal-sm").find(".modal-body").html("是否删除员工?</br>");
+
+            for(var i = 0; i < id.length; i++){
+                $(".bs-example-modal-sm").find(".modal-body").append("</br>"+contactsNameMap.get( parseInt(id[i]) ));
+            }
+
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
         } else {
             $("#dialog-return").find(".modal-body").html("请选中员工后操作");
             $("#dialog-return").modal("show");
@@ -919,7 +964,13 @@ F
     }
 
     function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
+        if(index == 0){
+            contactsNameMap = new Map();
+        }
+
+        contactsNameMap.set(value,row.name);
+
+        return '<input name="employee_id" type="checkbox" value="' + value + '" />';
     }
 
     $("#avatar-2").change(function (event) {
@@ -936,7 +987,11 @@ F
             $("#show-process").empty();
             $("#show-process").append("请选择以,jpg,jpeg,png结尾的图片");
 
+            $(".btn.btn-primary.add-new-user").removeAttr("disabled");
+
             $("#avatar-2").val('');
+
+            $("#choosedPic").attr('src',src="/images/default_avatar_male.jpg");
 
             return;
         }
@@ -945,7 +1000,11 @@ F
             $("#show-process").empty();
             $("#show-process").append("图片大小不能超过 8MB!");
 
+            $(".btn.btn-primary.add-new-user").removeAttr("disabled");
+
             $("#avatar-2").val('');
+
+            $("#choosedPic").attr('src',src="/images/default_avatar_male.jpg");
 
             return;
         }

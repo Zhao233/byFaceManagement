@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="/javascript/jquery-1.11.1.min.js"></script>
+
+    <style>
+    </style>
+</head>
+    <body>
+        <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org" id='vlc' events='false' width="1280" height="720">
+            <param id="param" name='mrl' value='rtsp://admin:Adminadmin@10.22.0.198:554/cam/realmonitor?channel=1&subtype=0' />
+            <param name='volume' value='50' />
+            <param name='autoplay' value='true' />
+            <param name='loop' value='false' />
+            <param name='fullscreen' value='false' />
+            <param name='controls' value='false' />
+        </object>
+
+        <script>
+            $(document).ready(function() {
+                var url = getUrlParam("rtspUrl");
+
+                $("#param").attr("url");
+            });
+
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+        </script>
+    </body>
+</html>

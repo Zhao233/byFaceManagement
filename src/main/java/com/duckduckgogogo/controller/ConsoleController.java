@@ -130,6 +130,11 @@ public class ConsoleController {
         return new ModelAndView("console/camera_location");
     }
 
+    @RequestMapping("/face_detect")
+    public ModelAndView toFaceDetect() {
+        return new ModelAndView("console/face_detect");
+    }
+
     @RequestMapping("/test")
     public ModelAndView toTest() {
         return new ModelAndView("console/test");
@@ -186,10 +191,6 @@ public class ConsoleController {
         return new ModelAndView("console/face_register");
     }
 
-    @RequestMapping("/face_detect")
-    public ModelAndView todetect_picture() {
-        return new ModelAndView("console/face_detect");
-    }
 
     @RequestMapping("/face_task")
     public ModelAndView toface_task() {

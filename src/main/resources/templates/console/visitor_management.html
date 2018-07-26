@@ -123,6 +123,11 @@
                             break;
                         case "FAILED" :
                             $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                            if(json.message != undefined){
+                                $("#dialog-return").find(".modal-body").append(json.message);
+                            }
+
                             $("#dialog-return").modal("show");
 
                             break;
@@ -546,6 +551,8 @@
 <script>
     var timeout_network = 3000;
 
+    var contactsNameMap;
+
     window.flag;
     window.id;
 
@@ -568,6 +575,7 @@
     });
 
     function _reset(from) {
+        $("#show-process").empty();
 
         from[0].reset();
 
@@ -579,6 +587,7 @@
     function _reset_input(input) {
         input.removeClass("alert-danger");
         input.tooltip('destroy');
+
     }
 
     function _set(el, message) {
@@ -602,16 +611,34 @@
     $(".btn.btn-success.open-update-use-dialog").click(function () {
         window.flag = 'update'
 
-        var id = $("input[type='radio']:checked").val();
+        var id = new Array();
+
+        var selectedBox = $("input[name='visitor_id']:checked");
+
         window.id = id;
         console.log('clicked update');
 
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push( selectedBox[i].value );
+
+            if(id.length > 2){
+                break;
+            }
+        }
+
         console.log(id);
-        if (id != undefined) {
+        if (id.length != 0) {
+            if(id.length > 1){
+                $("#dialog-return").find(".modal-body").html("请选择一个访客");
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
+
             _reset($(".form-horizontal.add-new-user"));
 
             // 读取用户选中的用户信息
-            $.get("/console/visitor_management/get/" + id, null, function (r, status) {
+            $.get("/console/visitor_management/get/" + id[0], null, function (r, status) {
                 console.log(r);
 
                 $("#dialog-visitor-management-update-title").html("修改");
@@ -764,6 +791,11 @@
                                 }
 
                                 $("#dialog-return").find(".modal-body").html(message);
+
+                                if(r.message != undefined){
+                                    $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                                }
+
                                 $("#dialog-return").modal("show");
 
                                 $(".btn.btn-default.add-new-user-close").click();
@@ -834,11 +866,13 @@
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
-        var id = $("input[type='radio']:checked").val();
-
         var list_id = new Array();
 
-        list_id[0] = (id);
+        var selectedBox = $("input[name='visitor_id']:checked");
+
+        for(var i = 0; i <  selectedBox.length; i++){
+            list_id.push( parseInt(selectedBox[i].value) );
+        }
 
         console.log(list_id);
 
@@ -847,7 +881,7 @@
         form.append("list_ID", list_id);
 
         $.ajax({
-            url: "/console/employee_management/delete",
+            url: "/console/visitor_management/delete",
             timeout : timeout_network,
             type: "post",
             data: form,
@@ -867,7 +901,14 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("删除失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                        }
+
                         $("#dialog-return").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
 
                         break
                 }
@@ -882,15 +923,23 @@
     })
 
     $(".btn.btn-danger.delete-employee-dialog").click(function () {
+        var selectedBox = $("input[name='visitor_id']:checked");
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
-            // 读取Project选中的用户信息
-            $.get("/console/employee_management/get/" + id, null, function (r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除访客：  " + r.name + "?");
-                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-                $(".bs-example-modal-sm").modal("show");
-            });
+        var id = new Array();
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push(selectedBox[i].value);
+        }
+
+        if (id.length > 0) {
+            $(".bs-example-modal-sm").find(".modal-body").html("是否删除访客?</br>");
+
+            for(var i = 0; i < id.length; i++){
+                $(".bs-example-modal-sm").find(".modal-body").append("</br>"+contactsNameMap.get( parseInt(id[i]) ));
+            }
+
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
         } else {
             $("#dialog-return").find(".modal-body").html("请选中访客后操作");
             $("#dialog-return").modal("show");
@@ -912,7 +961,13 @@
     }
 
     function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
+        if(index == 0){
+            contactsNameMap = new Map();
+        }
+
+        contactsNameMap.set(value,row.name);
+
+        return '<input name="visitor_id" type="checkbox" value="' + value + '" />';
     }
 
     $("#avatar-2").change(function (event) {
@@ -930,6 +985,9 @@
             $("#show-process").append("请选择以,jpg,jpeg,png结尾的图片");
 
             $("#avatar-2").val('');
+
+            $("#choosedPic").attr('src',src="/images/default_avatar_male.jpg");
+
             $(".btn.btn-primary.add-new-user").removeAttr("disabled");
 
             return;
@@ -940,6 +998,9 @@
             $("#show-process").append("图片大小不能超过 8MB!");
 
             $("#avatar-2").val('');
+
+            $("#choosedPic").attr('src',src="/images/default_avatar_male.jpg");
+
             $(".btn.btn-primary.add-new-user").removeAttr("disabled");
 
             return;

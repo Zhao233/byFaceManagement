@@ -75,6 +75,14 @@ public class VisitingRecordController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status", "FAILED");
         }
 
@@ -99,6 +107,14 @@ public class VisitingRecordController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status", "FAILED");
         }
         return r;
@@ -127,6 +143,14 @@ public class VisitingRecordController {
 
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status","FAILED");
         }
 
@@ -138,11 +162,19 @@ public class VisitingRecordController {
     public  Map<String,Object> delete(@RequestParam(value = "list_ID") List<Integer> list){
         Map<String, Object> r = new HashMap<>();
 
-        String respons = visitingRecordService.deleteVisitingRecord(list);
+        String response = visitingRecordService.deleteVisitingRecord(list);
 
-        if(JSONHandler.isSuccess(respons)){
+        if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status","FAILED");
         }
 

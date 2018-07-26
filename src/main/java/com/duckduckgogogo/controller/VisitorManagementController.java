@@ -104,6 +104,14 @@ public class VisitorManagementController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status", "FAILED");
         }
 
@@ -160,6 +168,14 @@ public class VisitorManagementController {
         if(JSONHandler.isSuccess(response)){
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status", "FAILED");
         }
         return r;
@@ -189,6 +205,14 @@ public class VisitorManagementController {
 
             r.put("status","SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(response);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
+
             r.put("status","FAILED");
         }
 

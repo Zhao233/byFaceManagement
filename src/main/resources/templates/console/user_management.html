@@ -513,6 +513,8 @@
 <script>
     var timeout_network = 3000;
 
+    var contactsNameMap;
+
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -526,7 +528,13 @@
     });
 
     function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
+        if(index == 0){
+            contactsNameMap = new Map();
+        }
+
+        contactsNameMap.set(value,row.username);
+
+        return '<input name="user_id" type="checkbox" value="' + value + '" />';
     }
 
     function _formatted_select(value, row, index) {
@@ -570,8 +578,26 @@
     $(".btn.btn-success.open-update-use-dialog").click(function() {
         window.flag = 'update';
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
+
+        var id = new Array();
+
+        var selectedBox = $("input[name='user_id']:checked");
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push( selectedBox[i].value );
+
+            if(id.length > 2){
+                break;
+            }
+        }
+        if ( id.length != 0 ) {
+            if(id.length > 1){
+                $("#dialog-return").find(".modal-body").html("请选择一个用户");
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
+
             _reset($(".form-horizontal.add-new-user"));
             // 读取用户选中的用户信息
             $.get("/console/user_management/get/" + id, null, function(r, status) {
@@ -692,6 +718,26 @@
                             message = window.flag=='add' ? '增加失败' : '修改失败';
 
                             if(r.message != undefined) {
+                                var checkIsExist = true;
+
+                                if(r.message.username != undefined){
+                                    _reset_input( $("input[id='username']") );
+                                    _set($("input[id='username']"), "用户名已存在，请重新输入");
+
+                                    checkIsExist = false;
+                                }
+
+                                if(r.message.email != undefined){
+                                    _reset_input( $("input[id='email']") );
+                                    _set( $("input[id='email']"), "邮箱已存在，请重新输入" );
+
+                                    checkIsExist = false;
+                                }
+
+                                if(!checkIsExcit){
+                                    return ;
+                                }
+
 
                                 $("#dialog-return").find(".modal-body").html(r.message.message)
                                 $("#dialog-return").modal("show");
@@ -749,15 +795,24 @@
     }
 
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
+        var selectedBox = $("input[name='user_id']:checked");
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
+        var id = new Array();
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push(selectedBox[i].value);
+        }
+
+        if (id.length > 0) {
             // 读取Project选中的用户信息
-            $.get("/console/user_management/get/" + id, null, function (r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除用户：  " + r.username  + "?");
-                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-                $(".bs-example-modal-sm").modal("show");
-            });
+            $(".bs-example-modal-sm").find(".modal-body").html("是否删除用户?</br>");
+
+            for(var i = 0; i < id.length; i++){
+                $(".bs-example-modal-sm").find(".modal-body").append("</br>"+contactsNameMap.get( parseInt(id[i]) ));
+            }
+
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
         } else {
             $("#dialog-return").find(".modal-body").html("请选中用户后操作");
             $("#dialog-return").modal("show");

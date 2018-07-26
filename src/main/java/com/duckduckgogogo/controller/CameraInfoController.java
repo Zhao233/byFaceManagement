@@ -108,8 +108,11 @@ public class CameraInfoController {
         object.put("rankData", object_rank);
         object.put("cameraName", object_camera.getString("cameraName"));
 
+
+
         map.put("data",object);
 
         return map;
     }
+
 }

@@ -434,6 +434,11 @@
                         break;
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+                        if(json.message != undefined){
+                            $("#dialog-return").find(".modal-body").append(json.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break;
@@ -451,6 +456,8 @@
 <!-- Custom Js -->
 
 <script>
+    var contactsNameMap;
+
     !function ($) {
         $(document).on("click","ul.nav li.parent > a > span.icon", function(){
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -464,7 +471,13 @@
     });
 
     function _formatte_user_id(value, row, index) {
-        return '<input name="id" type="radio" value="' + value + '" />';
+        if(index == 0){
+            contactsNameMap = new Map();
+        }
+
+        contactsNameMap.set(value,row.serverName);
+
+        return '<input name="server_id" type="checkbox" value="' + value + '" />';
     }
 
     function _formatte_name(value,row,index){
@@ -506,9 +519,29 @@
     $(".btn.btn-success.open-update-use-dialog").click(function() {
         window.flag = 'update';
 
-        var id = $("input[type='radio']:checked").val();
+        var id = new Array();
+
+        var selectedBox = $("input[name='server_id']:checked");
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push( selectedBox[i].value );
+
+            if(id.length > 2){
+                break;
+            }
+        }
+
         window.id = id;
-        if (id != undefined) {
+        console.log('clicked update');
+
+        if (id.length != 0) {
+            if(id.length > 1){
+                $("#dialog-return").find(".modal-body").html("请选择一个服务器");
+                $("#dialog-return").modal("show");
+
+                return ;
+            }
+
             _reset($(".form-horizontal.add-new-user"));
             // 读取用户选中的用户信息
             $.get("/console/server_management/get/" + id, null, function(r, status) {
@@ -626,6 +659,10 @@
 
                                 $(".btn.btn-default.add-new-user-close").click();
 
+                                if(r.message != undefined){
+                                    $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                                }
+
                                 $("#dialog-return").modal("show");
 
                                 break
@@ -654,11 +691,13 @@
     $(".btn.btn-danger.btn-task-delete-confirm").click(function () {
         console.log('clicked the delete');
 
-        var id = $("input[type='radio']:checked").val();
-
         var list_id = new Array();
 
-        list_id[0] = (id);
+        var selectedBox = $("input[name='server_id']:checked");
+
+        for(var i = 0; i <  selectedBox.length; i++){
+            list_id.push( parseInt(selectedBox[i].value) );
+        }
 
         console.log(list_id);
 
@@ -690,6 +729,11 @@
 
                     case "FAILED" :
                         $("#dialog-return").find(".modal-body").html("删除失败");
+
+                        if(r.message != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.message);
+                        }
+
                         $("#dialog-return").modal("show");
 
                         break
@@ -718,15 +762,23 @@
     }
 
     $(".btn.btn-danger.delete-employee-dialog").click(function (){
+        var selectedBox = $("input[name='server_id']:checked");
 
-        var id = $("input[type='radio']:checked").val();
-        if (id != undefined) {
-            // 读取Project选中的用户信息
-            $.get("/console/server_management/get/" + id, null, function(r, status) {
-                $(".bs-example-modal-sm").find(".modal-body").html("是否删除服务器：  " + r.serverName + "?");
-                $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
-                $(".bs-example-modal-sm").modal("show");
-            });
+        var id = new Array();
+
+        for(var i = 0; i < selectedBox.length; i++){
+            id.push(selectedBox[i].value);
+        }
+
+        if (id.length > 0) {
+            $(".bs-example-modal-sm").find(".modal-body").html("是否删除服务器?</br>");
+
+            for(var i = 0; i < id.length; i++){
+                $(".bs-example-modal-sm").find(".modal-body").append("</br>"+contactsNameMap.get( parseInt(id[i]) ));
+            }
+
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+            $(".bs-example-modal-sm").modal("show");
         } else {
             $("#dialog-return").find(".modal-body").html("请选择服务器");
             $("#dialog-return").modal("show");

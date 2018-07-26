@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class IndexController {
+    @RequestMapping(value = "/RTSP")
+    public ModelAndView toRTSP(){
+        return new ModelAndView("/RTSP");
+    }
 
     @RequestMapping(value = {"/", "/login"})
     public ModelAndView toHome(HttpServletRequest request, HttpServletResponse response) {
@@ -33,11 +37,11 @@ public class IndexController {
 
         if(user.getRole().equals("PM"))
         {
-        	return "redirect:/console/task_allocation";
+        	return "redirect:/console/employee_management";
         }else if(user.getRole().equals("S")){
-        	return "redirect:/console/task_management";
+        	return "redirect:/console/employee_management";
         }else if(user.getRole().equals("C")){
-        	return "redirect:/console/task_schedule_tracking";
+        	return "redirect:/console/employee_management";
         }else if(user.getRole().equals("A")){
         	return "redirect:/console/employee_management";
         }else {

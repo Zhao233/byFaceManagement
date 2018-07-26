@@ -54,6 +54,12 @@ public class ContactsManagementController {
         if(JSONHandler.isSuccess(respond)){
             r.put("status", "SUCCEED");
         } else {
+            JSONObject object = JSONObject.fromObject(respond);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
             r.put("status", "FAILED");
         }
 
@@ -76,7 +82,13 @@ public class ContactsManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status","SUCCEED");
         } else {
-            r.put("status","FAILED");
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;
@@ -91,7 +103,13 @@ public class ContactsManagementController {
         if(JSONHandler.isSuccess(result)){
             r.put("status","SUCCEED");
         } else {
-            r.put("status","FAILED");
+            JSONObject object = JSONObject.fromObject(result);
+
+            if(object.getString("errorMessage") != null){
+                r.put( "errorMessage", object.getString("errorMessage") );
+            }
+
+            r.put("status", "FAILED");
         }
 
         return r;

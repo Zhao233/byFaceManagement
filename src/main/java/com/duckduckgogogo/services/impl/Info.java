@@ -1,7 +1,7 @@
 package com.duckduckgogogo.services.impl;
 
 public class Info {
-    public static String serverIP = "10.8.20.255:8080";
+    public static String serverIP = "10.8.21.82:8080";
 
     public static String adminName = "";
     public static String adminEmail = "";

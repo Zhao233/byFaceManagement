@@ -67,4 +67,10 @@ public class TraceController {
 
         return map;
     }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(){
+        return "sdfghgsasdfg";
+    }
 }
