@@ -1,48 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html>
+    <head>
+        <style>
+            .square{
+                width: 400px;
+                height: 400px;
+                padding-top: 100%;
+                display: block;
+                position: relative;
+                background-size: cover;
+                background-position: 50% 50%;
+            }
 
-    <link href="/style/bootstrap.css" rel="stylesheet"/>
-    <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+            .test{
+                width: 300px;
+                height: 300px;
 
-    <script type="text/javascript" src="/javascript/jquery-1.11.1.min.js" charset="UTF-8"></script>
-    <script src="/javascript/bootstrap.min.js"></script>
-    <script src="/javascript/bootstrap-datetimepicker.js"></script>
-    <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
+                background-image: url(nave.jpg);
+                background-position: 50% 50%;
+                background-image: url(nave.jpg);
+                background-repeat: inherit;
 
-</head>
-<body>
-<div class="container">
-    <form action="" class="form-horizontal"  role="form">
-        <fieldset>
-            <legend>Test</legend>
-            <div class="form-group">
-                <label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label>
-                <div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                    <input class="form-control" size="16" type="text" value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                </div>
-                <input type="hidden" id="dtp_input1" value="" /><br/>
+                background-color: black;
+            }
+        </style>
+
+    </head>
+
+    <body>
+            <div class="test">
+
             </div>
-        </fieldset>
-    </form>
-</div>
 
-<script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    });
-</script>
+    </body>
 
-</body>
 </html>

@@ -1,11 +1,7 @@
 package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.services.AttendanceService;
-import com.duckduckgogogo.utils.JSONHandler;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +11,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @Controller
 @RequestMapping("/console/attendance_management")
 public class AttendanceManagementController{
+
     @Autowired
     private AttendanceService attendanceService;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping("/search")
     @ResponseBody
@@ -59,7 +56,6 @@ public class AttendanceManagementController{
     @RequestMapping("/test")
     @ResponseBody
     public String test(){
-        logger.info("wertsdfgfsdfgn");
 
         return "qwertyu";
     }

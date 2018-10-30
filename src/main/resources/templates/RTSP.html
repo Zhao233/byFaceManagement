@@ -3,33 +3,46 @@
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <script src="/javascript/jquery-1.11.1.min.js"></script>
-
-    <style>
-    </style>
 </head>
-    <body>
-        <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org" id='vlc' events='false' width="1280" height="720">
-            <param id="param" name='mrl' value='rtsp://admin:Adminadmin@10.22.0.198:554/cam/realmonitor?channel=1&subtype=0' />
-            <param name='volume' value='50' />
-            <param name='autoplay' value='true' />
-            <param name='loop' value='false' />
-            <param name='fullscreen' value='false' />
-            <param name='controls' value='false' />
-        </object>
+<body>
+<script>
+    var url = getUrlParam("rtspUrl");
 
-        <script>
-            $(document).ready(function() {
-                var url = getUrlParam("rtspUrl");
+    url = url.replace(/~/,'&');
 
-                $("#param").attr("url");
-            });
+    $("#param").attr("value",url);
 
-            function getUrlParam(name) {
-                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-                var r = window.location.search.substr(1).match(reg);
-                if (r != null) return unescape(r[2]);
-                return null;
-            }
-        </script>
-    </body>
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    create(url);
+
+    $("#vlc").css("width","1200px");
+    $("#vlc").css("height","720px");
+
+    function create(url){
+        $("body").append("<object type='application/x-vlc-plugin' pluginspage=\"http://www.videolan.org\" id='vlc' events='false' width=\"1280\" height=\"720\">\n" +
+            "            <param id=\"param\" name='mrl' value='"+url+"'/>\n" +
+            "            <param name='volume' value='50' />\n" +
+            "            <param name='autoplay' value='true' />\n" +
+            "            <param name='loop' value='false' />\n" +
+            "            <param name='fullscreen' value='false' />\n" +
+            "            <param name='controls' value='false' />\n" +
+            "        </object>");
+
+        // $("body").append("<object type='application/x-vlc-plugin' pluginspage=\"http://www.videolan.org\" id='vlc' events='false' width=\"1280\" height=\"720\">\n" +
+        //     "            <param id=\"param\" name='mrl' value='rtsp://admin:123456by@192.168.17.237:554/cam/realmonitor?channel=1&subtype=0'/>\n" +
+        //     "            <param name='volume' value='50' />\n" +
+        //     "            <param name='autoplay' value='true' />\n" +
+        //     "            <param name='loop' value='false' />\n" +
+        //     "            <param name='fullscreen' value='false' />\n" +
+        //     "            <param name='controls' value='false' />\n" +
+        //     "        </object>")
+    }
+</script>
+</body>
 </html>

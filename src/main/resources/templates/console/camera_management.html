@@ -7,7 +7,7 @@
     <title>BEYONDSOFT</title>
     <!-- Bootstrap Styles-->
     <link href="/style/bootstrap.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+    <link rel="/stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
 
     <!-- Custom Styles-->
     <link href="/style/custom-styles.css" rel="stylesheet"/>
@@ -41,8 +41,13 @@
         .fixed-table-body {
             overflow-x: auto;
             overflow-y: scroll;
-            height: 35em;
+            height: 450px;
             width: 100%;
+        }
+
+        .fixed-table-header {
+            overflow-x: auto;
+            clear:both;
         }
 
         #serverList .fixed-table-body-serverList {
@@ -51,22 +56,7 @@
             height: 10em;
             width: 100%;
         }
-
-        /*table tbody {*/
-            /*display:block;*/
-            /*height:30em;*/
-            /*width: 500px;*/
-            /*overflow-x: scroll;*/
-            /*overflow-y:scroll;*/
-        /*}*/
-        /*table thead, tbody tr {*/
-            /*display:table;*/
-            /*width:100%;*/
-            /*table-layout:fixed;*/
-        /*}*/
-        /*table thead {*/
-            /*width: calc( 100% - 1em )*/
-        /*}*/
+        
         table thead th{
             background:#275AB2;
         }
@@ -93,6 +83,11 @@
         .table th, .table td {
             text-align: center;
             vertical-align: middle !important;
+        }
+
+        th{
+            padding-left: 0px !important;
+            padding-right: 0px !important;
         }
 
         .search{
@@ -266,27 +261,36 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
+
+
                             <div >
-                                <table id="_table_user_search" class="table table-bordered" >
+                                <table id="_table_user_search" class="table table-bordered" data-toolbar="#toolbar">
                                     <thead>
                                     <tr>
-                                        <th data-field="id" data-formatter="_formatte_user_id" class="W30"style="border:none; " ></th>
+                                        <th data-field="id" data-formatter="_formatte_user_id" class="W30"style="border:none; " ><input id="doAllCheckBtn" type="checkbox" onclick="doallcheck(this)"></th>
                                         <th data-field="cameraName" data-formatter="_formatte_name" class="W150">摄像头名称</th>
                                         <th data-field="server.serverName" valign="middle" class="W150" style="border:none;" align="center">服务器名称</th>
+                                        <th data-field="cameraType" data-formatter="_formatte_cameraType" valign="middle" class="W150" style="border:none;" align="center">摄像头类型</th>
+                                        <th data-field="time1" valign="middle" class="W150" style="border:none;" align="center">识别间隔时间(秒)</th>
+                                        <th data-field="faceWidth" valign="middle" class="W150" style="border:none;" align="center">识别脸部像素宽度下限</th>
                                         <th data-field="entranceGuardNO" class="W150" style="border:none;white-space:nowrap;" align="center">门禁编号</th>
                                         <th data-field="entranceGuard" data-formatter="_formatted_select" class="W150" style="border:none;white-space:nowrap;" align="center">是否门禁摄像头</th>
-                                        <th data-field="entranceGuardType" class="W150" style="border:none;white-space:nowrap;" align="center">门禁类型</th>
+                                        <th data-field="entranceGuardType" class="W150" style="border:none;white-space:nowrap;" data-formatter="_formatte_guard_type" align="center">门禁类型</th>
                                         <th data-field="rtspUrl" class="W280" data-formatter="_formatte_rtsp" style="border:none;" align="center">rtspURL地址</th>
                                         <th data-field="cameraXY" class="W150" style="border:none;white-space:nowrap;" align="center">地图坐标</th>
                                         <th data-field="updateDateString"  class="W150" style="border:none;white-space:nowrap;" align="center">修改时间</th>
                                     </tr>
                                     </thead>
                                 </table>
+
+                                <div id="toolbar">
+                                    <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
+                                    <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
+                                    <button class="btn btn-danger delete-employee-dialog">删除</button>
+                                </div>
                             </div>
 
-                            <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
-                            <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
-                            <button class="btn btn-danger delete-employee-dialog">删除</button>
+
 
                         </div>
                     </div>
@@ -325,6 +329,34 @@
                         <label for="rtspUrl" class="col-sm-4 control-label">rtspUrl地址</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" id="rtspUrl" name="rtspUrl" maxlength="200" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time1" class="col-sm-4 control-label">识别间隔时间(秒)</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="time1" name="rtspUrl" maxlength="200" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entranceGuard" class="col-sm-4 control-label">摄像头类型</label>
+                        <div class="col-sm-7">
+                            <select id="cameraType" name="entranceGuard" class="form-control" required="required">
+                                <option value="1">半球</option>
+                                <option value="2">枪机</option>
+                                <option value="3">球机</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="faceWidth" class="col-sm-4 control-label">识别脸部像素宽度下限</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="faceWidth" name="entranceGuardNO" maxlength="30" />
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
@@ -460,6 +492,9 @@
 <!-- Custom Js -->
 <script>
     $(document).ready(function() {
+        $(document.body).css("overflow-y","hidden");
+
+
         /*bootstrap table*/
         $.ajax({
             type: "get",
@@ -494,6 +529,7 @@
             method: 'get',
             url: "/console/camera_management/search",
             striped: true,
+            height:300,
             dataType: "json",
             pagination: true,
             queryParamsType: "limit",
@@ -522,47 +558,68 @@
             responseHandler: function(res) {
                 console.log(res);
 
+                $("#doAllCheckBtn").checked != $("#doAllCheckBtn").checked;
+
+                doallcheck();
+
                 return {
                     "rows": res.rows,
                     "total": res.total
                 };
-            }
-
-        });
-
-        $.ajax({
-            type: "get",
-            timeout : timeout_network,
-            url: "/console/user_management/getAdminInfo",
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
-
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-
             },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
+            onPostHeader : function(){
+                adjustTableHeight();//custom-script
             }
+
         });
+
+        // $.ajax({
+        //     type: "get",
+        //     timeout : timeout_network,
+        //     url: "/console/user_management/getAdminInfo",
+        //     dataType:"json",
+        //     success : function(json) {
+        //         switch (json.status){
+        //             case "SUCCEED" :
+        //                 $("#adminName").append(json.adminName);
+        //                 $("#adminEmail").append(json.adminEmail);
+        //                 console.log("管理员姓名 ： "+json.adminName);
+        //                 console.log("管理员邮箱 ： "+json.adminEmail);
+
+        //                 break;
+        //             case "FAILED" :
+        //                 $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+
+        //                 if(json.message != undefined){
+        //                     $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
+        //                 }
+
+        //                 $("#dialog-return").modal("show");
+
+        //                 break;
+        //         }
+
+
+        //     },
+        //     error : function () {
+        //         $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+        //         $("#dialog-return").modal("show");
+        //     }
+        // });
+
+        // var table_body_height_margin_bottom = $(window).height() - $(".fixed-table-body").height();
+        // console.log("高度差："+ table_body_height_margin_bottom );
+        // console.log("屏幕大小："+ $(window).height() );
+        // console.log("table高："+ $(".fixed-table-body").height()) ;
+
+        // if(table_body_height_margin_bottom > 350){
+        //     $(".fixed-table-body").height( $(".fixed-table-body").height() + (table_body_height_margin_bottom-350) );
+        // } else {
+        //     $(".fixed-table-body").height( $(".fixed-table-body").height() - (table_body_height_margin_bottom-350) );
+
+        // }
+
+        // console.log("调整后高度："+$(".fixed-table-body").height());
 
     });
 
@@ -600,7 +657,23 @@
     $(window).on('resize', function () {
         if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
         else $('#sidebar-collapse').collapse('hide');
+
+        //判断是否有滚动条
+        if(document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight)){
+            $(".fixed-table-header").attr("margin-right","17px");
+        } else {
+            $(".fixed-table-header").attr("margin-right","0px");
+        }
     });
+
+    function doallcheck(e){
+        console.log()
+
+        var list = $("input[name='camera_id']");
+        for(i in list){
+            list[i].checked = !list[i].checked;
+        }
+    }
 
     function _formatte_user_id(value, row, index) {
         if(index == 0){
@@ -622,15 +695,63 @@
         }
     }
 
+    function _formatte_cameraType(value,row,index){
+        if (value != undefined) {
+
+            switch($.trim(value)){
+                case $.trim(1) :
+                    return "半球"
+
+                    break;
+                case $.trim(2) :
+                    return "枪机"
+
+                    break;
+                case $.trim(3) :
+                    return "球机"
+
+                    break;
+            }
+        } else {
+            return "-";
+        }
+    }
+
+     function _formatte_guard_type(value,row,index){
+        if (value != undefined) {
+
+            switch($.trim(value)){
+                case $.trim("in") :
+                    return "入口"
+
+                    break;
+                case $.trim("out") :
+                    return "出口"
+
+                    break;
+                case $.trim("inout") :
+                    return "出入口"
+
+                    break;
+                case $.trim("") :
+                    return "其他"
+
+                    break;
+            }
+        } else {
+            return "-";
+        }
+    }
+
     function _formatted_select(value, row, index) {
         return $.trim(value) ==$.trim('true') ? "是":"否" ;
     }
 
     var host = window.location.host;
     function _formatte_rtsp(value,row,index){
-        if (value != undefined) {
-            return '<a href="openIE:http://'+host+'/RTSP/?rtspUrl=' + value +'">' + value + '</a>';
-        }
+        url = value.replace(/&/,'~');
+
+        return '<a href="openIE:http://'+host+'/RTSP/?rtspUrl=' + url +'">' + value + '</a>';
     }
 
     function _reset(from) {
@@ -758,6 +879,9 @@
                 $("#dialog-camera-management-update").find("input[id='rtspUrl']").attr("readOnly","readOnly");
 
                 $("#dialog-camera-management-update").find("input[id='entranceGuardNO']").val(r.entranceGuardNO);
+                $("#dialog-camera-management-update").find("input[id='time1']").val(r.time1);
+                $("#dialog-camera-management-update").find("input[id='cameraType']").val(_formatte_cameraType(r.cameraType,0,0));
+                $("#dialog-camera-management-update").find("input[id='faceWidth']").val(r.faceWidth);
                 $("#dialog-camera-management-update").find("input[id='cameraXY']").val(r.cameraXY);
                 $("#dialog-camera-management-update").find("select[id='entranceGuard']").val(r.entranceGuard ? "true" : "false");
 
@@ -796,6 +920,14 @@
             _set($("input[id='rtspUrl']"), "请输入有效地址");
             isComplete = false;
         }
+        if($("input[id='time1']").val() == ""){
+            _set($("input[id='time1']"), "请间隔时间");
+            isComplete = false;
+        }
+        if($("input[id='faceWidth']").val() == ""){
+            _set($("input[id='faceWidth']"), "识别脸部像素宽度下限");
+            isComplete = false;
+        }
         if($("input[id='server']").val() == ""){
             _set($("input[id='server']"), "请选择摄像头");
             isComplete = false;
@@ -821,6 +953,24 @@
                 isFormatted = false;
 
                 _set($("input[id='cameraName']"), "请输入包含中文，英文，数字和-的名字");
+            }
+
+            if( !isName( $("input[id='cameraName']").val() ) ){
+                isFormatted = false;
+
+                _set($("input[id='cameraName']"), "请输入包含中文，英文，数字和-的名字");
+            }
+
+            if( !isNumber( $("input[id='time1']").val() ) ){
+                isFormatted = false;
+
+                _set($("input[id='time1']"), "请输入数字");
+            }
+
+            if( !isNumber( $("input[id='faceWidth']").val() ) ){
+                isFormatted = false;
+
+                _set($("input[id='faceWidth']"), "请输入数字");
             }
 
             if( !isLocation( $("input[id='cameraXY']").val() ) ){
@@ -854,6 +1004,10 @@
                         data.append("server", $("input[name='serverID']:checked").val());
                     }
 
+                    data.append("entranceGuard", $("select[id='entranceGuard']").val());
+                    data.append("time1", $("input[id='time1']").val());
+                    data.append("faceWidth", $("input[id='faceWidth']").val());
+                    data.append("cameraType", $("select[id='cameraType']").val());
                     data.append("entranceGuard", $("select[id='entranceGuard']").val());
                     data.append("entranceGuardNO", $("input[id='entranceGuardNO']").val());
                     data.append("entranceGuardType", $("#entranceGuardType").val());
@@ -925,6 +1079,13 @@
             }
         }
     });
+
+    function isNumber(val) {
+        var reg = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字 //判断正整数 /^[1-9]+[0-9]*]*$/
+
+        return reg.test(val);
+
+    }
 
     function isLocation(val){
         var reg = /[0-9]{0,1}[0-9]{0,1}[0-9]{0,1},[0-9]{0,1}[0-9]{0,1}[0-9]{0,1}/ ;

@@ -20,7 +20,7 @@
     <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
 
     <link href="/style/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
-    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="style/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> -->
 
     <link href="/style/font-awesome.css" rel="stylesheet"/>
 
@@ -47,14 +47,53 @@
     <script src="/javascript/tableExport.js"></script>
     <script src="/javascript/bootstrap-table-export.js"></script>
 
-    <script src="/javascript/bootstrap-datetimepicker.js"></script>
-    <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
+    <!--datetimepicker-->
+    <script src="/javascript/jquery-ui-timepicker-addon.js"></script>
+    <link href="/style/jquery-ui.css" rel="stylesheet"/>
+    <link href="/style/jquery-ui-timepicker-addon.css" rel="stylesheet"/>
+
+    <script>
+        jQuery(function($){
+            $.datepicker.regional['zh-CN'] = {
+                clearText: '清除',
+                clearStatus: '清除已选日期',
+                closeText: '关闭',
+                closeStatus: '不改变当前选择',
+                prevText: '< 上月',
+                prevStatus: '显示上月',
+                prevBigText: '<<',
+                prevBigStatus: '显示上一年',
+                nextText: '下月>',
+                nextStatus: '显示下月',
+                nextBigText: '>>',
+                nextBigStatus: '显示下一年',
+                currentText: '今天',
+                currentStatus: '显示本月',
+                monthNames: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthNamesShort: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthStatus: '选择月份',
+                yearStatus: '选择年份',
+                weekHeader: '周',
+                weekStatus: '年内周次',
+                dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+                dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+                dayNamesMin: ['日','一','二','三','四','五','六'],
+                dayStatus: '设置 DD 为一周起始',
+                dateStatus: '选择 m月 d日, DD',
+                dateFormat: 'yy-mm-dd',
+                firstDay: 1,
+                initStatus: '请选择日期',
+                isRTL: false};
+            $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        });
+
+    </script>
 
     <style>
         .fixed-table-body {
             overflow-x: auto;
             overflow-y: scroll;
-            height: 35em;
+            height: 450px;
             width: 100%;
         }
 
@@ -83,8 +122,14 @@
         table thead th{
             background:#275AB2;
         }
+
         thead{
             color:#FFFFFF;
+        }
+
+        th{
+            padding-left: 0px !important;
+            padding-right: 0px !important;
         }
 
         .search{
@@ -353,7 +398,23 @@
     $(window).on('resize', function () {
         if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
         else $('#sidebar-collapse').collapse('hide');
+
+        //判断是否有滚动条
+        if(document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight)){
+            $(".fixed-table-header").attr("margin-right","17px");
+        } else {
+            $(".fixed-table-header").attr("margin-right","0px");
+        }
     });
+
+    function doallcheck(e){
+        var list = $("input[name='visitor_id']");
+
+        for(i in list){
+            list[i].checked = !list[i].checked;
+        }
+    }
+
     function _formatte_user_id(value, row, index) {
         return '<input name="id" type="radio" value="' + value + '" />';
     }
@@ -449,6 +510,8 @@
     var timeout_network = 3000;
 
     $(document).ready(function() {
+        $(document.body).css("overflow-y","hidden");
+
         //初始化table
         var date = new Date();
         var year = date.getFullYear();
@@ -495,6 +558,7 @@
             method: 'get',
             url: "/console/attendance_management/search",
             striped: true,
+            height:300,
             dataType: "json",
             pagination: true,
             queryParamsType: "limit",
@@ -533,24 +597,40 @@
             },
             responseHandler: function(res) {
                 console.log('row'+res.rows);
+
+                $("#doAllCheckBtn").checked != $("#doAllCheckBtn").checked;
+
+                doallcheck();
+
                 return {
                     "rows": res.rows,
                     "total": res.total
                 };
+            },
+
+            onPostHeader : function(){
+                adjustTableHeight();//custom-script
             }
         });
 
         //初始化日历
-        $('.form_date').datetimepicker({
-            format: "yyyy-m-d",
-            language:  'zh-CN',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
+        $( "#datepicker_start" ).datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            showButtonPanel: true,
+            showOn: "both",
+            buttonImageOnly: true,
+            buttonImage: "calendar.gif",
+            buttonText: "",
+        });
+        $( "#datepicker_end" ).datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            showButtonPanel: true,
+            showOn: "both",
+            buttonImageOnly: true,
+            buttonImage: "calendar.gif",
+            buttonText: "",
         });
         // $( "#datepicker_start" ).datepicker({
         //     dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
@@ -582,41 +662,7 @@
         //     （因为月份中已经包含“月”字，所以这里省略） */
         //     dateFormat : "yy-m-d"
         // });
-
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            timeout:timeout_network,
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
-
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-                
-
-            },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
-    })
+    });
     function getLastDay(year,month) {
         var new_year = year;    //取当前的年份
         var new_month = month++;//取下一个月的第一天，方便计算（最后一天不固定）

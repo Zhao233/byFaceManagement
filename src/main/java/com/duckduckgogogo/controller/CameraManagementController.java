@@ -23,11 +23,12 @@ public class CameraManagementController {
     @ResponseBody
     private Map<String,Object> addCamera(@RequestParam("cameraName") String cameraName, @RequestParam("rtspUrl") String rtspUrl,
                                          @RequestParam("server") int server, @RequestParam("entranceGuard") String entranceGuard,
-                                         @RequestParam("entranceGuardType") String entranceGuardType,@RequestParam("entranceGuardNO") String entranceGuardNO, @RequestParam("cameraXY") String cameraXY){
+                                         @RequestParam("entranceGuardType") String entranceGuardType,@RequestParam("entranceGuardNO") String entranceGuardNO, @RequestParam("cameraXY") String cameraXY,
+                                         @RequestParam("time1") int time1, @RequestParam("cameraType") int cameraType, @RequestParam("faceWidth") int faceWidth){
 
-        String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardType, entranceGuardNO, cameraXY);
+        String result = cameraService.addCamera(cameraName, rtspUrl, server, entranceGuard, entranceGuardType, entranceGuardNO, cameraXY, time1, cameraType, faceWidth);
         Map<String, Object> r = r = new HashMap<>();
-//        JSONObject
+//
 
 
         if(JSONHandler.isSuccess(result)){
@@ -81,10 +82,11 @@ public class CameraManagementController {
                                              @RequestParam("entranceGuardType") String entranceGuardType,
                                              @RequestParam("version") int version, @RequestParam("rtspUrl") String rtspUrl,
                                              @RequestParam("cameraXY") String cameraXY, @RequestParam("entranceGuardNO") String entranceGuardNO,
-                                             @RequestParam("id") int id, @RequestParam("cameraName") String cameraName){
+                                             @RequestParam("id") int id, @RequestParam("cameraName") String cameraName,
+                                             @RequestParam("time1") int time1, @RequestParam("cameraType") int cameraType, @RequestParam("faceWidth") int faceWidth){
         Map<String, Object> r = new HashMap<>();
 
-        String result = cameraService.updateCamera(id, version, cameraName, rtspUrl, server, entranceGuard,entranceGuardType, entranceGuardNO, cameraXY);
+        String result = cameraService.updateCamera(id, version, cameraName, rtspUrl, server, entranceGuard,entranceGuardType, entranceGuardNO, cameraXY, time1, cameraType, faceWidth);
 
         if(JSONHandler.isSuccess(result)){
             r.put("status", "SUCCEED");
@@ -143,6 +145,10 @@ public class CameraManagementController {
             r.put("entranceGuardNO",object.getString("entranceGuardNO"));
             r.put("cameraXY",object.getString("cameraXY"));
             r.put("entranceGuard",object.getString("entranceGuard"));
+            r.put("entranceGuardType",object.getString("entranceGuardType"));
+            r.put("time1", object.getString("time1"));
+            r.put("cameraType", object.getString("cameraType"));
+            r.put("faceWidth", object.getString("faceWidth"));
             r.put("version", object.getString("version"));
 
             r.put("status","SUCCEED");

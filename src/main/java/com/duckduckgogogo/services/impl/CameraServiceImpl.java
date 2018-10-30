@@ -19,7 +19,7 @@ import java.util.Map;
 public class CameraServiceImpl extends Info implements CameraService {
     @Override
     public String addCamera(String cameraName, String rtspUrl, int server, String entranceGuard,String entranceGuardType,
-                            String entranceGuardNO, String cameraXY) {
+                            String entranceGuardNO, String cameraXY, int time1,int cameraType, int faceWidth) {
         try {
             String url = "http://" + Info.serverIP + "/api/camera/add";
 
@@ -33,6 +33,9 @@ public class CameraServiceImpl extends Info implements CameraService {
             object.put("entranceGuardType",entranceGuardType);
             object.put("entranceGuardNO",entranceGuardNO);
             object.put("cameraXY",cameraXY);
+            object.put("time1",time1);
+            object.put("cameraType",cameraType);
+            object.put("faceWidth",faceWidth);
 
             rest.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
@@ -67,7 +70,8 @@ public class CameraServiceImpl extends Info implements CameraService {
 
     @Override
     public String updateCamera(int id, int version, String cameraName, String rtspUrl, int server,
-                               String entranceGuard, String entranceGuardType, String entranceGuardNO, String cameraXY) {
+                               String entranceGuard, String entranceGuardType, String entranceGuardNO, String cameraXY,
+                               int time1,int cameraType, int faceWidth) {
         try{
             String url = "http://" + Info.serverIP + "/api/camera/update";
 
@@ -79,6 +83,7 @@ public class CameraServiceImpl extends Info implements CameraService {
             param.add("server", server);
             param.add("entranceGuard", entranceGuard);
             param.add("entranceGuardNO", entranceGuardNO);
+            param.add("entranceGuardType", entranceGuardType);
             param.add("cameraXY", cameraXY);
             param.add("id", id);
             param.add("version", version);
@@ -91,11 +96,11 @@ public class CameraServiceImpl extends Info implements CameraService {
                     "\"rtspUrl\":\"" + rtspUrl + "\"," +
                     "\"cameraXY\":\""        + cameraXY + "\"," +
                     "\"entranceGuardNO\":\"" + entranceGuardNO + "\"," +
-                    "\"id\":\"" + id + "\"," +
-                    "\"cameraName\":\"" + cameraName + "\"}";
-
-
-
+                    "\"id\":" + id + "," +
+                    "\"cameraName\":\"" + cameraName + "\","+
+                    "\"time1\":" + time1 + "," +
+                    "\"faceWidth\":" + faceWidth + "," +
+                    "\"cameraType\":" + cameraType + "}" ;
 
             return rest.postForObject(url,request,String.class);
 

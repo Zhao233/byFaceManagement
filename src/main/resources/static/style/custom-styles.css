@@ -23,7 +23,7 @@ body {
     width: 100%;
     margin: 10px 20px 10px 0px;
     background: transparent; !important;
-    padding: 10px;
+    padding: 5px;
     /*min-height: 1200px;*/
 }
 
@@ -165,8 +165,7 @@ p {
    DASHBOARD STYLES    
 ------------------------------------------------*/
 .page-header {
-    padding-bottom: 9px;
-    margin: 10px 0 20px;
+    margin: 5px 0 5px;
     border-bottom: 1px solid transparent;
     text-align: left;
 }
@@ -550,7 +549,7 @@ footer p {
 }
 
 .fa.arrow:before {
-    content: "\f104" !important;
+    content: "\f104";
 }
 
 .active > a > .fa.arrow:before {
@@ -698,7 +697,7 @@ ul.dropdown-menu.dropdown-messages li a div {
 @media (min-width: 768px) {
     #page-wrapper {
         margin: 0 0 0 260px;
-        padding: 15px 30px;
+        padding: 5px 30px;
 
         /*min-height: 1200px;*/
 

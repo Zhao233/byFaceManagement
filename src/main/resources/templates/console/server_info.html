@@ -246,26 +246,13 @@
                 </div>
             </div>
             <!-- /. ROW  -->
-
             <!--main-->
             <div class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <!--<div  class="panel-heading">-->
-                                <!--<h3>-->
-                                    <!--<div id="choose">-->
-                                        <!--<label for="serverName_show">服务器名称：</label>-->
-                                        <!--<input type="text" id="serverName_show">-->
-
-                                        <!--&lt;!&ndash;<button class="btn btn-primary search_">搜索</button>&ndash;&gt;-->
-                                    <!--</div>-->
-                                <!--</h3>-->
-
-                            <!--</div>-->
-                            <br class="panel-body">
-
+                        
                             <table id="table_status" style="display: none" class="table table-striped table-bordered table-hover table-condensed">
                                 <thead>
                                 <tr>
@@ -319,6 +306,49 @@
                                     <th data-field="gpu.slice" data-formatter="_formatte_serverInfo_item_gpu" class="W100" style="border:none;">显卡使用率</th>
                                 </tr>
                                 </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                    <td>1</td>
+                                                    <td>1</td>
+                                                    <td>1</td>
+                                                    <td>1</td>
+                                                    <td>1</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                    </tr>
+                                </tbody>
                             </table>
                             </div>
                         </div>
@@ -421,8 +451,12 @@
         });
         $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
     }(window.jQuery);
+
     $(window).on('resize', function () {
-        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+
+        adjustTableHeight();
     })
 
     $(document).ready(function() {
@@ -473,10 +507,9 @@
                 showRefresh: true,
                 sidePagination: "server", //服务端请求
                 showHeader : true,
-                //sidePagination : 'server',//服务器端分页
                 pageNumber : 1,
                 pageList: [5, 10, 20, 50],//分页步进值
-                //search: true,//显示搜索框
+                search: true,//显示搜索框
                 clickToSelect: false,
                 queryParams: function (params) {
                     return {
@@ -490,6 +523,10 @@
                         "rows": res.rows,
                         "total": res.total
                     };
+                },
+                onPostHeader : function(){
+                    console.log("ddd");
+                    adjustTableHeight();//custom-script
                 }
             });
 
@@ -499,39 +536,11 @@
             showServerInfo();
         }
 
-
-
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            timeout : timeout_network,
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
-
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append(json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-            },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
+        // if( $(window).height() >= 807 ){
+        //     $(".panel-body").height( ( $(window).height()-807 ) + 600 );
+        // } else {
+        //     $(".panel-body").height( ( 600 - ( 807 - $(window).height() ) )  );
+        // }
 
     });
     

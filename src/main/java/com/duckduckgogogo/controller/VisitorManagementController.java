@@ -62,7 +62,8 @@ public class VisitorManagementController {
     public  Map<String,Object> add(MultipartHttpServletRequest request,
                                    @RequestParam(value = "personName") String personName,
                                    @RequestParam(value = "IDNumber") String IDNumber,
-                                   @RequestParam(value = "phoneNumber") String phoneNumber
+                                   @RequestParam(value = "phoneNumber") String phoneNumber,
+                                   @RequestParam(value = "title")  String title
     ){
         Map<String, Object> r = new HashMap<>();
 
@@ -98,7 +99,7 @@ public class VisitorManagementController {
             resource = new FileSystemResource(file);
         }
 
-        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber);
+        String response = visitorService.addVisitor(resource,personName,IDNumber,phoneNumber,title);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -125,6 +126,7 @@ public class VisitorManagementController {
                                       @RequestParam(value = "personName") String personName,
                                       @RequestParam(value = "IDNumber") String IDNumber,
                                       @RequestParam(value = "phoneNumber") String phoneNumber,
+                                      @RequestParam(value = "title") String title,
                                       @RequestParam(value = "version") int version){
 
         Map<String, Object> r = new HashMap<>();
@@ -162,7 +164,7 @@ public class VisitorManagementController {
             resource = new FileSystemResource(file);
         }
 
-        String response = visitorService.updateVisitor(resource,personID, personName,IDNumber,phoneNumber,version+1);
+        String response = visitorService.updateVisitor(resource,personID, personName, IDNumber, phoneNumber, title,version+1);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -201,6 +203,7 @@ public class VisitorManagementController {
             r.put("version",object.getString("version"));
             r.put("startDateString",object.getString("startDateString"));
             r.put("endDateString",object.getString("endDateString"));
+            r.put("title",object.getString("title"));
             r.put("feature",object.getString("feature"));
 
             r.put("status","SUCCEED");

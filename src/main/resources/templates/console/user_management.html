@@ -56,6 +56,11 @@
             width: 100%;
         }
 
+        .fixed-table-header {
+            overflow-x: auto;
+            clear:both;
+        }
+
         /*table tbody {*/
             /*display:block;*/
             /*height:30em;*/
@@ -90,6 +95,12 @@
             text-align: center;
             vertical-align: middle !important;
         }
+
+        th{
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
         .search{
             padding-bottom: 1em;
         }
@@ -260,12 +271,15 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body">
+
+
+
                             <div class="table-responsive">
 
-                                <table id="_table_user_search" class="table table-striped table-bordered table-hover">
+                                <table id="_table_user_search" class="table table-striped table-bordered table-hover" data-toolbar="#toolbar">
                                     <thead>
                                     <tr>
-                                        <th data-field="id" class="W30" data-formatter="_formatte_user_id" data-align="center"></th>
+                                        <th data-field="id" class="W30" data-formatter="_formatte_user_id" data-align="center"><input id="doAllCheckBtn" type="checkbox" onclick="doallcheck(this)"></th>
                                         <th data-field="username" class="W100">用户名</th>
                                         <th data-field="firstName" class="W100">姓</th>
                                         <th data-field="lastName" class="W100">名</th>
@@ -274,12 +288,16 @@
                                         <th data-field="enabled" class="W100" data-formatter="_formatted_select">是否启用</th>
                                     </tr>
                                     </thead>
+
+                                    <div id="toolbar">
+                                        <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
+                                        <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
+                                        <button class="btn btn-danger delete-employee-dialog">删除</button>
+                                    </div>
                                 </table>
                             </div>
 
-                            <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">新增</button>
-                            <button class="btn btn-success open-update-use-dialog" data-toggle="modal">修改</button>
-                            <button class="btn btn-danger delete-employee-dialog">删除</button>
+
 
                         </div>
                     </div>
@@ -290,7 +308,7 @@
         </div>
     </div>
     <!-- /. PAGE INNER  -->
-</div>
+</div>y
 
 <!--//弹出框-->
 <div id="dialog-user-management-update" class="modal fade" tabindex="-1" role="dialog">
@@ -424,6 +442,8 @@
 <!-- Custom Js -->
 <script>
     $(document).ready(function() {
+        $(document.body).css("overflow-y","hidden");
+
         $.ajax({
             type: "get",
             dataType:"json",
@@ -480,6 +500,7 @@
             method: 'get',
             url: "/console/user_management/search",
             striped: true,
+            height:300,
             dataType: "json",
             pagination: true,
             queryParamsType: "limit",
@@ -506,40 +527,48 @@
                 };
             },
             responseHandler: function(res) {
+                $("#doAllCheckBtn").checked != $("#doAllCheckBtn").checked;
+
+                doallcheck();
+
                 return {
                     "rows": res.rows,
                     "total": res.total
                 };
             },
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
-
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-
-            },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
+            onPostHeader : function(){
+                adjustTableHeight();//custom-script
             }
         });
+        // $.ajax({
+        //     type: "get",
+        //     url: "/console/user_management/getAdminInfo",
+        //     dataType:"json",
+        //     success : function(json) {
+        //         switch (json.status){
+        //             case "SUCCEED" :
+        //                 $("#adminName").append(json.adminName);
+        //                 $("#adminEmail").append(json.adminEmail);
+        //                 console.log("管理员姓名 ： "+json.adminName);
+        //                 console.log("管理员邮箱 ： "+json.adminEmail);
+
+        //                 break;
+        //             case "FAILED" :
+        //                 $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+        //                 $("#dialog-return").modal("show");
+
+        //                 break;
+        //         }
+
+
+        //     },
+        //     error : function () {
+        //         $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+        //         $("#dialog-return").modal("show");
+        //     }
+        // });
+
+        
     });
 </script>
 
@@ -558,7 +587,22 @@
     $(window).on('resize', function () {
         if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
         else $('#sidebar-collapse').collapse('hide');
+
+        //判断是否有滚动条
+        if(document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight)){
+            $(".fixed-table-header").attr("margin-right","17px");
+        } else {
+            $(".fixed-table-header").attr("margin-right","0px");
+        }
     });
+
+    function doallcheck(e){
+        var list = $("input[name='user_id']");
+
+        for(i in list){
+            list[i].checked = !list[i].checked;
+        }
+    }
 
     function _formatte_user_id(value, row, index) {
         if(index == 0){
@@ -956,11 +1000,6 @@
     });
 
 
-</script>
-
-
-<script>
-    console.log("this script has been launched");
 </script>
 
 </body>

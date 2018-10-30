@@ -40,7 +40,7 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
     }
 
     @Override
-    public String addEmployee(FileSystemResource image, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber) {
+    public String addEmployee(FileSystemResource image, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber, String department) {
         try{
 
             String url = "http://" + Info.serverIP + "/api/face/add";
@@ -53,6 +53,7 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             object.put("cardNumber",cardNumber);
             object.put("IDNumber",IDNumber);
             object.put("phoneNumber",phoneNumber);
+            object.put("department",department);
             object.put("role","staff");
 
             if(image == null){
@@ -71,7 +72,7 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
     }
 
     @Override
-    public String updateEmployee(FileSystemResource resource, int personID, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber, int version) {
+    public String updateEmployee(FileSystemResource resource, int personID, String personName, String personNumber, String cardNumber, String IDNumber, String phoneNumber, String department, int version) {
         try{
             String url = "http://" + Info.serverIP + "/api/face/update";
 
@@ -85,6 +86,7 @@ public class EmployeeServiceImp extends Info implements EmployeeService {
             object.put("cardNumber", cardNumber);
             object.put("IDNumber", IDNumber);
             object.put("phoneNumber", phoneNumber);
+            object.put("department", department);
             object.put("version", version);
 
             if(resource == null){

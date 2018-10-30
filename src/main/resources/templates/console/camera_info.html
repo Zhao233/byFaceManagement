@@ -42,6 +42,46 @@
     <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
 
 
+    <script>
+        jQuery(function($){
+            $.datepicker.regional['zh-CN'] = {
+                clearText: '清除',
+                clearStatus: '清除已选日期',
+                closeText: '关闭',
+                closeStatus: '不改变当前选择',
+                prevText: '< 上月',
+                prevStatus: '显示上月',
+                prevBigText: '<<',
+                prevBigStatus: '显示上一年',
+                nextText: '下月>',
+                nextStatus: '显示下月',
+                nextBigText: '>>',
+                nextBigStatus: '显示下一年',
+                currentText: '今天',
+                currentStatus: '显示本月',
+                monthNames: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthNamesShort: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthStatus: '选择月份',
+                yearStatus: '选择年份',
+                weekHeader: '周',
+                weekStatus: '年内周次',
+                dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+                dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+                dayNamesMin: ['日','一','二','三','四','五','六'],
+                dayStatus: '设置 DD 为一周起始',
+                dateStatus: '选择 m月 d日, DD',
+                dateFormat: 'yy-mm-dd',
+                firstDay: 1,
+                initStatus: '请选择日期',
+                isRTL: false};
+            $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        });
+    </script>
+    <!--editable select-->
+    <!-- <script src="javascript/jquery-editable-select.js"></script>
+    <link href="style/jquery-editable-select.css" rel="stylesheet"/> -->
+
+
     <style>
         .fixed-table-body {
             overflow-x: auto;
@@ -86,6 +126,37 @@
             padding-bottom: 1em;
         }
 
+        .person_info{
+            position: absolute;
+            top: 20px;
+            left: 0px;
+        }
+
+        .div_allinline{
+            text-align:center;
+            margin:0 auto;
+            padding:0;
+            clear:both;
+        }
+
+        .info_detail{
+            margin:5px;
+            padding:0;
+            display:inline-block;
+            float: none;
+        }
+
+        label{
+            margin-bottom: 0px;
+        }
+
+        .info_hide{
+
+        }
+
+        .hide{
+            display: none;
+        }
 
         .W180{width:180px;}
         .W150{width:150px;}
@@ -255,14 +326,13 @@
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
-                            <div  class="panel-heading">
+                            <div  class="panel-heading" >
                                 <div class="form-inline">
 
                                     <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
                                         <lable for="cameraName">摄像头名称：</lable>
-                                        <input type="text" class="form-control" id="cameraName" readonly>
+                                        <select type="text" class="form-control" id="cameraName"></select>
                                     </div>
-
 
 
                                     <div class="form-group" style="margin-bottom: 8px; margin-left: 1em;">
@@ -289,18 +359,17 @@
 
                                 <div class="canvas-wrapper form-group" style="margin-top: 5px;margin-left: 15px;">
                                     <div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px">
-                                        <canvas  id="line-chart" style="padding-right: 0px; min-height: 200px;width: 100%;"></canvas>
+                                        <canvas  id="line-chart" style="height:270px !important; padding-left: 18%; padding-right: 18%; width: 100%;"></canvas>
                                     </div>
                                     <br>
 
                                     <div class="row" style="margin-left: 15px;margin-right:15px">
-                                        <h2>
+                                        <h2 style="margin-bottom: 10px;padding-left: 20%;">
                                             详情：
                                         </h2>
 
-                                        <div class="col-md-2 col-sm-0"></div>
-                                        <div class="col-md-8 col-sm-12 row" id="personInfo" style="padding-left: 5px;padding-right: 5px; overflow-y: scroll; max-height: 15em !important;"></div>
-                                        <div class="col-md-2 col-sm-0"></div>
+                                        <div class="col-md-12 col-sm-12 div_allinline" id="personInfo" style="padding-left: 20%;padding-right: 20%;  margin: 0 auto"></div>
+
                                     </div>
                                 </div>
 
@@ -393,6 +462,8 @@
 </div><!-- /.modal -->
 
 <script>
+    var ratio = window.innerHeight/400;
+
     var timeout_network = 3000;
 
     var ischoosedCamera = false;
@@ -424,7 +495,10 @@
         $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
     }(window.jQuery);
     $(window).on('resize', function () {
-        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+
+
     })
 
     $(document).ready(function() {
@@ -444,6 +518,13 @@
                 $(".fixed-table-body").css("height","30em");
             }
         });
+
+        //修改canvas 边距
+        if(isCellPhone){
+            $("#line-chart").css("padding-left","10%");
+            $("#line-chart").css("padding-right","10%");
+        }
+
 
         $.ajax({
             type: "get",
@@ -473,17 +554,7 @@
         })
 
         //初始化日历
-        $('.form_date').datetimepicker({
-            format: "yyyy-m-d",
-            language:  'zh-CN',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
-        });
+        $('#datepicker').datepicker();
 
         // $( "#datepicker" ).datepicker({
         //     dayNamesMin : ["日", "一", "二", "三", "四", "五", "六"],
@@ -541,39 +612,7 @@
 
         });
 
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            timeout : 300,
-            dataType: "json",
-            success: function (json) {
-                switch (json.status) {
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： " + json.adminName);
-                        console.log("管理员邮箱 ： " + json.adminEmail);
 
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-
-            },
-            error: function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
 
         $("#datepicker").val(date);
 
@@ -581,7 +620,7 @@
 
         if(id==undefined){
             ischoosedCamera = false;
-            $("#dialog-user-management-update").modal("show");
+            //$("#dialog-user-management-update").modal("show");
         } else {
             ischoosedCamera = true;
         }
@@ -599,41 +638,69 @@
 
             refreshChartAndTable(data);
 
-            $.ajax({
-                type: "get",
-                timeout:300,
-                url: "/console/user_management/getAdminInfo",
-                dataType: "json",
-                success: function (json) {
-                    switch (json.status) {
-                        case "SUCCEED" :
-                            $("#adminName").append(json.adminName);
-                            $("#adminEmail").append(json.adminEmail);
-                            console.log("管理员姓名 ： " + json.adminName);
-                            console.log("管理员邮箱 ： " + json.adminEmail);
 
-                            break;
-                        case "FAILED" :
-                            $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                            if(json.message != undefined){
-                                $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
-                            }
-
-                            $("#dialog-return").modal("show");
-
-                            break;
-                    }
-
-
-                },
-                error: function () {
-                    $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                    $("#dialog-return").modal("show");
-                }
-            });
         }
+
+        $.ajax({
+            type : "get",
+            dataType : "json",
+            async: false,
+            url : "/console/camera_management/search",
+
+            success : function (r) {
+                switch (r.status){
+                    case "SUCCEED" :
+                        createOptions(r.rows);
+
+                        break;
+                    case "FAILED" :
+                        $("#dialog-return").find(".modal-body").html("网络错误");
+
+                        if(r.errorMessage != undefined){
+                            $("#dialog-return").find(".modal-body").append("\n原因:"+r.errorMessage);
+                        }
+
+                        $("#dialog-return").modal("show");
+
+                        break;
+                }
+            },
+            error : function (r) {
+            }
+        });
+
+        //初始化输入框
+        //$('#cameraName').editableSelect();
+
+        //默认搜索一楼电梯
+        var option = $("ul").find("li[value$=39]");
+
+        if( option.length != 0){
+            option.addClass("focused");
+
+            $("#cameraName").val(option.text());
+        }
+
+        $(".searchData").click();
     });
+
+    //动态div框的信息显示与清除
+    $(document).on("mouseover",".info_detail", function () {
+        $(this).find(".info_hide").removeClass("hide");
+        console.log("in");
+    });
+    $(document).on("mouseout", ".info_detail", function(){
+        $(this).find(".info_hide").addClass("hide");
+        console.log("out");
+    });
+
+    function createOptions(rows){
+        for(i in rows){
+            var option = '<option value='+rows[i].id+'>'+rows[i].cameraName+'</option>';
+
+            $("#cameraName").append(option);
+        }
+    }
 
     function getCameraNameById(id){
         $.ajax({
@@ -681,6 +748,8 @@
             var rank_data = r.data.rankData;
 
             if(rank_data.length == 0){
+                $(".searchResult").empty();
+
                 $(".searchResult").append("未查询到数据");
             } else {
                 $(".searchResult").empty();
@@ -690,7 +759,6 @@
 
             //设置标题信息
 
-            $("#cameraName").val(r.data.cameraName+": ");
             $("#datepicker").val(data.date);
 
             $("#personInfo").empty();
@@ -713,10 +781,15 @@
                 //     "<label>出现次数: "+content.times+"</label><br>" +
                 //     "</div>" +
                 //     "</div>");
+                var personnumber = content.personnumber
+                var sign = 0;
 
-                $("#personInfo").append( createPersonInfo(content.feature, parseInt(i)+1, content.personname, content.personnumber, content.times) )
+                if(content.personname == "Visitor"){
+                    personnumber = content.personid;
+                    sign = 1;
+                }
 
-
+                $("#personInfo").append( createPersonInfo(content.feature, parseInt(i)+1, content.personname, personnumber, content.times, sign) )
             }
 
             //lineChartData.datasets[0].data = chart_data;
@@ -735,19 +808,40 @@
         $.ajaxSettings.async = true;
     }
 
+    function createPersonInfo(picUrl, rank, name, personNumber, times, sign){
+        if(sign == 0){
+            return "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-6 info_detail\" tabindex=\"0\" style=\"position:relative;width:10em;padding-left:0;padding-right:0;\"> " +
+                "<img src=\""+picUrl+"\" style=\"width:10em;\"/>" +
 
-    function createPersonInfo(picUrl, rank, name, personNumber, times){
-        return "<div class=\"col-md-6 col-lg-6 col-xs-12 col-sm-12 panel-body\" style=\"padding-left: 3px; \">" +
-            "    <div align='right' style='padding-right: 0px;width: 50%; float:left;box-sizing: border-box; width: 40%'>" +
-            "            <img src=\""+picUrl+"\" class='img-responsive' style='height: 10em; vertical-align: middle; '>" +
-            "    </div>" +
-            "    <div style='padding-left: 0px;width: 50%; float:left;box-sizing: border-box; width: 60%; padding-left: 5px'>" +
-            "        <label>排行: "+rank+"</label><br/>" +
-            "        <label>姓名: "+name+"</label><br/>" +
-            "        <label>编号: "+personNumber+"</label><br/>" +
-            "        <label>出现次数: "+times+"</label><br/>" +
-            "    </div>" +
-            "</div>"
+                "<div style=\"position:absolute; left:0; top:0;height:100%; width : 10em; background:#050404; opacity:0.5\"></div>"+
+
+                "<div style=\"position:absolute;left:0;bottom:0;width:100%\">"+
+                "<label class=\"info_hide hide\" style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">排行: "+rank+"</label>"+
+                "<label class=\"info_hide hide\" style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">编号: "+personNumber+"</label>"+
+                "<label style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">姓名: "+name+"</label>"+
+                "<label style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">出现次数: "+times+"</label>"+
+                "</div>"+
+
+                "</div>";
+
+        } else {
+            return "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-6 info_detail\" tabindex=\"0\" style=\"position:relative;width:10em;padding-left:0;padding-right:0;\"> " +
+                "<img src=\""+picUrl+"\" style=\"width:10em;\"/>" +
+
+                "<div style=\"position:absolute; left:0; top:0;height:100%; width : 10em; background:#050404; opacity:0.5\"></div>"+
+
+                "<div style=\"position:absolute;left:0;bottom:0;width:100%\">"+
+                "<label class=\"info_hide hide\" style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">排行: "+rank+"</label>"+
+                "<label class=\"info_hide hide\" style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">编号: "+personNumber+"</label>"+
+                "<label style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">"+name+"</label>"+
+                "<label style=\"font-size:12px; color:#ffffff;text-align:center;width: 100%;\">出现次数: "+times+"</label>"+
+                "</div>"+
+
+                "</div>";
+
+        }
+
+
     }
 
     function getUrlParam(name) {
@@ -759,10 +853,13 @@
     function displayLineChart() {
         var ctx = document.getElementById("line-chart").getContext("2d");
         var options = {
-            response:true
+            responsive:true,
+            showTooltips: false
         };
         var lineChart = new Chart(ctx).Line(data_chart, options);
     }
+
+    document.getElementById("line-chart").addEventListener("mousemove",function (ev) {  })
 
     function _formatte_camera_id(value, row, index) {
         return '<input id="cameraID" name="cameraId" type="radio" value="' + value + '" />';
@@ -784,6 +881,8 @@
 
     $(".searchData").click(function () {
         var date = $("#datepicker").val();
+        //var id_select = $("ul").find("li[class$=focused]")[0];
+        var id_select = $("#cameraName").val();
 
         if(date == ""){
             $("#dialog-return").find(".modal-body").html("请选择日期");
@@ -791,22 +890,24 @@
             return ;
         }
 
-        if(id == undefined){
+        if(id_select == undefined){
             $("#dialog-return").find(".modal-body").html("请选择摄像头");
             $("#dialog-return").modal("show");
             return ;
         }
 
-        var date = $( "#datepicker" ).val();
-
         console.log("choosed date : "+ date);
 
         var new_data = {
-            "cameraID": id,
+            "cameraID": id_select,
             "date": date
         }
 
         refreshChartAndTable(new_data);
+
+        //去除点击之后cameraName后面的冒号
+        //var cameraName = $("#cameraName").val();
+        //$("#cameraName").val( cameraName.substr(0,cameraName.length - 2) );
     });
 
     $(".btn.btn-primary.add-new-user").click(function () {
@@ -833,11 +934,15 @@
 
         refreshChartAndTable(data);
 
-    })
+    });
 
-    $("#cameraName").focus(function () {
-        $("#dialog-user-management-update").modal("show");
-    })
+
+
+    $(window).resize( function () {
+        $("#line-chart").height((window.innerHeight/ratio));
+
+        console.log($("#line-chart").height());
+    } );
 </script>
 
 </body>

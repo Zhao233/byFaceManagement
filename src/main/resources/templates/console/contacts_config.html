@@ -19,7 +19,7 @@
     <link href="/javascript/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
     <link href="http://www.bootcss.com/p/buttons/css/buttons.css" rel="stylesheet"/>
 
-    <link href="/style/font-awesome.css" rel="stylesheet"/>
+    <link href="style/font-awesome.css" rel="stylesheet"/>
 
     <!-- it's about file upload box -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -109,43 +109,16 @@
 
             },
             error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+                $("#dialog-return").find(".modal-body").html("获取配置信息失败---网络错误");
                 $("#dialog-return").modal("show");
             }
         });
-
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            timeout : timeout_network,
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
-
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append("\n原因:"+json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-            },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
+        
+        if( $(window).height() >= 807 ){
+            $(".panel-body").height( ( $(window).height()-807 ) + 600 );
+        } else {
+            $(".panel-body").height( ( 600 - ( 807 - $(window).height() ) )  );
+        }
     });
 </script>
 <div id="wrapper">
@@ -319,8 +292,50 @@
                                         <div class="col-sm-4"></div>
                                     </div>
 
-                                    <button type="button" class="btn btn-primary form-profile-save pull-left" style="margin-left: 100px">保存</button>
+                                    <div class="form-group">
+                                        <label for="showTimes_day" class="col-sm-3 control-label">一天内出现次数告警阈值</label>
+                                        <div class="col-sm-5">
+                                            <input type="number" class="form-control" id="showTimes_day" name="showTimes_day" maxlength="30" required="required" value="4"/>
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label for="showTimes_guard" class="col-sm-3 control-label">门禁停留时间告警阈值</label>
+                                        <div class="col-sm-5">
+                                            <input type="number" class="form-control" id="showTimes_guard" name="showTimes_guard" maxlength="30" required="required" value="3"/>
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="showTimes_guard_min" class="col-sm-3 control-label">门禁一分钟内出现人次告警阈值</label>
+                                        <div class="col-sm-5">
+                                            <input type="number" class="form-control" id="showTimes_guard_min" name="showTimes_guard_min" maxlength="30" required="required" value="5"/>
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label  class="col-sm-3 control-label">夜间监控时段</label>
+                                        <div class="col-sm-5">
+                                            <div style="display: inline-flex;width: 100%;">
+                                                <input class="form-control" id="watchtime_night_start" name="watchtime_night_start" maxlength="30" style="width: 50%"  required="required" value="00:00" />
+                                                <lable class="control-label">至</lable>
+                                                <input class="form-control" id="watchtime_night_end" name="watchtime_night_end" maxlength="30" style="width: 50%" required="required" value="06:00"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-5">
+                                            <button type="button" class="btn btn-primary form-profile-save">保存</button>
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
                                     <!--<div class="form-group">-->
                                         <!--<div class="col-md-12 widget-center">-->
                                             <!--<button type="button" class="btn btn-primary form-profile-save pull-left">保存</button>-->
@@ -416,6 +431,12 @@
     $(window).on('resize', function () {
         if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
         else $('#sidebar-collapse').collapse('hide');
+
+        if( $(window).height() >= 807 ){
+            $(".panel-body").height( ( $(window).height()-807 ) + 600 );
+        } else {
+            $(".panel-body").height( ( 600 - ( 807 - $(window).height() ) )  );
+        }
     });
 
     function _reset_input(input) {

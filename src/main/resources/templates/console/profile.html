@@ -266,7 +266,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
-                        <div class="panel-body">
+                        <div class="panel-body" style="min-height: 45em">
                             <div class="panel-heading">
                             </div>
                             <form class="form-horizontal form-profile-save" method="post">
@@ -317,10 +317,17 @@
                                     <div class="col-sm-4"></div>
                                 </div>
 
+                                <div class="form-group">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-5">
+                                        <button class=" btn btn-primary save">确认修改</button>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
 
                         </form>
 
-                            <button class="btn btn-primary save">确认修改</button>
+
                         </div>
                     </div>
                     <!--End Advanced Tables -->
@@ -406,9 +413,15 @@
             error : function (r) {
 
             }
-        })
+        });
 
-    })
+        if( $(window).height() >= 807 ){
+            $(".panel-body").height( ( $(window).height()-807 ) + 600 );
+        } else {
+            $(".panel-body").height( ( 600 - ( 807 - $(window).height() ) )  );
+        }
+
+    });
 
     function _set(el, message) {
         el.addClass("alert-danger");
@@ -426,6 +439,12 @@
     $(window).on('resize', function () {
         if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
         else $('#sidebar-collapse').collapse('hide');
+
+        if( $(window).height() >= 807 ){
+            $(".panel-body").height( ( $(window).height()-807 ) + 600 );
+        } else {
+            $(".panel-body").height( ( 600 - ( 807 - $(window).height() ) )  );
+        }
     });
 
     function _reset(from) {

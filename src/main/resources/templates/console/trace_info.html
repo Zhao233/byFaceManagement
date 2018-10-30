@@ -37,6 +37,42 @@
     <script src="/javascript/bootstrap-datetimepicker.js"></script>
     <script src="/javascript/bootstrap-datetimepicker.zh-CN.js"></script>
 
+    <script>
+        jQuery(function($){
+            $.datepicker.regional['zh-CN'] = {
+                clearText: '清除',
+                clearStatus: '清除已选日期',
+                closeText: '关闭',
+                closeStatus: '不改变当前选择',
+                prevText: '< 上月',
+                prevStatus: '显示上月',
+                prevBigText: '<<',
+                prevBigStatus: '显示上一年',
+                nextText: '下月>',
+                nextStatus: '显示下月',
+                nextBigText: '>>',
+                nextBigStatus: '显示下一年',
+                currentText: '今天',
+                currentStatus: '显示本月',
+                monthNames: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthNamesShort: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+                monthStatus: '选择月份',
+                yearStatus: '选择年份',
+                weekHeader: '周',
+                weekStatus: '年内周次',
+                dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+                dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+                dayNamesMin: ['日','一','二','三','四','五','六'],
+                dayStatus: '设置 DD 为一周起始',
+                dateStatus: '选择 m月 d日, DD',
+                dateFormat: 'yy-mm-dd',
+                firstDay: 1,
+                initStatus: '请选择日期',
+                isRTL: false};
+            $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        });
+    </script>
+
     <style>
         #canvas{
             border: 1px solid #ADACB0;
@@ -323,6 +359,12 @@
                         </div>
 
                             <script>
+                                var camera_enable = new Image();
+                                camera_enable.src = "/images/test_camera.png";
+
+                                var camera_disable = new Image();
+                                camera_disable.src = "/images/test_camera0.png";
+
                                 var personId = getUrlParam("id");
                                 var personType = getUrlParam("type");
 
@@ -557,28 +599,43 @@
 
                                 function drawCamera(cameraList_, context, isEnable) {
 
-                                    var camera = new Image();
+                                    // var camera = new Image();
+                                    //
+                                    // if (isEnable) {
+                                    //     camera.src = "/images/test_camera.png";
+                                    // } else {
+                                    //     camera.src = "/images/test_camera0.png";
+                                    // }
 
-                                    if (isEnable) {
-                                        camera.src = "/images/test_camera.png";
-                                    } else {
-                                        camera.src = "/images/test_camera0.png";
+                                    var camera = isEnable ? camera_enable : camera_disable;
+
+                                    var length = cameraList_.length;
+                                    for(var i = length - 1 ; i >= 0; i--){
+                                        var temp_camera = cameraList_[i];
+
+                                        var location;
+
+                                        location = temp_camera.cameraXY.split(",");//0: x, 1: y
+
+                                        console.log("camera location: "+(parseInt(location[0]) + offset_camera.x )+","+(parseInt(location[1]) + offset_camera.y));
+
+                                        context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
                                     }
 
-                                    camera.onload = function (ev) {
-                                        var length = cameraList_.length;
-                                        for(var i = length - 1 ; i >= 0; i--){
-                                            var temp_camera = cameraList_[i];
-
-                                            var location;
-
-                                            location = temp_camera.cameraXY.split(",");//0: x, 1: y
-
-                                            console.log("camera location: "+(parseInt(location[0]) + offset_camera.x )+","+(parseInt(location[1]) + offset_camera.y));
-
-                                            context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
-                                        }
-                                    }
+                                    // camera.onload = function (ev) {
+                                    //     var length = cameraList_.length;
+                                    //     for(var i = length - 1 ; i >= 0; i--){
+                                    //         var temp_camera = cameraList_[i];
+                                    //
+                                    //         var location;
+                                    //
+                                    //         location = temp_camera.cameraXY.split(",");//0: x, 1: y
+                                    //
+                                    //         console.log("camera location: "+(parseInt(location[0]) + offset_camera.x )+","+(parseInt(location[1]) + offset_camera.y));
+                                    //
+                                    //         context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
+                                    //     }
+                                    // }
                                 }
 
                                 function clearprofileImage(context){
@@ -721,7 +778,19 @@
 
                                     var date = new Date();
 
-                                    var toDayTime = date.getFullYear()+"-"+( parseInt(date.getMonth())+1 )+"-"+date.getDate();
+                                    var month = ( parseInt(date.getMonth())+1 );
+
+                                    if(month/10 < 1){
+                                        month = "0"+month;
+                                    }
+
+                                    var day = date.getDate();
+
+                                    if(day/10 < 1){
+                                        day = "0"+day;
+                                    }
+                
+                                    var toDayTime = date.getFullYear()+"-"+month+"-"+day;
 
                                     $("#datepicker_start").val(toDayTime);
                                     $("#datepicker_end").val(toDayTime);
@@ -729,7 +798,6 @@
                                     $("#searchType").val(personType);
 
                                     start_draw(personId,toDayTime, toDayTime);
-
                                 }
                                 
                                 function start_draw(id, startTime, endTime) {
@@ -976,18 +1044,10 @@
         //     "overflow-y":"hidden"
         // });
 
-        //初始化日历
-        $('.form_date').datetimepicker({
-            format: "yyyy-m-d",
-            language:  'zh-CN',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
-        });
+
+        $('#datepicker_start').datepicker();
+        $('#datepicker_end').datepicker();
+
 
         //手机端修改dialog的长度
         $("#dialog-select-person").on('show.bs.modal', function () {
@@ -1000,7 +1060,20 @@
 
         //获取时间
         var oDate = new Date();
-        var date = oDate.getFullYear() + '-'+ (parseInt(oDate.getMonth())+1) +'-'+oDate.getDate();
+
+        var month = ( parseInt(oDate.getMonth())+1 );
+
+        if(month/10 < 1){
+            month = "0"+month;
+        }
+
+        var day = oDate.getDate();
+
+        if(day/10 < 1){
+            day = "0"+day;
+        }
+        
+        var date = oDate.getFullYear() + '-'+ month +'-'+day;
 
         $("#datepicker_start").val(date);
         $("#datepicker_end").val(date);
@@ -1060,39 +1133,7 @@
             //$("#dialog-select-person").find("[input id= ]")
          });
 
-        $.ajax({
-            type: "get",
-            url: "/console/user_management/getAdminInfo",
-            timeout : timeout_network,
-            dataType:"json",
-            success : function(json) {
-                switch (json.status){
-                    case "SUCCEED" :
-                        $("#adminName").append(json.adminName);
-                        $("#adminEmail").append(json.adminEmail);
-                        console.log("管理员姓名 ： "+json.adminName);
-                        console.log("管理员邮箱 ： "+json.adminEmail);
 
-                        break;
-                    case "FAILED" :
-                        $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
-
-                        if(json.message != undefined){
-                            $("#dialog-return").find(".modal-body").append(json.message);
-                        }
-
-                        $("#dialog-return").modal("show");
-
-                        break;
-                }
-
-
-            },
-            error : function () {
-                $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
-                $("#dialog-return").modal("show");
-            }
-        });
     })
 
     $("#searchType").change(function () {

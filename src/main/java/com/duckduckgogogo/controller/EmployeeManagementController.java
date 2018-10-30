@@ -63,8 +63,9 @@ public class EmployeeManagementController {
                                    @RequestParam(value = "personNumber") String personNumber,
                                    @RequestParam(value = "cardNumber") String cardNumber,
                                    @RequestParam(value = "IDNumber") String IDNumber,
-                                   @RequestParam(value = "phoneNumber") String phoneNumber
-                                      ){
+                                   @RequestParam(value = "phoneNumber") String phoneNumber,
+                                   @RequestParam(value = "department") String department
+    ){
         Map<String, Object> r = new HashMap<>();
 
         MultipartFile mf = request.getFile("file");
@@ -100,7 +101,7 @@ public class EmployeeManagementController {
 
         }
 
-        String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber);
+        String response = employeeService.addEmployee(resource,personName,personNumber,cardNumber,IDNumber,phoneNumber,department);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -127,6 +128,7 @@ public class EmployeeManagementController {
                                       @RequestParam(value = "cardNumber") String cardNumber,
                                       @RequestParam(value = "IDNumber") String IDNumber,
                                       @RequestParam(value = "phoneNumber") String phoneNumber,
+                                      @RequestParam(value = "department") String department,
                                       @RequestParam(value = "version") int version){
 
         Map<String, Object> r = new HashMap<>();
@@ -166,7 +168,7 @@ public class EmployeeManagementController {
 
         }
 
-        String response = employeeService.updateEmployee(resource, personID, personName, personNumber, cardNumber, IDNumber, phoneNumber, version + 1);
+        String response = employeeService.updateEmployee(resource, personID, personName, personNumber, cardNumber, IDNumber, phoneNumber, department, version + 1);
         System.out.println(response);
 
         if(JSONHandler.isSuccess(response)){
@@ -202,6 +204,7 @@ public class EmployeeManagementController {
             r.put("IDNumber",object.getString("IDNumber"));
             r.put("version",object.getString("version"));
             r.put("feature",object.getString("feature"));
+            r.put("department",object.getString("department"));
 
             r.put("status","SUCCEED");
         } else {

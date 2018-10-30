@@ -206,6 +206,7 @@
     // Initializing ///
 
     $(document).ready(function () {
+
         mainApp.initFunction();
         $("#sideNav").click(function () {
             if ($(this).hasClass('closed')) {
@@ -220,6 +221,62 @@
                 $('#page-wrapper').animate({'margin-left': '0px'});
             }
         });
+
+        $("a").mouseover(function(){
+            $(this).css("background-color","#175191");
+            //$(this).css("opacity","0.5");
+        });
+
+        $("a").mouseout(function(){
+            $(this).css("background-color","transparent");
+            //$(this).css("opacity","1");
+        });
+
+
     });
 
 }(jQuery));
+
+function adjustTableHeight(){
+    var AltitudeDifference = $("body")[0].scrollHeight - $(window).height();
+    console.log("高度差："+ AltitudeDifference );
+    console.log("屏幕大小："+ $(window).height() );
+    console.log("body高："+ $("body").height() ) ;
+
+    $(".fixed-table-body").height( $(".fixed-table-body").height() - AltitudeDifference);
+
+    console.log("调整后高度："+$(".fixed-table-body").height());
+};
+
+function getAdminInfo(){
+    //get the admin info
+    // $.ajax({
+    //     type: "get",
+    //     url: "/console/user_management/getAdminInfo",
+    //     dataType: "json",
+    //     timeout : timeout,
+    //     success : function(json) {
+    //         switch (json.status){
+    //             case "SUCCEED" :
+    //                 $("#adminName").append(json.adminName);
+    //                 $("#adminEmail").append(json.adminEmail);
+    //                 console.log("管理员姓名 ： "+json.adminName);
+    //                 console.log("管理员邮箱 ： "+json.adminEmail);
+
+    //                 break;
+    //             case "FAILED" :
+    //                 $("#dialog-return").find(".modal-body").html("获取管理员信息失败");
+    //                 $("#dialog-return").modal("show");
+
+    //                 break;
+    //         }
+
+
+    //     },
+    //     error : function () {
+    //         $("#dialog-return").find(".modal-body").html("获取管理员信息失败---网络错误");
+    //         $("#dialog-return").modal("show");
+    //     }
+    // });
+};
+
