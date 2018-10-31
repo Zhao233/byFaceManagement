@@ -211,7 +211,7 @@
 
                         <!--告警设置-->
                         <li>
-                            <a href=r"/console/contacts_config">告警设置</a>
+                           <a href=r"/console/contacts_config">告警设置</a>
                         </li>
 
                         <!--告警联系人-->
@@ -909,6 +909,8 @@
             return ;
         }
         console.log("choosed date : "+ date);
+
+        $("#time_show").empty();
 
         var new_data = {
             "cameraID": id_select,

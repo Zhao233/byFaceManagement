@@ -359,11 +359,11 @@
                         </div>
 
                             <script>
-                                var camera_enable = new Image();
-                                camera_enable.src = "/images/test_camera.png";
-
-                                var camera_disable = new Image();
-                                camera_disable.src = "/images/test_camera0.png";
+                                // var camera_enable = new Image();
+                                // camera_enable.src = "/images/test_camera.png";
+                                //
+                                // var camera_disable = new Image();
+                                // camera_disable.src = "/images/test_camera0.png";
 
                                 var personId = getUrlParam("id");
                                 var personType = getUrlParam("type");
@@ -607,11 +607,14 @@
                                     //     camera.src = "/images/test_camera0.png";
                                     // }
 
-                                    var camera = isEnable ? camera_enable : camera_disable;
-
                                     var length = cameraList_.length;
                                     for(var i = length - 1 ; i >= 0; i--){
                                         var temp_camera = cameraList_[i];
+
+                                        var camera = new Image();
+                                        var flag = isEnable==true? "-2.png" : "-1.png"
+                                        var src = "/images/"+temp_camera.cameraType+flag;
+
 
                                         var location;
 
@@ -619,7 +622,12 @@
 
                                         console.log("camera location: "+(parseInt(location[0]) + offset_camera.x )+","+(parseInt(location[1]) + offset_camera.y));
 
-                                        context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
+
+                                        preImage(src,location, function(image,location){
+                                            context.drawImage(image, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
+                                        });
+
+                                        console.log(camera);
                                     }
 
                                     // camera.onload = function (ev) {
@@ -636,6 +644,20 @@
                                     //         context.drawImage(camera, parseInt(location[0]) + offset_camera.x, parseInt(location[1]) + offset_camera.y, camera_size.width, camera_size.height);
                                     //     }
                                     // }
+                                }
+
+                                function preImage(url,location,callback){
+                                    var img = new Image(); //创建一个Image对象，实现图片的预下载
+                                    img.src = url;
+
+                                    if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数
+                                        callback(img,location);
+                                        return; // 直接返回，不用再处理onload事件
+                                    }
+
+                                    img.onload = function () { //图片下载完毕时异步调用callback函数。
+                                        callback(img,location);//将回调函数的this替换为Image对象
+                                    };
                                 }
 
                                 function clearprofileImage(context){
@@ -989,6 +1011,28 @@
     var timeout_network = 3000;
 
     var pageSize_personList = 10;
+
+    // //预加载摄像头image
+    // var camera_1_1 = new Image();
+    // camera_1_1.src = "/images/1-1.png";
+    //
+    // var camera_1_2 = new Image();
+    // camera_1_2.src = "/images/1-2.png";
+    //
+    // var camera_2_1 = new Image();
+    // camera_2_1.src = "/images/2-1.png";
+    //
+    // var camera_3_1 = new Image();
+    // camera_3_1.src = "/images/3-1.png";
+    //
+    // var camera_3_2 = new Image();
+    // camera_3_2.src = "/images/3-2.png";
+    //
+    // var camera_4_1 = new Image();
+    // camera_4_1.src = "/images/4-1.png";
+    //
+    // var camera_4_2 = new Image();
+    // camera_4_2.src = "/images/4-2.png";
 
     $(document).ready(function () {
         var pageSize_cameraList = 10;
