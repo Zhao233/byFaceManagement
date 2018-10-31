@@ -937,10 +937,10 @@
                                         <thead>
                                         <tr>
                                             <th data-field="userid" data-formatter="_formatte_person_id" data-align="center"></th>
+                                            <th data-field="feature" data-formatter="_formatte_locale_image" style="border:none;">图像信息
                                             <th id="person_name" data-field="name" style="border:none;">姓名</th>
                                             <th data-field="IDNumber" style="border:none;">证件号码</th>
                                             <th data-field="phoneNumber" style="border:none;">电话</th>
-                                            <th data-field="feature" data-formatter="_formatte_locale_image" style="border:none;">图像信息
                                             </th>
                                         </tr>
                                         </thead>
@@ -1264,16 +1264,30 @@
         return '<input name="id" type="radio" value="' + value + '" />';
     }
 
+    // function _formatte_locale_image(value, row, index) {
+    //     var imgSrc = value;
+    //
+    //     if(value == ""){
+    //         imgSrc = "/images/default_avatar_male.jpg";
+    //
+    //         return s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src=' + imgSrc+' /></a>';
+    //     }
+    //
+    //     var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
+    //
+    //     return s;
+    // }
+
     function _formatte_locale_image(value, row, index) {
         var imgSrc = value;
 
         if(value == ""){
             imgSrc = "/images/default_avatar_male.jpg";
 
-            return s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src=' + imgSrc+' /></a>';
+            return s = '<a class = "view"  href="javascript:void(0)"><img style="height:60px; border-radius:20%"  src=' + imgSrc+' /></a>';
         }
 
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="width:100px;"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="height:60px;border-radius:20%"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
 
         return s;
     }
