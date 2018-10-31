@@ -538,14 +538,11 @@
                             <thead>
                             <tr>
                                 <th data-field="userid" class="W30" data-formatter="_formate_visitor_id"></th>
-                                <!--<th data-field="userid" data-sortable="true" class="W30" style="border:none;">-->
-                                <!--User ID-->
-                                <!--</th>-->
+                                <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
                                 <th data-field="name" data-formatter="_formatte_name" class="W100" style="border:none;">姓名</th>
                                 <th data-field="IDNumber" class="W100" style="border:none;">证件号码</th>
                                 <th data-field="phoneNumber" class="W100" style="border:none;">电话号码</th>
                                 <th data-field="updateDateString" class="W100" style="border:none;">修改时间</th>
-                                <th data-field="feature" data-formatter="_formatte_locale_image" class="W100" style="border:none;">图像信息</th>
                             </tr>
                             </thead>
                         </table>
@@ -1074,10 +1071,10 @@
         if(value == ""){
             imgSrc = "/images/default_avatar_male.jpg";
 
-            return s = '<a class = "view"  href="javascript:void(0)"><img style="height:100px;border-radius:20%"  src=' + imgSrc+' /></a>';
+            return s = '<a class = "view"  href="javascript:void(0)"><img style="height:60px;border-radius:20%"  src=' + imgSrc+' /></a>';
         }
 
-        var s = '<a class = "view"  href="javascript:void(0)"><img style="height:100px;border-radius:20%"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
+        var s = '<a class = "view"  href="javascript:void(0)"><img style="height:60px;border-radius:20%"  src="' + imgSrc+"&t="+Math.random() +'" /></a>';
 
         return s;
     }
