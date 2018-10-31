@@ -673,12 +673,11 @@
         //$('#cameraName').editableSelect();
 
         //默认搜索一楼电梯
-        var option = $("ul").find("li[value$=39]");
+        var option = $("option[value=39]");
 
         if( option.length != 0){
-            option.addClass("focused");
 
-            $("#cameraName").val(option.text());
+            option[0].selected = true;
         }
 
         $(".searchData").click();
